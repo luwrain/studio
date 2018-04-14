@@ -1,4 +1,4 @@
-<project name="luwrain-app-editor" default="jar" basedir=".">
+<project name="luwrain-studio" default="jar" basedir=".">
   <path id="classpath">
     <pathelement location="."/>
      <fileset dir="lib">
@@ -24,10 +24,10 @@
   </target>
   <target name="jar" depends="compile">
     <mkdir dir="jar"/>
-    <jar jarfile="jar/luwrain-app-editor.jar">
+    <jar jarfile="jar/luwrain-studio.jar">
       <manifest>
         <section name="org/luwrain">
-          <attribute name="Extensions" value="org.luwrain.app.editor.Extension"/>
+          <attribute name="Extensions" value="org.luwrain.studio.Extension"/>
         </section>
       </manifest>
       <fileset dir="./build/main">
