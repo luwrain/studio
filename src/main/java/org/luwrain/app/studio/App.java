@@ -1,3 +1,18 @@
+/*
+   Copyright 2012-2018 Michael Pozhidaev <michael.pozhidaev@gmail.com>
+
+   This file is part of LUWRAIN.
+
+   LUWRAIN is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 3 of the License, or (at your option) any later version.
+
+   LUWRAIN is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+*/
 
 package org.luwrain.app.studio;
 
@@ -38,6 +53,7 @@ public class App implements Application
 	this.base = new Base(luwrain, strings);
 	this.actionList = new ActionList(strings);
 	this.actions = new Actions(luwrain, base, strings);
+	createAreas();
 	layout = new AreaLayoutHelper(()->{
 		luwrain.onNewAreaLayout();
 		luwrain.announceActiveArea();
@@ -47,10 +63,17 @@ public class App implements Application
 
     private void createAreas()
     {
- 	treeArea = new EditArea(new DefaultControlEnvironment(luwrain), "Проект", new String[0], ()->{}) {
+ 	treeArea = new EditArea(new DefaultControlEnvironment(luwrain), strings.treeAreaName(), new String[0], ()->{}) {
 		@Override public boolean onKeyboardEvent(KeyboardEvent event)
 		{
 		    NullCheck.notNull(event, "event");
+		    if (event.isSpecial() && !event.isModified())
+			switch(event.getSpecial())
+			{
+			case TAB:
+			    luwrain.setActiveArea(editArea);
+			    return true;
+			}
 		    return super.onKeyboardEvent(event);
 		}
 		@Override public boolean onEnvironmentEvent(EnvironmentEvent event)
@@ -58,7 +81,72 @@ public class App implements Application
 		    NullCheck.notNull(event, "event");
 		    if (event.getType() != EnvironmentEvent.Type.REGULAR)
 			return super.onEnvironmentEvent(event);
-		    return super.onEnvironmentEvent(event);
+		    switch(event.getCode())
+		    {
+		    case CLOSE:
+			closeApp();
+			return true;
+		    default:
+			return super.onEnvironmentEvent(event);
+		    }
+		}
+	    };
+
+	editArea = new EditArea(new DefaultControlEnvironment(luwrain), strings.editAreaName(), new String[0], ()->{}) {
+		@Override public boolean onKeyboardEvent(KeyboardEvent event)
+		{
+		    NullCheck.notNull(event, "event");
+		    if (event.isSpecial() && !event.isModified())
+			switch(event.getSpecial())
+			{
+			case TAB:
+			    luwrain.setActiveArea(outputArea);
+			    return true;
+			}
+		    return super.onKeyboardEvent(event);
+		}
+		@Override public boolean onEnvironmentEvent(EnvironmentEvent event)
+		{
+		    NullCheck.notNull(event, "event");
+		    if (event.getType() != EnvironmentEvent.Type.REGULAR)
+			return super.onEnvironmentEvent(event);
+		    switch(event.getCode())
+		    {
+		    case CLOSE:
+			closeApp();
+			return true;
+		    default:
+			return super.onEnvironmentEvent(event);
+		    }
+		}
+	    };
+
+	outputArea = new EditArea(new DefaultControlEnvironment(luwrain), strings.outputAreaName(), new String[0], ()->{}) {
+		@Override public boolean onKeyboardEvent(KeyboardEvent event)
+		{
+		    NullCheck.notNull(event, "event");
+		    if (event.isSpecial() && !event.isModified())
+			switch(event.getSpecial())
+			{
+			case TAB:
+			    luwrain.setActiveArea(treeArea);
+			    return true;
+			}
+		    return super.onKeyboardEvent(event);
+		}
+		@Override public boolean onEnvironmentEvent(EnvironmentEvent event)
+		{
+		    NullCheck.notNull(event, "event");
+		    if (event.getType() != EnvironmentEvent.Type.REGULAR)
+			return super.onEnvironmentEvent(event);
+		    switch(event.getCode())
+		    {
+		    case CLOSE:
+			closeApp();
+			return true;
+		    default:
+			return super.onEnvironmentEvent(event);
+		    }
 		}
 	    };
     }
