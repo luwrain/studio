@@ -37,9 +37,9 @@ public class App implements Application
     private Actions actions = null;
     private ActionList actionList = null;
 
-    private EditArea treeArea = null;
+    private TreeArea treeArea = null;
     private EditArea editArea = null;
-    private EditArea outputArea = null;
+    private NavigationArea outputArea = null;
     private AreaLayoutHelper layout = null;
 
     @Override public InitResult onLaunchApp(Luwrain luwrain)
@@ -63,7 +63,15 @@ public class App implements Application
 
     private void createAreas()
     {
- 	treeArea = new EditArea(new DefaultControlEnvironment(luwrain), strings.treeAreaName(), new String[0], ()->{}) {
+	final TreeArea.Params treeParams = new TreeArea.Params();
+	treeParams.environment = new DefaultControlEnvironment(luwrain);
+	treeParams.model = new CachedTreeModel(base.getTreeModel());
+	treeParams.name = strings.treeAreaName();
+	treeParams.clickHandler = (area,obj)->{
+	    return false;
+	};
+
+ 	treeArea = new TreeArea(treeParams){
 		@Override public boolean onKeyboardEvent(KeyboardEvent event)
 		{
 		    NullCheck.notNull(event, "event");
@@ -92,7 +100,12 @@ public class App implements Application
 		}
 	    };
 
-	editArea = new EditArea(new DefaultControlEnvironment(luwrain), strings.editAreaName(), new String[0], ()->{}) {
+	final EditArea.Params editParams = new EditArea.Params();
+	editParams.context = new DefaultControlEnvironment(luwrain);
+	editParams.name = strings.editAreaName();
+	
+
+	editArea = new EditArea(editParams) {
 		@Override public boolean onKeyboardEvent(KeyboardEvent event)
 		{
 		    NullCheck.notNull(event, "event");
@@ -121,7 +134,7 @@ public class App implements Application
 		}
 	    };
 
-	outputArea = new EditArea(new DefaultControlEnvironment(luwrain), strings.outputAreaName(), new String[0], ()->{}) {
+	outputArea = new NavigationArea(new DefaultControlEnvironment(luwrain)) {
 		@Override public boolean onKeyboardEvent(KeyboardEvent event)
 		{
 		    NullCheck.notNull(event, "event");
@@ -147,6 +160,20 @@ public class App implements Application
 		    default:
 			return super.onEnvironmentEvent(event);
 		    }
+		}
+		@Override public int getLineCount()
+		{
+		    return 1;
+		}
+		@Override public String getLine(int index)
+		{
+		    if (index < 0)
+			throw new IllegalArgumentException("index (" + index + ") may not be negative");
+		    return "";
+		}
+		@Override public String getAreaName()
+		{
+		    return strings.outputAreaName();
 		}
 	    };
     }

@@ -21,8 +21,9 @@ import java.io.*;
 
 import org.luwrain.base.*;
 import org.luwrain.core.*;
+import org.luwrain.controls.*;
 
-class Base
+final class Base
 {
     private final Luwrain luwrain;
     private final Strings strings;
@@ -36,4 +37,23 @@ class Base
 	this.strings = strings;
 	this.sett = Settings.create(luwrain.getRegistry());
     }
+
+    CachedTreeModelSource getTreeModel()
+    {
+	return new TreeModel();
+    }
+
+    private class TreeModel implements CachedTreeModelSource
+    {
+    @Override public Object getRoot()
+	{
+	    return null;
+	}
+	
+    @Override public Object[] getChildObjs(Object obj)
+	{
+	    return null;
+	}
+}
+
 }
