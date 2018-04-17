@@ -69,4 +69,5 @@ public interface Strings
     String treeAreaName();
     String editAreaName();
     String outputAreaName();
+    String treeRoot();
 }

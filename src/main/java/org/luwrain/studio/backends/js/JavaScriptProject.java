@@ -14,11 +14,26 @@
    General Public License for more details.
 */
 
-//LWR_API 1.0
+package org.luwrain.studio.backends.js;
 
-package org.luwrain.studio;
-
-public interface Output
+public final class JavaScriptProject implements  org.luwrain.studio.Project
 {
-    void onCompletelyNewOutput(String[] lines);
+    @Override public org.luwrain.studio.Folder[] getFoldersRoot()
+    {
+	return null;
+    }
+
+    @Override public org.luwrain.studio.Flavor[] getBuildFlavors()
+    {
+	return new org.luwrain.studio.Flavor[0];
+    }
+
+    @Override public boolean build(org.luwrain.studio.Flavor flavor, org.luwrain.studio.Output output)
+    {
+	return false;
+    }
+
+    @Override public void run(org.luwrain.studio.Output output)
+    {
+    }
 }

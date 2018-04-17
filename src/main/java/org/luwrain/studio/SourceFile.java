@@ -18,7 +18,19 @@
 
 package org.luwrain.studio;
 
-public interface Output
+import java.io.*;
+
+import org.luwrain.controls.*;
+
+public interface SourceFile
 {
-    void onCompletelyNewOutput(String[] lines);
+    public interface Editing
+    {
+	EditArea.ModelWrapperFactory getEditModelWrapperFactory();
+    }
+
+    String getSourceFileName();
+    File getFile();
+    Editing startEditing();
+    void finishEditing();
 }

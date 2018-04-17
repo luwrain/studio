@@ -14,11 +14,17 @@
    General Public License for more details.
 */
 
-//LWR_API 1.0
+package org.luwrain.studio.backends.js;
 
-package org.luwrain.studio;
-
-public interface Output
+final class Folder implements org.luwrain.studio.Folder
 {
-    void onCompletelyNewOutput(String[] lines);
+    @Override public org.luwrain.studio.Folder[] getSubfolders()
+    {
+	return new org.luwrain.studio.Folder[0];
+    }
+
+    @Override public org.luwrain.studio.SourceFile[] getSourceFiles()
+    {
+	return new org.luwrain.studio.SourceFile[0];
+    }
 }
