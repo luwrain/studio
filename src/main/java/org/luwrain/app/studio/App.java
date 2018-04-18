@@ -18,16 +18,12 @@ package org.luwrain.app.studio;
 
 import java.util.*;
 import java.io.*;
-import java.io.*;
-
-import org.apache.commons.vfs2.*;
 
 import org.luwrain.base.*;
 import org.luwrain.core.*;
 import org.luwrain.core.events.*;
 import org.luwrain.controls.*;
-import org.luwrain.io.*;
-import org.luwrain.popups.*;
+import org.luwrain.studio.*;
 
 public class App implements Application
 {
@@ -68,7 +64,29 @@ public class App implements Application
 	treeParams.model = new CachedTreeModel(base.getTreeModel());
 	treeParams.name = strings.treeAreaName();
 	treeParams.clickHandler = (area,obj)->{
-	    return false;
+	    NullCheck.notNull(obj, "obj");
+	    if (!(obj instanceof SourceFile))
+		return false;
+	    final SourceFile sourceFile = (SourceFile)obj;
+	    final SourceFile.Editing editing = sourceFile.startEditing();
+	    if (editing == null)
+		return false;
+	    if (base.openedFile != null && base.openedFile.equals(sourceFile.getFile()))
+	    {
+		luwrain.setActiveArea(editArea);
+		return true;
+	    }
+	    try {
+		base.startEditing(editing);
+	    }
+	    catch(IOException e)
+	    {
+		//FIXME:
+	    }
+	    editArea.setHotPoint(0, 0);
+	    luwrain.onAreaNewContent(editArea);
+	    luwrain.setActiveArea(editArea);
+	    return true;
 	};
 
  	treeArea = new TreeArea(treeParams){
@@ -103,7 +121,12 @@ public class App implements Application
 	final EditArea.Params editParams = new EditArea.Params();
 	editParams.context = new DefaultControlEnvironment(luwrain);
 	editParams.name = strings.editAreaName();
-	
+	editParams.content = base.fileText;
+	editParams.modelWrapperFactory = (model)->{
+	    NullCheck.notNull(model, "model");
+	    base.editModelWrapper.setWrappedModel(model);
+	    return base.editModelWrapper;
+	};
 
 	editArea = new EditArea(editParams) {
 		@Override public boolean onKeyboardEvent(KeyboardEvent event)

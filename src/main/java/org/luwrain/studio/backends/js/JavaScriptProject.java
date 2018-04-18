@@ -18,7 +18,7 @@ package org.luwrain.studio.backends.js;
 
 public final class JavaScriptProject implements  org.luwrain.studio.Project
 {
-    @Override public org.luwrain.studio.Folder[] getFoldersRoot()
+    @Override public org.luwrain.studio.Folder getFoldersRoot()
     {
 	return null;
     }

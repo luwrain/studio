@@ -33,6 +33,10 @@ final class Base
 
     private Project project = null;
 
+    final MutableLinesImpl fileText = new MutableLinesImpl();
+    final EditModelWrapper editModelWrapper = new EditModelWrapper();
+    File openedFile = null;
+
     Base (Luwrain luwrain, Strings strings)
     {
 	NullCheck.notNull(luwrain, "luwrain");
@@ -41,6 +45,12 @@ final class Base
 	this.strings = strings;
 	this.sett = Settings.create(luwrain.getRegistry());
 	this.treeRoot = strings.treeRoot();
+    }
+
+    void startEditing(SourceFile.Editing editing) throws IOException
+    {
+	NullCheck.notNull(editing, "editing");
+	//FIXME:
     }
 
     CachedTreeModelSource getTreeModel()
@@ -56,7 +66,23 @@ final class Base
 	}
 	@Override public Object[] getChildObjs(Object obj)
 	{
-	    return new String[0];
+	    NullCheck.notNull(obj, "obj");
+	    if (project == null)
+		return new Object[0];
+	    final Folder folder;
+	    if (obj == treeRoot)
+		folder = project.getFoldersRoot(); else
+		if (obj instanceof Folder)
+		    folder = (Folder)obj; else
+		    return new Object[0];
+	    if (folder == null)
+		return new Object[0];
+	    final List res = new LinkedList();
+	    for(Folder f: folder.getSubfolders())
+		res.add(f);
+	    for(SourceFile f: folder.getSourceFiles())
+		res.add(f);
+	    return res.toArray(new Object[res.size()]);
 	}
     }
 }
