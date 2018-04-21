@@ -34,7 +34,7 @@ final class Base
     private Project project = null;
 
     final MutableLinesImpl fileText = new MutableLinesImpl();
-    final EditModelWrapper editModelWrapper = new EditModelWrapper();
+    final EditCorrectorWrapper editCorrectorWrapper = new EditCorrectorWrapper();
     File openedFile = null;
 
     Base (Luwrain luwrain, Strings strings)

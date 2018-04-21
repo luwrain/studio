@@ -122,10 +122,10 @@ public class App implements Application
 	editParams.context = new DefaultControlEnvironment(luwrain);
 	editParams.name = strings.editAreaName();
 	editParams.content = base.fileText;
-	editParams.modelWrapperFactory = (model)->{
-	    NullCheck.notNull(model, "model");
-	    base.editModelWrapper.setWrappedModel(model);
-	    return base.editModelWrapper;
+	editParams.correctorWrapperFactory = (corrector)->{
+	    NullCheck.notNull(corrector, "corrector");
+	    base.editCorrectorWrapper.setWrappedCorrector(corrector);
+	    return base.editCorrectorWrapper;
 	};
 
 	editArea = new EditArea(editParams) {
