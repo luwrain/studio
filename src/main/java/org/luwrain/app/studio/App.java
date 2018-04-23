@@ -31,7 +31,7 @@ public class App implements Application
     private Strings strings = null;
     private Base base = null;
     private Actions actions = null;
-    private ActionList actionList = null;
+    private ActionLists actionLists = null;
 
     private TreeArea treeArea = null;
     private EditArea editArea = null;
@@ -47,7 +47,7 @@ public class App implements Application
 	strings = (Strings)o;
 	this.luwrain = luwrain;
 	this.base = new Base(luwrain, strings);
-	this.actionList = new ActionList(strings);
+	this.actionLists = new ActionLists(strings);
 	this.actions = new Actions(luwrain, base, strings);
 	createAreas();
 	layout = new AreaLayoutHelper(()->{
@@ -109,12 +109,18 @@ public class App implements Application
 			return super.onEnvironmentEvent(event);
 		    switch(event.getCode())
 		    {
+		    case ACTION:
+			return onCommonActions(event);
 		    case CLOSE:
 			closeApp();
 			return true;
 		    default:
 			return super.onEnvironmentEvent(event);
 		    }
+		}
+		@Override public Action[] getAreaActions()
+		{
+		    return actionLists.getTreeActions();
 		}
 	    };
 
@@ -148,12 +154,18 @@ public class App implements Application
 			return super.onEnvironmentEvent(event);
 		    switch(event.getCode())
 		    {
+		    case ACTION:
+			return onCommonActions(event);
 		    case CLOSE:
 			closeApp();
 			return true;
 		    default:
 			return super.onEnvironmentEvent(event);
 		    }
+		}
+		@Override public Action[] getAreaActions()
+		{
+		    return actionLists.getEditActions();
 		}
 	    };
 
@@ -177,6 +189,8 @@ public class App implements Application
 			return super.onEnvironmentEvent(event);
 		    switch(event.getCode())
 		    {
+		    case ACTION:
+			return onCommonActions(event);
 		    case CLOSE:
 			closeApp();
 			return true;
@@ -184,7 +198,11 @@ public class App implements Application
 			return super.onEnvironmentEvent(event);
 		    }
 		}
-		@Override public int getLineCount()
+		@Override public Action[] getAreaActions()
+		{
+		    return actionLists.getOutputActions();
+		}
+				@Override public int getLineCount()
 		{
 		    return 1;
 		}
@@ -199,6 +217,14 @@ public class App implements Application
 		    return strings.outputAreaName();
 		}
 	    };
+    }
+
+    private boolean onCommonActions(EnvironmentEvent event)
+    {
+	NullCheck.notNull(event, "event");
+	if (ActionEvent.isAction(event, "open-project"))
+	    return actions.onOpenProject();
+	return false;
     }
 
     @Override public AreaLayout getAreaLayout()

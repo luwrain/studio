@@ -29,13 +29,13 @@ import org.luwrain.controls.*;
 import org.luwrain.popups.Popups;
 
 
-class Actions
+final class Actions
 {
     private final Luwrain luwrain;
     private final Base base;
     private final Strings strings;
 
-    final Conversations conversations;
+    final Conversations conv;
 
     Actions(Luwrain luwrain, Base base, Strings strings)
     {
@@ -45,7 +45,14 @@ class Actions
 	this.luwrain = luwrain;
 	this.base = base;
 	this.strings = strings;
-	this.conversations = new Conversations(luwrain, strings);
+	this.conv = new Conversations(luwrain, strings);
     }
 
+    boolean onOpenProject()
+    {
+	final File projFile = conv.openProject();
+	if (projFile == null)
+	    return true;
+	return true;
+    }
 }

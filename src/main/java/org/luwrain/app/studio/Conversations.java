@@ -17,9 +17,7 @@
 package org.luwrain.app.studio;
 
 import java.io.*;
-import java.nio.file.*;
 
-import org.luwrain.base.FilesOperation;
 import org.luwrain.core.*;
 import org.luwrain.popups.*;
 
@@ -35,4 +33,12 @@ class Conversations
 	this.luwrain = luwrain;
 	this.strings = strings;
     }
-}
+
+    File openProject()
+    {
+	return Popups.path(luwrain, strings.openProjectPopupName(), strings.openProjectPopupPrefix(),
+			   (fileToCheck,announce)->{
+			       return true;
+			   });
+    }
+    }
