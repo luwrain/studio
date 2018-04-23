@@ -71,7 +71,7 @@ public class App implements Application
 	    final SourceFile.Editing editing = sourceFile.startEditing();
 	    if (editing == null)
 		return false;
-	    if (base.openedFile != null && base.openedFile.equals(sourceFile.getFile()))
+	    if (base.openedFile != null && base.openedFile.equals(editing.getFile()))
 	    {
 		luwrain.setActiveArea(editArea);
 		return true;

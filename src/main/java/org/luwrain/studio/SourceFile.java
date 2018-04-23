@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2018 Michael Pozhidaev <michael.pozhidaev@gmail.com>
+~   Copyright 2012-2018 Michael Pozhidaev <michael.pozhidaev@gmail.com>
 
    This file is part of LUWRAIN.
 
@@ -26,11 +26,11 @@ public interface SourceFile
 {
     public interface Editing
     {
+	File getFile();	
 	EditArea.CorrectorWrapperFactory getEditCorrectorWrapperFactory();
     }
 
     String getSourceFileName();
-    File getFile();
     Editing startEditing();
     void finishEditing();
 }
