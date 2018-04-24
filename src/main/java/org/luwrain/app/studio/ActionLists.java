@@ -17,38 +17,48 @@
 package org.luwrain.app.studio;
 
 import java.util.*;
-import org.apache.commons.vfs2.*;
 
 import org.luwrain.core.*;
 import org.luwrain.core.events.*;
 
 class ActionLists
-{private final Strings strings;
+{
+    private final Strings strings;
+    private final Base base;
 
-    ActionLists(Strings strings)
+    ActionLists(Strings strings, Base base)
     {
 	NullCheck.notNull(strings, "strings");
+	NullCheck.notNull(base, "base");
 	this.strings = strings;
+	this.base = base;
+    }
+
+    private List<Action> commonActions()
+    {
+	final List<Action> res = new LinkedList();
+	res.add(new Action("open-project", strings.actionOpenProject()));
+	if (base.getProject() != null && base.getProject().getBuildFlavors().length > 0)
+	    res.add(new Action("build", strings.actionBuild()));
+	res.add(new Action("run", strings.actionRun()));
+		return res;
     }
 
     Action[] getTreeActions()
     {
-	return new Action[]{
-	    new Action("open-project", strings.actionOpenProject()),
-	};
+	final List<Action> res = commonActions();
+	return res.toArray(new Action[res.size()]);
     }
 
     Action[] getEditActions()
     {
-	return new Action[]{
-	    new Action("open-project", strings.actionOpenProject()),
-	};
+	final List<Action> res = commonActions();
+	return res.toArray(new Action[res.size()]);
     }
 
     Action[] getOutputActions()
     {
-	return new Action[]{
-	    new Action("open-project", strings.actionOpenProject()),
-	};
+	final List<Action> res = commonActions();
+	return res.toArray(new Action[res.size()]);
     }
 }

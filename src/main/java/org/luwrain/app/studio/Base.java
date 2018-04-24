@@ -56,6 +56,11 @@ final class Base
 	this.project = proj;
     }
 
+    Project getProject()
+    {
+	return project;
+    }
+
     void startEditing(SourceFile.Editing editing) throws IOException
     {
 	NullCheck.notNull(editing, "editing");

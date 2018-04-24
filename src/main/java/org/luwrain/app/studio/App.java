@@ -47,7 +47,7 @@ public class App implements Application
 	strings = (Strings)o;
 	this.luwrain = luwrain;
 	this.base = new Base(luwrain, strings);
-	this.actionLists = new ActionLists(strings);
+	this.actionLists = new ActionLists(strings, base);
 	this.actions = new Actions(luwrain, base, strings);
 	createAreas();
 	layout = new AreaLayoutHelper(()->{

@@ -26,10 +26,12 @@ public interface Strings
     String appName();
 
     String actionOpenProject();
+    String actionBuild();
+    String actionRun();
     String editAreaName();
     String openProjectPopupName();
     String openProjectPopupPrefix();
     String outputAreaName();
-        String treeAreaName();
+    String treeAreaName();
     String treeRoot();
 }
