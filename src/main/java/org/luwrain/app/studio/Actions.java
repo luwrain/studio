@@ -22,12 +22,9 @@ import java.net.*;
 
 import org.apache.commons.vfs2.*;
 
-import org.luwrain.base.*;
 import org.luwrain.core.*;
-import org.luwrain.core.events.*;
 import org.luwrain.controls.*;
-import org.luwrain.popups.Popups;
-
+import org.luwrain.studio.*;
 
 final class Actions
 {
@@ -48,11 +45,23 @@ final class Actions
 	this.conv = new Conversations(luwrain, strings);
     }
 
-    boolean onOpenProject()
+    boolean onOpenProject(TreeArea treeArea)
     {
+	NullCheck.notNull(treeArea, "treeArea");
 	final File projFile = conv.openProject();
 	if (projFile == null)
 	    return true;
+	final Project proj;
+	try {
+	    proj = ProjectFactory.load(projFile);
+	}
+	catch(IOException e)
+	{
+	    luwrain.message(luwrain.i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
+	    return true;
+	}
+	base.activateProject(proj);
+	treeArea.refresh();
 	return true;
     }
 }

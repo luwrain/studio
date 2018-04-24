@@ -47,6 +47,12 @@ final class Base
 	this.treeRoot = strings.treeRoot();
     }
 
+    void activateProject(Project proj)
+    {
+	NullCheck.notNull(proj, "proj");
+	this.project = proj;
+    }
+
     void startEditing(SourceFile.Editing editing) throws IOException
     {
 	NullCheck.notNull(editing, "editing");

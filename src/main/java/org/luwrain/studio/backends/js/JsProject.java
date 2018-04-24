@@ -19,12 +19,14 @@ package org.luwrain.studio.backends.js;
 import java.io.*;
 import java.util.*;
 
+import org.luwrain.core.*;
+
 public final class JsProject implements  org.luwrain.studio.Project
 {
     private String projName = "";
     private File[] projFiles = new File[0];
 
-    void load(File dir) throws IOException
+    public void load(File dir) throws IOException
     {
 	final Properties props = new Properties();
 	final InputStream is = new FileInputStream(dir);
@@ -47,7 +49,10 @@ public final class JsProject implements  org.luwrain.studio.Project
 	this.projName = name;
 	final String mainFile = props.getProperty("files.main");
 	if (mainFile != null)
+	{
+	    Log.debug("proba", mainFile);
 	    projFiles = new File[]{new File(mainFile)};
+	}
     }
 
     @Override public org.luwrain.studio.Folder getFoldersRoot()
@@ -77,6 +82,7 @@ public final class JsProject implements  org.luwrain.studio.Project
 	}
 	@Override public org.luwrain.studio.SourceFile[] getSourceFiles()
 	{
+	    Log.debug("proba", "requesting source files");
 	    final List<org.luwrain.studio.SourceFile> res = new LinkedList();
 	    for(File f: projFiles)
 		res.add(new JsSourceFile(f));
@@ -84,11 +90,8 @@ public final class JsProject implements  org.luwrain.studio.Project
 	}
 	@Override public boolean equals(Object o)
 	{
-	    
-	
-	{
-	    
-return o != null && (o instanceof RootFolder);
+	    		{
+	    return o != null && (o instanceof RootFolder);
 	}
     }
 }
