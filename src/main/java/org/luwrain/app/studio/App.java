@@ -71,17 +71,19 @@ public class App implements Application
 	    final SourceFile.Editing editing = sourceFile.startEditing();
 	    if (editing == null)
 		return false;
-	    if (base.openedFile != null && base.openedFile.equals(editing.getFile()))
+	    if (base.openedEditing != null && base.openedEditing.getFile().equals(editing.getFile()))
 	    {
 		luwrain.setActiveArea(editArea);
 		return true;
 	    }
+	    luwrain.message(editing.getFile().getAbsolutePath());
 	    try {
 		base.startEditing(editing);
 	    }
 	    catch(IOException e)
 	    {
-		//FIXME:
+		luwrain.message(luwrain.i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
+		return true;
 	    }
 	    editArea.setHotPoint(0, 0);
 	    luwrain.onAreaNewContent(editArea);

@@ -26,10 +26,11 @@ public final class JsProject implements  org.luwrain.studio.Project
     private String projName = "";
     private File[] projFiles = new File[0];
 
-    public void load(File dir) throws IOException
+    public void load(File projFile) throws IOException
     {
+	NullCheck.notNull(projFile, "projFile");
 	final Properties props = new Properties();
-	final InputStream is = new FileInputStream(dir);
+	final InputStream is = new FileInputStream(projFile);
 	try {
 	    props.load(is);
 	}
@@ -50,7 +51,9 @@ public final class JsProject implements  org.luwrain.studio.Project
 	final String mainFile = props.getProperty("files.main");
 	if (mainFile != null)
 	{
-	    Log.debug("proba", mainFile);
+	    final File parent = projFile.getParentFile();
+	    if (parent != null)
+		projFiles = new File[]{new File(parent, mainFile)}; else
 	    projFiles = new File[]{new File(mainFile)};
 	}
     }

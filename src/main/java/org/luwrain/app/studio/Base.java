@@ -23,9 +23,12 @@ import org.luwrain.base.*;
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
+import org.luwrain.util.*;
 
 final class Base
 {
+    static private final String CHARSET = "UTF-8";
+
     private final Luwrain luwrain;
     private final Strings strings;
     final Settings sett;
@@ -35,7 +38,7 @@ final class Base
 
     final MutableLinesImpl fileText = new MutableLinesImpl();
     final EditCorrectorWrapper editCorrectorWrapper = new EditCorrectorWrapper();
-    File openedFile = null;
+    SourceFile.Editing openedEditing = null;
 
     Base (Luwrain luwrain, Strings strings)
     {
@@ -56,7 +59,11 @@ final class Base
     void startEditing(SourceFile.Editing editing) throws IOException
     {
 	NullCheck.notNull(editing, "editing");
-	//FIXME:
+	final File file = editing.getFile();
+	NullCheck.notNull(file, "file");
+	final String[] lines = FileUtils.readTextFileMultipleStrings(file, CHARSET, null);//null means using the default line separator
+	fileText.setLines(lines);
+	this.openedEditing = editing;
     }
 
     CachedTreeModelSource getTreeModel()

@@ -55,6 +55,11 @@ final class JsSourceFile implements org.luwrain.studio.SourceFile
     {
     }
 
+    @Override public String toString()
+    {
+	return file.getName();
+    }
+
     @Override public boolean equals(Object o)
     {
 	if (o == null || !(o instanceof JsSourceFile))
