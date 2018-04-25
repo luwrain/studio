@@ -17,6 +17,7 @@
 package org.luwrain.app.studio;
 
 import java.util.*;
+import java.util.concurrent.*;
 import java.io.*;
 
 import org.luwrain.base.*;
@@ -35,8 +36,10 @@ final class Base
     private final String treeRoot;
 
     private Project project = null;
+    private FutureTask runTask = null;
 
     final MutableLinesImpl fileText = new MutableLinesImpl();
+    final MutableLinesImpl outputText = new MutableLinesImpl();
     final EditCorrectorWrapper editCorrectorWrapper = new EditCorrectorWrapper();
     SourceFile.Editing openedEditing = null;
 
@@ -59,6 +62,44 @@ final class Base
     Project getProject()
     {
 	return project;
+    }
+
+    boolean isProjectRunning()
+    {
+	return runTask != null && !runTask.isDone();
+    }
+
+    boolean runProject(Runnable outputRedrawing) throws IOException
+    {
+	NullCheck.notNull(outputRedrawing, "outputRedrawing");
+	if (project == null || isProjectRunning())
+	    return false;
+	final OutputControl output = new OutputControl(()->luwrain.runUiSafely(outputRedrawing));
+	final RunControl runControl = project.run(luwrain, output);
+	if (runControl == null)
+	    return false;
+	if (runControl.isSuitableForBackground())
+	{
+	    runTask = new FutureTask(()->{
+		    try {
+			runControl.getCallableObj().call();
+		    }
+		    catch(Exception e)
+		    {
+			luwrain.crash(e);
+		    }
+		}, null);
+	    luwrain.executeBkg(runTask);
+	    return true;
+	}
+	try {
+	    runControl.getCallableObj().call();
+	}
+	catch(Exception e)
+	{
+	    luwrain.crash(e);
+	}
+	return true;
     }
 
     void startEditing(SourceFile.Editing editing) throws IOException
@@ -101,6 +142,28 @@ final class Base
 	    for(SourceFile f: folder.getSourceFiles())
 		res.add(f);
 	    return res.toArray(new Object[res.size()]);
+	}
+    }
+
+    private final class OutputControl implements org.luwrain.studio.Output
+    {
+	private final Runnable listener;
+	OutputControl(Runnable listener)
+	{
+	    NullCheck.notNull(listener, "listener");
+	    this.listener = listener;
+	}
+	@Override public void reset(String[] lines)
+	{
+	    NullCheck.notNullItems(lines, "lines");
+	    outputText.setLines(lines);
+	    listener.run();
+	}
+        @Override public void addLine(String line)
+	{
+	    NullCheck.notNull(line, "line");
+	    listener.run();
+	    outputText.addLine(line);
 	}
     }
 }

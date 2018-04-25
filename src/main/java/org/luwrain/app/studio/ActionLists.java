@@ -41,7 +41,7 @@ class ActionLists
 	if (base.getProject() != null && base.getProject().getBuildFlavors().length > 0)
 	    res.add(new Action("build", strings.actionBuild()));
 	if (base.getProject() != null)
-	    res.add(new Action("run", strings.actionRun()));
+	    res.add(new Action("run", strings.actionRun(), new KeyboardEvent(KeyboardEvent.Special.F9, EnumSet.of(KeyboardEvent.Modifiers.ALT))));
 	return res;
     }
 

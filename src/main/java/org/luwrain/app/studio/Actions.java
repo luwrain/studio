@@ -68,9 +68,13 @@ final class Actions
     boolean onRun(NavigationArea outputArea)
     {
 	NullCheck.notNull(outputArea, "outputArea");
-	if (base.getProject() == null)
-	    return false;
-
-	return true;
+	try {
+	    return base.runProject(()->outputArea.redraw());
+	}
+	catch(IOException e)
+	{
+	    luwrain.message(luwrain.i18n().getExceptionDescr(e));
+	    return true;
+	}
     }
 }
