@@ -83,6 +83,7 @@ final class Base
 	    runTask = new FutureTask(()->{
 		    try {
 			runControl.getCallableObj().call();
+			luwrain.playSound(Sounds.DONE);
 		    }
 		    catch(Exception e)
 		    {
@@ -94,6 +95,7 @@ final class Base
 	}
 	try {
 	    runControl.getCallableObj().call();
+	    luwrain.playSound(Sounds.DONE);
 	}
 	catch(Exception e)
 	{

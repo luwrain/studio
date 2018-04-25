@@ -206,13 +206,16 @@ public class App implements Application
 		}
 				@Override public int getLineCount()
 		{
-		    return 1;
+		    final int count = base.outputText.getLineCount();
+		    return count > 0?count:1;
 		}
 		@Override public String getLine(int index)
 		{
 		    if (index < 0)
 			throw new IllegalArgumentException("index (" + index + ") may not be negative");
-		    return "";
+		    if (base.outputText.getLineCount() < 1)
+			return "";
+		    return base.outputText.getLine(index);
 		}
 		@Override public String getAreaName()
 		{
