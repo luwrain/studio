@@ -18,6 +18,7 @@ package org.luwrain.studio.backends.js;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import org.luwrain.core.*;
 
@@ -25,6 +26,7 @@ public final class JsProject implements  org.luwrain.studio.Project
 {
     private String projName = "";
     private File[] projFiles = new File[0];
+    private File mainFile = null;
 
     public void load(File projFile) throws IOException
     {
@@ -53,8 +55,9 @@ public final class JsProject implements  org.luwrain.studio.Project
 	{
 	    final File parent = projFile.getParentFile();
 	    if (parent != null)
-		projFiles = new File[]{new File(parent, mainFile)}; else
-	    projFiles = new File[]{new File(mainFile)};
+		this.mainFile = new File(parent, mainFile); else
+		this.mainFile = new File(mainFile);
+	    projFiles = new File[]{this.mainFile};
 	}
     }
 
@@ -73,8 +76,26 @@ public final class JsProject implements  org.luwrain.studio.Project
 	return false;
     }
 
-    @Override public void run(org.luwrain.studio.Output output)
+    @Override public org.luwrain.studio.RunControl run(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
     {
+	NullCheck.notNull(luwrain, "luwrain");
+	NullCheck.notNull(output, "output");
+	final String text = org.luwrain.util.FileUtils.readTextFileSingleString(mainFile, "UTF-8");
+	final org.luwrain.core.script.Context context = new org.luwrain.core.script.Context();
+	context.output = (line)->{
+	    output.addLine(line);
+	};
+	final Callable callable = luwrain.runScriptInFuture(context, text);
+	return new org.luwrain.studio.RunControl(){
+	    @Override public java.util.concurrent.Callable getCallableObj()
+	    {
+		return callable;
+	    }
+	    @Override public boolean isSuitableForBackground()
+	    {
+		return true;
+	    }
+	};
     }
 
     private final class RootFolder implements org.luwrain.studio.Folder

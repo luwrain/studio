@@ -226,7 +226,9 @@ public class App implements Application
 	NullCheck.notNull(event, "event");
 	if (ActionEvent.isAction(event, "open-project"))
 	    return actions.onOpenProject(treeArea);
-	return false;
+		if (ActionEvent.isAction(event, "run"))
+	    return actions.onRun(outputArea);
+			return false;
     }
 
     @Override public AreaLayout getAreaLayout()

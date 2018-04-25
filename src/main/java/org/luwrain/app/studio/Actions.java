@@ -64,4 +64,13 @@ final class Actions
 	treeArea.refresh();
 	return true;
     }
+
+    boolean onRun(NavigationArea outputArea)
+    {
+	NullCheck.notNull(outputArea, "outputArea");
+	if (base.getProject() == null)
+	    return false;
+
+	return true;
+    }
 }

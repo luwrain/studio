@@ -40,8 +40,9 @@ class ActionLists
 	res.add(new Action("open-project", strings.actionOpenProject()));
 	if (base.getProject() != null && base.getProject().getBuildFlavors().length > 0)
 	    res.add(new Action("build", strings.actionBuild()));
-	res.add(new Action("run", strings.actionRun()));
-		return res;
+	if (base.getProject() != null)
+	    res.add(new Action("run", strings.actionRun()));
+	return res;
     }
 
     Action[] getTreeActions()
