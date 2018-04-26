@@ -158,6 +158,8 @@ public class App implements Application
 		    {
 		    case ACTION:
 			return onCommonActions(event);
+		    case SAVE:
+			return actions.onSaveEdit();
 		    case CLOSE:
 			closeApp();
 			return true;
@@ -168,6 +170,11 @@ public class App implements Application
 		@Override public Action[] getAreaActions()
 		{
 		    return actionLists.getEditActions();
+		}
+		@Override public void announceLine(int index, String line)
+		{
+		    NullCheck.notNull(line, "line");
+		    base.codePronun.announceLine(line);
 		}
 	    };
 

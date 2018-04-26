@@ -28,11 +28,12 @@ import org.luwrain.util.*;
 
 final class Base
 {
-    static private final String CHARSET = "UTF-8";
+    static final String CHARSET = "UTF-8";
 
     private final Luwrain luwrain;
     private final Strings strings;
     final Settings sett;
+    final CodePronunciation codePronun;
     private final String treeRoot;
 
     private Project project = null;
@@ -50,6 +51,7 @@ final class Base
 	this.luwrain = luwrain;
 	this.strings = strings;
 	this.sett = Settings.create(luwrain.getRegistry());
+	this.codePronun = new CodePronunciation(luwrain, strings);
 	this.treeRoot = strings.treeRoot();
     }
 
@@ -74,6 +76,8 @@ final class Base
 	NullCheck.notNull(outputRedrawing, "outputRedrawing");
 	if (project == null || isProjectRunning())
 	    return false;
+	outputText.clear();
+	outputRedrawing.run();
 	final OutputControl output = new OutputControl(()->luwrain.runUiSafely(outputRedrawing));
 	final RunControl runControl = project.run(luwrain, output);
 	if (runControl == null)

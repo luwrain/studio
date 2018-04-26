@@ -20,11 +20,10 @@ import java.io.*;
 import java.util.*;
 import java.net.*;
 
-import org.apache.commons.vfs2.*;
-
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
+import org.luwrain.util.*;
 
 final class Actions
 {
@@ -76,5 +75,20 @@ final class Actions
 	    luwrain.message(luwrain.i18n().getExceptionDescr(e));
 	    return true;
 	}
+    }
+
+    boolean onSaveEdit()
+    {
+	if (base.openedEditing == null)
+	    return false;
+	try {
+	FileUtils.writeTextFileMultipleStrings(base.openedEditing.getFile(), base.fileText.getLines(), Base.CHARSET, null);
+	luwrain.message(strings.fileSavedSuccessfully(), Luwrain.MessageType.OK);	    
+	}
+	catch(IOException e)
+	{
+	    luwrain.message(luwrain.i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
+	}
+	return true;
     }
 }

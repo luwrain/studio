@@ -28,7 +28,12 @@ public interface Strings
     String actionOpenProject();
     String actionBuild();
     String actionRun();
+    String codeBlockBegin();
+    String codeBlockEnd();
+    String codeComments();
+    String codeIndent(String len);
     String editAreaName();
+    String fileSavedSuccessfully();
     String openProjectPopupName();
     String openProjectPopupPrefix();
     String outputAreaName();
