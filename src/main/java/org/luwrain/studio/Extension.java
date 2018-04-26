@@ -51,6 +51,8 @@ public class Extension extends org.luwrain.core.extensions.EmptyExtension
 		@Override public Application[] prepareApp(String[] args)
 		{
 		    NullCheck.notNullItems(args, "args");
+		    if (args.length == 1)
+			return new Application[]{new org.luwrain.app.studio.App(args[0])};
 		    return new Application[]{new org.luwrain.app.studio.App()};
 		}
 	    },

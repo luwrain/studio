@@ -38,6 +38,19 @@ public class App implements Application
     private NavigationArea outputArea = null;
     private AreaLayoutHelper layout = null;
 
+    private final String arg;
+
+    public App()
+    {
+	arg = null;
+    }
+
+    public App(String arg)
+    {
+	NullCheck.notNull(arg, "arg");
+	this.arg = arg;
+    }
+
     @Override public InitResult onLaunchApp(Luwrain luwrain)
     {
 	NullCheck.notNull(luwrain, "luwrain");
@@ -54,6 +67,7 @@ public class App implements Application
 		luwrain.onNewAreaLayout();
 		luwrain.announceActiveArea();
 	    }, new AreaLayout(AreaLayout.LEFT_RIGHT_BOTTOM, treeArea, editArea, outputArea));
+	loadProjectByArg();
 	return new InitResult();
     }
 
@@ -239,6 +253,26 @@ public class App implements Application
 		if (ActionEvent.isAction(event, "run"))
 	    return actions.onRun(outputArea);
 			return false;
+    }
+
+    private void loadProjectByArg()
+    {
+	if (arg == null || arg.isEmpty())
+	    return;
+	final File file = new File(arg);
+	if (!file.exists() || file.isDirectory())
+	    return;
+	final Project proj;
+	try {
+	    proj = ProjectFactory.load(file);
+	}
+	catch(IOException e)
+	{
+	    luwrain.message(luwrain.i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
+	    return;
+	}
+	base.activateProject(proj);
+	treeArea.refresh();
     }
 
     @Override public AreaLayout getAreaLayout()
