@@ -121,7 +121,8 @@ luwrain.runUiSafely(outputRedrawing);
 	NullCheck.notNull(editing, "editing");
 	final File file = editing.getFile();
 	NullCheck.notNull(file, "file");
-	final String[] lines = FileUtils.readTextFileMultipleStrings(file, CHARSET, null);//null means using the default line separator
+	final String wholeText = FileUtils.readTextFileSingleString(file, CHARSET);
+	final String[] lines = FileUtils.universalLineSplitting(wholeText);
 	fileText.setLines(lines);
 	this.openedEditing = editing;
     }
