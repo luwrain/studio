@@ -67,6 +67,17 @@ final class Actions
     boolean onRun(NavigationArea outputArea)
     {
 	NullCheck.notNull(outputArea, "outputArea");
+	if (base.openedEditing != null)
+	{
+	    try {
+		FileUtils.writeTextFileMultipleStrings(base.openedEditing.getFile(), base.fileText.getLines(), Base.CHARSET, null);
+	    }
+	    catch(IOException e)
+	    {
+		luwrain.message(luwrain.i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
+		return true;
+	    }
+	}
 	try {
 	    return base.runProject(()->outputArea.redraw());
 	}
