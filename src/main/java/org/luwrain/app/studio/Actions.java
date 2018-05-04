@@ -91,4 +91,15 @@ final class Actions
 	}
 	return true;
     }
+
+    boolean onOutputClick(int lineIndex, EditArea editArea)
+    {
+	final Base.PositionInfo posInfo = base.getCompilationOutputPositionInfo(lineIndex);
+	if (posInfo == null)
+	    return false;
+	//FIXME:ensure the corresponding file is opened
+	editArea.setHotPoint(posInfo.colNum > 0?posInfo.colNum:0, posInfo.lineNum - 1);
+	luwrain.setActiveArea(editArea);
+	return true;
+    }
 }

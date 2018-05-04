@@ -203,6 +203,11 @@ public class App implements Application
 			case TAB:
 			    luwrain.setActiveArea(treeArea);
 			    return true;
+			case BACKSPACE:
+			    luwrain.setActiveArea(editArea);
+			    return true;
+			case ENTER:
+			    return actions.onOutputClick(getHotPointY(), editArea);
 			}
 		    return super.onKeyboardEvent(event);
 		}
@@ -215,6 +220,8 @@ public class App implements Application
 		    {
 		    case ACTION:
 			return onCommonActions(event);
+		    case OK:
+			return actions.onOutputClick(getHotPointY(), editArea);
 		    case CLOSE:
 			closeApp();
 			return true;

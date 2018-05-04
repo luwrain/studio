@@ -22,7 +22,7 @@ import org.luwrain.core.*;
 
 final class ScriptExceptionWrapper
 {
-    private final ScriptException ex;
+    final ScriptException ex;
 
     ScriptExceptionWrapper(ScriptException ex)
     {

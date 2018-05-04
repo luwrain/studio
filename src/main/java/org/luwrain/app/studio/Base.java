@@ -126,6 +126,19 @@ luwrain.runUiSafely(outputRedrawing);
 	this.openedEditing = editing;
     }
 
+    PositionInfo getCompilationOutputPositionInfo(int index)
+    {
+	if (compilationOutput == null || index < 0 || index >= compilationOutput.length)
+	    return null;
+	final Object obj = compilationOutput[index];
+	if (!(obj instanceof ScriptExceptionWrapper))
+	    return null;
+	final ScriptExceptionWrapper wrapper = (ScriptExceptionWrapper)obj;
+	if (wrapper.ex.getLineNumber() <= 0)
+	    return null;
+	return new PositionInfo(wrapper.ex.getFileName(), wrapper.ex.getLineNumber(), wrapper.ex.getColumnNumber());
+    }
+
     CachedTreeModelSource getTreeModel()
     {
 	return new TreeModel();
@@ -211,6 +224,23 @@ luwrain.runUiSafely(outputRedrawing);
 	    if (outputText.getLineCount() < 1)
 		return "";
 	    return outputText.getLine(index);
+	}
+    }
+
+    static final class PositionInfo
+    {
+	final String fileName;
+	final int lineNum;
+	final int colNum;
+
+	PositionInfo(String fileName, int lineNum, int colNum)
+	{
+	    NullCheck.notNull(fileName, "fileName");
+	    if (lineNum <= 0)
+		throw new IllegalArgumentException("lineNum (" + lineNum + ") must be greater than zero");
+	    this.fileName = fileName;
+	    this.lineNum = lineNum;
+	    this.colNum = colNum;
 	}
     }
 }
