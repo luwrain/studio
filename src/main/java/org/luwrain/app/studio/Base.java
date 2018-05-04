@@ -40,9 +40,10 @@ final class Base
     private FutureTask runTask = null;
 
     final MutableLinesImpl fileText = new MutableLinesImpl();
-    final MutableLinesImpl outputText = new MutableLinesImpl();
-    final EditCorrectorWrapper editCorrectorWrapper = new EditCorrectorWrapper();
     SourceFile.Editing openedEditing = null;
+    final EditCorrectorWrapper editCorrectorWrapper = new EditCorrectorWrapper();
+    Object[] compilationOutput = new Object[0];
+    final MutableLinesImpl outputText = new MutableLinesImpl();
 
     Base (Luwrain luwrain, Strings strings)
     {
@@ -77,6 +78,7 @@ final class Base
 	if (project == null || isProjectRunning())
 	    return false;
 	outputText.clear();
+	compilationOutput = new Object[0];
 	outputRedrawing.run();
 	final OutputControl output = new OutputControl(()->luwrain.runUiSafely(outputRedrawing));
 	final RunControl runControl = project.run(luwrain, output);
@@ -88,6 +90,12 @@ final class Base
 		    try {
 			runControl.getCallableObj().call();
 			luwrain.playSound(Sounds.DONE);
+		    }
+		    catch(javax.script.ScriptException e)
+		    {
+			compilationOutput = new Object[]{new ScriptExceptionWrapper(e), ""};
+luwrain.runUiSafely(outputRedrawing);
+			luwrain.playSound(Sounds.ERROR);
 		    }
 		    catch(Exception e)
 		    {
@@ -121,6 +129,11 @@ final class Base
     CachedTreeModelSource getTreeModel()
     {
 	return new TreeModel();
+    }
+
+    Lines getOutputModel()
+    {
+	return new OutputModel();
     }
 
     private class TreeModel implements CachedTreeModelSource
@@ -170,6 +183,34 @@ final class Base
 	    NullCheck.notNull(line, "line");
 	    listener.run();
 	    outputText.addLine(line);
+	}
+    }
+
+    private final class OutputModel implements Lines
+    {
+	@Override public int getLineCount()
+	{
+	    if (compilationOutput != null && compilationOutput.length > 0)
+	    {
+		final int count = compilationOutput.length;
+		return count > 0?count:1;
+	    }
+	    final int count = outputText.getLineCount();
+	    return count > 0?count:1;
+	}
+	@Override public String getLine(int index)
+	{
+	    if (index < 0)
+		throw new IllegalArgumentException("index (" + index + ") may not be negative");
+	    if (compilationOutput != null && compilationOutput.length > 0)
+	    {
+		if (index >= compilationOutput.length)
+		    return "";
+		return compilationOutput[index].toString();
+	    }
+	    if (outputText.getLineCount() < 1)
+		return "";
+	    return outputText.getLine(index);
 	}
     }
 }

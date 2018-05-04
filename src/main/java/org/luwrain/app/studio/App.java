@@ -193,6 +193,7 @@ public class App implements Application
 	    };
 
 	outputArea = new NavigationArea(new DefaultControlEnvironment(luwrain)) {
+		final Lines outputModel = base.getOutputModel();
 		@Override public boolean onKeyboardEvent(KeyboardEvent event)
 		{
 		    NullCheck.notNull(event, "event");
@@ -227,16 +228,11 @@ public class App implements Application
 		}
 				@Override public int getLineCount()
 		{
-		    final int count = base.outputText.getLineCount();
-		    return count > 0?count:1;
+		    return outputModel.getLineCount();
 		}
 		@Override public String getLine(int index)
 		{
-		    if (index < 0)
-			throw new IllegalArgumentException("index (" + index + ") may not be negative");
-		    if (base.outputText.getLineCount() < 1)
-			return "";
-		    return base.outputText.getLine(index);
+		    return outputModel.getLine(index);
 		}
 		@Override public String getAreaName()
 		{
@@ -268,6 +264,7 @@ public class App implements Application
 	}
 	catch(IOException e)
 	{
+	    //FIXME: this notification isn't heard
 	    luwrain.message(luwrain.i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
 	    return;
 	}
