@@ -32,6 +32,8 @@ public final class JsProject implements  org.luwrain.studio.Project
     private File mainFile = null;
     private String appName = "";
 
+    private String previouslyLoadedExtId = null;
+
     public void load(File projFile) throws IOException
     {
 	NullCheck.notNull(projFile, "projFile");
@@ -68,6 +70,7 @@ public final class JsProject implements  org.luwrain.studio.Project
 	this.appName = props.getProperty("project.appname");
 	if (this.appName == null)
 	    this.appName = "";
+	this.appName = this.appName.trim();
 	}
 	final String mainFile = props.getProperty("files.main");
 	if (mainFile != null)
@@ -120,7 +123,14 @@ public final class JsProject implements  org.luwrain.studio.Project
     {
 	NullCheck.notNull(luwrain, "luwrain");
 	final String text = org.luwrain.util.FileUtils.readTextFileSingleString(mainFile, "UTF-8");
-	final Callable callable = ()->luwrain.loadScriptExtension(text);
+	final Callable callable = ()->{
+	    if (previouslyLoadedExtId != null && !previouslyLoadedExtId.isEmpty())
+		luwrain.unloadDynamicExtension(previouslyLoadedExtId);
+	    previouslyLoadedExtId = luwrain.loadScriptExtension(text);
+	    if (appName != null && !appName.trim().isEmpty())
+		luwrain.launchApp(appName);
+	    return null;
+	};
 	return new org.luwrain.studio.RunControl(){
 	    @Override public java.util.concurrent.Callable getCallableObj()
 	    {
@@ -133,6 +143,12 @@ public final class JsProject implements  org.luwrain.studio.Project
 	};
     }
 
+    @Override public void close(Luwrain luwrain)
+    {
+	NullCheck.notNull(luwrain, "luwrain");
+	if (previouslyLoadedExtId != null && !previouslyLoadedExtId.isEmpty())
+	    luwrain.unloadDynamicExtension(previouslyLoadedExtId);
+    }
 
             @Override public org.luwrain.studio.Folder getFoldersRoot()
     {
@@ -169,5 +185,5 @@ public final class JsProject implements  org.luwrain.studio.Project
 	    return o != null && (o instanceof RootFolder);
 	}
     }
-}
+    }
 }

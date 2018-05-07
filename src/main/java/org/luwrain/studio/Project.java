@@ -28,4 +28,5 @@ public interface Project
     Flavor[] getBuildFlavors();
     boolean build(Flavor flavor, Output output);
     RunControl run(Luwrain luwrain, Output output) throws IOException;
+    void close(Luwrain luwrain);
 }

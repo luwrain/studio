@@ -291,6 +291,8 @@ public class App implements Application
 
     @Override public void closeApp()
     {
+	if (base.getProject() != null)
+	    base.getProject().close(luwrain);
 	luwrain.closeApp();
     }
 }

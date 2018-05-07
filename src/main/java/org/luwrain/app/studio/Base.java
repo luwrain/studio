@@ -93,30 +93,30 @@ final class Base
     {
 	NullCheck.notNull(runControl, "runControl");
 	NullCheck.notNull(outputRedrawing, "outputRedrawing");
-	    this.runTask = new FutureTask(()->{
-		    try {
-			runControl.getCallableObj().call();
-			luwrain.playSound(Sounds.DONE);
-		    }
-		    catch(javax.script.ScriptException e)
-		    {
-			compilationOutput = new Object[]{new ScriptExceptionWrapper(e), ""};
-luwrain.runUiSafely(outputRedrawing);
-			luwrain.playSound(Sounds.ERROR);
-		    }
-		    catch(Exception e)
-		    {
-			luwrain.crash(e);
-		    }
-		}, null);
-	    luwrain.executeBkg(runTask);
-	    return true;
+	this.runTask = new FutureTask(()->{
+		try {
+		    runControl.getCallableObj().call();
+		    luwrain.playSound(Sounds.DONE);
+		}
+		catch(javax.script.ScriptException e)
+		{
+		    compilationOutput = new Object[]{new ScriptExceptionWrapper(e), ""};
+		    luwrain.runUiSafely(outputRedrawing);
+		    luwrain.playSound(Sounds.ERROR);
+		}
+		catch(Exception e)
+		{
+		    luwrain.crash(e);
+		}
+	    }, null);
+	luwrain.executeBkg(runTask);
+	return true;
     }
 
     private boolean runForeground(RunControl runControl)
     {
 	NullCheck.notNull(runControl, "runControl");
-		try {
+	try {
 	    runControl.getCallableObj().call();
 	    luwrain.playSound(Sounds.DONE);
 	}
