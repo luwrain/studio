@@ -24,9 +24,13 @@ import org.luwrain.core.*;
 
 public final class JsProject implements  org.luwrain.studio.Project
 {
+    enum Type {SIMPLE, APP};
+
     private String projName = "";
+    private Type projType = Type.SIMPLE;
     private File[] projFiles = new File[0];
     private File mainFile = null;
+    private String appName = "";
 
     public void load(File projFile) throws IOException
     {
@@ -42,14 +46,29 @@ public final class JsProject implements  org.luwrain.studio.Project
 	final String type = props.getProperty("project.type");
 	if (type == null)
 	    throw new IOException("Project properties do not have \'project.type\' value");
-	if (!type.trim().equals("js"))
+	switch (type.trim())
+	{
+	    case "js":
+		this.projType = Type.SIMPLE;
+		break;
+	case "js-app":
+	    this.projType = Type.APP;
+	    break;
+	default:
 	    throw new IOException("Illegal project type \'" + type + "\', expecting \'js\'");
+	}
 	final String name = props.getProperty("project.name");
 	if (name == null)
 	    throw new IOException("Project properties do not have \'project.name\' value");
 	if (name.trim().isEmpty())
 	    throw new IOException("Project name may not be empty");
 	this.projName = name;
+	if (this.projType == Type.APP)
+	{
+	this.appName = props.getProperty("project.appname");
+	if (this.appName == null)
+	    this.appName = "";
+	}
 	final String mainFile = props.getProperty("files.main");
 	if (mainFile != null)
 	{
@@ -61,22 +80,21 @@ public final class JsProject implements  org.luwrain.studio.Project
 	}
     }
 
-    @Override public org.luwrain.studio.Folder getFoldersRoot()
-    {
-	return new RootFolder();
-    }
-
-    @Override public org.luwrain.studio.Flavor[] getBuildFlavors()
-    {
-	return new org.luwrain.studio.Flavor[0];
-    }
-
-    @Override public boolean build(org.luwrain.studio.Flavor flavor, org.luwrain.studio.Output output)
-    {
-	return false;
-    }
-
     @Override public org.luwrain.studio.RunControl run(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
+    {
+	NullCheck.notNull(luwrain, "luwrain");
+        switch(projType)
+    {
+    case SIMPLE:
+	return runSimple(luwrain, output);
+    case APP:
+	return runApp(luwrain);
+    default:
+	return null;
+    }
+}
+
+    private org.luwrain.studio.RunControl runSimple(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
     {
 	NullCheck.notNull(luwrain, "luwrain");
 	NullCheck.notNull(output, "output");
@@ -96,6 +114,39 @@ public final class JsProject implements  org.luwrain.studio.Project
 		return true;
 	    }
 	};
+    }
+
+    private org.luwrain.studio.RunControl runApp(Luwrain luwrain) throws IOException
+    {
+	NullCheck.notNull(luwrain, "luwrain");
+	final String text = org.luwrain.util.FileUtils.readTextFileSingleString(mainFile, "UTF-8");
+	final Callable callable = ()->luwrain.loadScriptExtension(text);
+	return new org.luwrain.studio.RunControl(){
+	    @Override public java.util.concurrent.Callable getCallableObj()
+	    {
+		return callable;
+	    }
+	    @Override public boolean isSuitableForBackground()
+	    {
+		return false;
+	    }
+	};
+    }
+
+
+            @Override public org.luwrain.studio.Folder getFoldersRoot()
+    {
+	return new RootFolder();
+    }
+
+    @Override public org.luwrain.studio.Flavor[] getBuildFlavors()
+    {
+	return new org.luwrain.studio.Flavor[0];
+    }
+
+    @Override public boolean build(org.luwrain.studio.Flavor flavor, org.luwrain.studio.Output output)
+    {
+	return false;
     }
 
     private final class RootFolder implements org.luwrain.studio.Folder

@@ -85,8 +85,15 @@ final class Base
 	if (runControl == null)
 	    return false;
 	if (runControl.isSuitableForBackground())
-	{
-	    runTask = new FutureTask(()->{
+	    return runBackground(runControl, outputRedrawing);
+	return runForeground(runControl);
+    }
+
+    private boolean runBackground(RunControl runControl, Runnable outputRedrawing)
+    {
+	NullCheck.notNull(runControl, "runControl");
+	NullCheck.notNull(outputRedrawing, "outputRedrawing");
+	    this.runTask = new FutureTask(()->{
 		    try {
 			runControl.getCallableObj().call();
 			luwrain.playSound(Sounds.DONE);
@@ -104,8 +111,12 @@ luwrain.runUiSafely(outputRedrawing);
 		}, null);
 	    luwrain.executeBkg(runTask);
 	    return true;
-	}
-	try {
+    }
+
+    private boolean runForeground(RunControl runControl)
+    {
+	NullCheck.notNull(runControl, "runControl");
+		try {
 	    runControl.getCallableObj().call();
 	    luwrain.playSound(Sounds.DONE);
 	}
