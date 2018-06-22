@@ -106,7 +106,7 @@ public class App implements Application
 	};
 
  	treeArea = new TreeArea(treeParams){
-		@Override public boolean onKeyboardEvent(KeyboardEvent event)
+		@Override public boolean onInputEvent(KeyboardEvent event)
 		{
 		    NullCheck.notNull(event, "event");
 		    if (event.isSpecial() && !event.isModified())
@@ -116,7 +116,7 @@ public class App implements Application
 			    luwrain.setActiveArea(editArea);
 			    return true;
 			}
-		    return super.onKeyboardEvent(event);
+		    return super.onInputEvent(event);
 		}
 		@Override public boolean onSystemEvent(EnvironmentEvent event)
 		{
@@ -151,7 +151,7 @@ public class App implements Application
 	};
 
 	editArea = new EditArea(editParams) {
-		@Override public boolean onKeyboardEvent(KeyboardEvent event)
+		@Override public boolean onInputEvent(KeyboardEvent event)
 		{
 		    NullCheck.notNull(event, "event");
 		    if (event.isSpecial() && !event.isModified())
@@ -161,7 +161,7 @@ public class App implements Application
 			    luwrain.setActiveArea(outputArea);
 			    return true;
 			}
-		    return super.onKeyboardEvent(event);
+		    return super.onInputEvent(event);
 		}
 		@Override public boolean onSystemEvent(EnvironmentEvent event)
 		{
@@ -194,7 +194,7 @@ public class App implements Application
 
 	outputArea = new NavigationArea(new DefaultControlEnvironment(luwrain)) {
 		final Lines outputModel = base.getOutputModel();
-		@Override public boolean onKeyboardEvent(KeyboardEvent event)
+		@Override public boolean onInputEvent(KeyboardEvent event)
 		{
 		    NullCheck.notNull(event, "event");
 		    if (event.isSpecial() && !event.isModified())
@@ -209,7 +209,7 @@ public class App implements Application
 			case ENTER:
 			    return actions.onOutputClick(getHotPointY(), editArea);
 			}
-		    return super.onKeyboardEvent(event);
+		    return super.onInputEvent(event);
 		}
 		@Override public boolean onSystemEvent(EnvironmentEvent event)
 		{
