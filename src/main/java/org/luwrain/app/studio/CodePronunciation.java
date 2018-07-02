@@ -55,7 +55,7 @@ final class CodePronunciation
 	    luwrain.say(indent + " " + strings.codeBlockEnd());
 	    return;
 	}
-	luwrain.say(indent + " " + line.trim());
+	luwrain.say(indent + " " + luwrain.getSpokenText(line.trim(), Luwrain.SpokenTextType.PROGRAMMING));
     }
 
     private int getIndent(String line)
