@@ -1,5 +1,7 @@
 #!/usr/bin/jjs
 
+var INDENT_STEP = 4;
+
 var lines = [];
 var f = new java.io.File("indent-js.js");
 var r = new java.io.BufferedReader(new java.io.InputStreamReader(new java.io.FileInputStream(f)));
@@ -8,16 +10,6 @@ while (line != null)
 {
     lines.push(line);
     line = r.readLine();
-}
-
-function findPrevLine(index)
-{
-    var prevLine = index - 1;
-    while (prevLine >= 0 && lines[prevLine].trim().isEmpty())
-	prevLine--;
-    if (prevLine < 0)
-	return -1;
-    return prevLine;
 }
 
 function getIndentOfLine(line)
@@ -57,8 +49,7 @@ function cutStringConstants(line)
 	    while (j < line.length() && line[j] != '\'')
 				if (line[j] == '\\')
 		    j += 2; else
-			
-		j++;
+					j++;
 	    if (j >= line.length())
 		return res;
 	    i = j;
@@ -69,9 +60,27 @@ function cutStringConstants(line)
     return res;
 }
 
-function getBalanceBraces(line)
+function getBracesBalance(line)
 {
-    
+    var res = 0;
+    for(var i = 0;i < line.length;i++)
+    {
+	if (line[i] == '{')
+	    res++;
+	if (line[i] == '}')
+	    res--;
+    }
+    return res;
+}
+
+function findPrevLine(index)
+{
+    var prevLine = index - 1;
+    while (prevLine >= 0 && lines[prevLine].trim().isEmpty())
+	prevLine--;
+    if (prevLine < 0)
+	return -1;
+    return prevLine;
 }
 
 function getNewIndent(index)
@@ -81,12 +90,12 @@ function getNewIndent(index)
 	return 0;
     var prevLine = lines[prevLineIndex];
     var prevLineIndex = getIndentOfLine(prevLine);
-    var prevLineText = prevLine.trim();
-    if (prevLineText.isEmpty())//must never happen
+    var prevLineText = cutStringConstants(prevLine.trim());
+    if (prevLineText.isEmpty())
 	return 0;
-    
-    return getIndentOfLine(index);
+    var bracesBalance = getBracesBalance(prevLineText);
+    return getIndentOfLine(prevLine) + (bracesBalance * INDENT_STEP);
 }
 
 for(var i = 0;i < lines.length;i++)
-    print(cutStringConstants(lines[i]));
+    print(getNewIndent(i) + " " + lines[i]);
