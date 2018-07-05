@@ -31,7 +31,47 @@ function getIndentOfLine(line)
 		    res += 1; else
 			return res;
     }
-    return -2;
+    return 0;
+}
+
+function cutStringConstants(line)
+{
+    var res = "";
+    for(var i = 0;i < line.length();i++)
+    {
+	if (line[i] == '\"')
+	{
+	    var j = i + 1;
+	    while (j < line.length() && line[j] != '\"')
+		if (line[j] == '\\')
+		    j += 2; else
+		j++;
+	    if (j >= line.length())
+		return res;
+	    i = j;
+	    continue;
+	}
+		if (line[i] == '\'')
+	{
+	    var j = i + 1;
+	    while (j < line.length() && line[j] != '\'')
+				if (line[j] == '\\')
+		    j += 2; else
+			
+		j++;
+	    if (j >= line.length())
+		return res;
+	    i = j;
+	    continue;
+	}
+		res += line[i];
+    }
+    return res;
+}
+
+function getBalanceBraces(line)
+{
+    
 }
 
 function getNewIndent(index)
@@ -49,4 +89,4 @@ function getNewIndent(index)
 }
 
 for(var i = 0;i < lines.length;i++)
-    print(getNewIndent(i) + ":" + lines[i].trim());
+    print(cutStringConstants(lines[i]));
