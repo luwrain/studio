@@ -106,7 +106,7 @@ public final class JsProject implements  org.luwrain.studio.Project
 	context.output = (line)->{
 	    output.addLine(line);
 	};
-	final Callable callable = luwrain.runScriptInFuture(context, text);
+	final Callable callable = luwrain.runScriptInFuture(context, luwrain.getFileProperty("luwrain.dir.data"), text);
 	return new org.luwrain.studio.RunControl(){
 	    @Override public java.util.concurrent.Callable getCallableObj()
 	    {
