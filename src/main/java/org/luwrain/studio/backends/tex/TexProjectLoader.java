@@ -26,7 +26,7 @@ import org.luwrain.studio.*;
 
 public final class TexProjectLoader
 {
-    Project load(File projFile) throws IOException
+    public Project load(File projFile) throws IOException
     {
 	final Gson gson = new Gson();
 	final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(projFile)));
