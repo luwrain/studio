@@ -31,6 +31,20 @@ final class TexFolder implements Folder
     @SerializedName("subfolders")
     private List<TexFolder> subfolders = null;
 
+    private TexProject proj = null;
+
+    void setProject(TexProject proj)
+    {
+	NullCheck.notNull(proj, "proj");
+	this.proj = proj;
+	if (subfolders != null)
+	    for(TexFolder f: subfolders)
+		f.setProject(proj);
+		if (sourceFiles != null)
+	    for(TexSourceFile f: sourceFiles)
+		f.setProject(proj);
+    }
+
         @SerializedName("files")
     private List<TexSourceFile> sourceFiles = null;
 

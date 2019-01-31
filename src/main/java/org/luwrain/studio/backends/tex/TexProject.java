@@ -22,16 +22,40 @@ import java.util.*;
 import com.google.gson.annotations.*;
 
 import org.luwrain.core.*;
+import org.luwrain.studio.*;
 
-public final class TexProject implements  org.luwrain.studio.Project
+final class TexProject implements  org.luwrain.studio.Project
 {
-    enum Type {SIMPLE, APP};
-
     @SerializedName("name")
     private String projName = null;
 
     @SerializedName("folders")
     private TexFolder rootFolder = null;
+
+    private File projFile = null;
+    private File projDir = null;
+    private IDE ide = null;
+
+    void setProjectFile(File projFile)
+    {
+	final File parent = projFile.getParentFile();
+	if (parent == null)
+	    throw new IllegalArgumentException("projFile must have the not-null parent");
+	this.projDir = parent;
+	this.projFile = projFile;
+    }
+
+    File getProjectDir()
+    {
+	if (projDir == null)
+	    throw new RuntimeException("The project does not have any project directory information");
+	return projDir;
+    }
+
+    void finalizeLoading()
+    {
+	rootFolder.setProject(this);
+    }
 
     @Override public org.luwrain.studio.RunControl run(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
     {

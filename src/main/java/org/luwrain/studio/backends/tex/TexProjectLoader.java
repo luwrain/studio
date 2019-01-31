@@ -30,6 +30,9 @@ public final class TexProjectLoader
     {
 	final Gson gson = new Gson();
 	final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(projFile)));
-	return gson.fromJson(reader, TexProject.class);
+final TexProject proj = gson.fromJson(reader, TexProject.class);
+proj.setProjectFile(projFile);
+proj.finalizeLoading();
+return proj;
     }
 }

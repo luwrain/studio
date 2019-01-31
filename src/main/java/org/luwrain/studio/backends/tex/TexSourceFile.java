@@ -32,19 +32,25 @@ final class TexSourceFile implements SourceFile
     @SerializedName("path")
     private String path = null;
 
-    //private final File file;
+    private TexProject proj = null;
+
+        void setProject(TexProject proj)
+    {
+	NullCheck.notNull(proj, "proj");
+	this.proj = proj;
+    }
 
     @Override public String getSourceFileName()
     {
 	return name != null?name:"NONAME";
     }
 
-    @Override public org.luwrain.studio.SourceFile.Editing startEditing()
+    @Override public SourceFile.Editing startEditing()
     {
-	return new org.luwrain.studio.SourceFile.Editing(){
+	return new SourceFile.Editing(){
 	    @Override public File getFile()
 	    {
-		return new File(path);
+		return new File(proj.getProjectDir(), path);
 	    }
 	    @Override public EditArea.CorrectorWrapperFactory getEditCorrectorWrapperFactory()
 	    {
