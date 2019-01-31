@@ -17,23 +17,26 @@
 package org.luwrain.studio.backends.tex;
 
 import java.io.*;
+import java.util.*;
+import com.google.gson. annotations.*;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
+import org.luwrain.studio.*;
 
-final class TexSourceFile implements org.luwrain.studio.SourceFile
+final class TexSourceFile implements SourceFile
 {
-    private final File file;
+    @SerializedName("name")
+    private String name = null;
 
-    TexSourceFile(File file)
-    {
-	NullCheck.notNull(file, "file");
-	this.file = file;
-    }
+    @SerializedName("path")
+    private String path = null;
+
+    //private final File file;
 
     @Override public String getSourceFileName()
     {
-	return file.getName();
+	return name != null?name:"NONAME";
     }
 
     @Override public org.luwrain.studio.SourceFile.Editing startEditing()
@@ -41,7 +44,7 @@ final class TexSourceFile implements org.luwrain.studio.SourceFile
 	return new org.luwrain.studio.SourceFile.Editing(){
 	    @Override public File getFile()
 	    {
-		return file;
+		return new File(path);
 	    }
 	    @Override public EditArea.CorrectorWrapperFactory getEditCorrectorWrapperFactory()
 	    {
@@ -57,7 +60,7 @@ final class TexSourceFile implements org.luwrain.studio.SourceFile
 
     @Override public String toString()
     {
-	return file.getName();
+	return getSourceFileName();
     }
 
     @Override public boolean equals(Object o)
@@ -65,6 +68,6 @@ final class TexSourceFile implements org.luwrain.studio.SourceFile
 	if (o == null || !(o instanceof TexSourceFile))
 	    return false;
 	final TexSourceFile f = (TexSourceFile)o;
-	return file.equals(f.file);
+	return path.equals(f.path);
     }
 }

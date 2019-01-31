@@ -30,17 +30,22 @@ final class TexFolder implements Folder
 
     @SerializedName("subfolders")
     private List<TexFolder> subfolders = null;
-    
+
+        @SerializedName("files")
+    private List<TexSourceFile> sourceFiles = null;
+
     @Override public Folder[] getSubfolders()
     {
 	if (subfolders == null)
 	    return new Folder[0];
 	return subfolders.toArray(new Folder[subfolders.size()]);
     }
-    
+
     @Override public SourceFile[] getSourceFiles()
     {
+	if (sourceFiles == null)
 	return new SourceFile[0];
+	return sourceFiles.toArray(new SourceFile[sourceFiles.size()]);
     }
 
     @Override public String toString()
