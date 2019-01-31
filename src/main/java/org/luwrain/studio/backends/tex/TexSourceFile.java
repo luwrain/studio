@@ -52,7 +52,7 @@ final class TexSourceFile implements SourceFile
 	    {
 		return new File(proj.getProjectDir(), path);
 	    }
-	    @Override public EditArea.CorrectorWrapperFactory getEditCorrectorWrapperFactory()
+	    @Override public EditArea.CorrectorFactory getEditCorrectorFactory()
 	    {
 		//FIXME:
 		return null;

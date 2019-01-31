@@ -27,7 +27,7 @@ public interface SourceFile
     public interface Editing
     {
 	File getFile();	
-	EditArea.CorrectorWrapperFactory getEditCorrectorWrapperFactory();
+	EditArea.CorrectorFactory getEditCorrectorFactory();
     }
 
     String getSourceFileName();

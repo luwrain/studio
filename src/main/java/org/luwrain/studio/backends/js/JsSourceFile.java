@@ -43,7 +43,7 @@ final class JsSourceFile implements org.luwrain.studio.SourceFile
 	    {
 		return file;
 	    }
-	    @Override public EditArea.CorrectorWrapperFactory getEditCorrectorWrapperFactory()
+	    @Override public EditArea.CorrectorFactory getEditCorrectorFactory()
 	    {
 		//FIXME:
 		return null;

@@ -144,7 +144,7 @@ public class App implements Application
 	editParams.context = new DefaultControlEnvironment(luwrain);
 	editParams.name = strings.editAreaName();
 	editParams.content = base.fileText;
-	editParams.correctorWrapperFactory = (corrector)->{
+	editParams.correctorFactory = (corrector)->{
 	    NullCheck.notNull(corrector, "corrector");
 	    base.editCorrectorWrapper.setWrappedCorrector(corrector);
 	    return base.editCorrectorWrapper;
