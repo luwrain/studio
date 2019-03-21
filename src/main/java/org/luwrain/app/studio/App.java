@@ -74,7 +74,7 @@ public class App implements Application
     private void createAreas()
     {
 	final TreeArea.Params treeParams = new TreeArea.Params();
-	treeParams.environment = new DefaultControlEnvironment(luwrain);
+	treeParams.context = new DefaultControlEnvironment(luwrain);
 	treeParams.model = new CachedTreeModel(base.getTreeModel());
 	treeParams.name = strings.treeAreaName();
 	treeParams.clickHandler = (area,obj)->{
