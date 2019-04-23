@@ -74,7 +74,7 @@ public class App implements Application
     private void createAreas()
     {
 	final TreeArea.Params treeParams = new TreeArea.Params();
-	treeParams.context = new DefaultControlEnvironment(luwrain);
+	treeParams.context = new DefaultControlContext(luwrain);
 	treeParams.model = new CachedTreeModel(base.getTreeModel());
 	treeParams.name = strings.treeAreaName();
 	treeParams.clickHandler = (area,obj)->{
@@ -141,7 +141,7 @@ public class App implements Application
 	    };
 
 	final EditArea.Params editParams = new EditArea.Params();
-	editParams.context = new DefaultControlEnvironment(luwrain);
+	editParams.context = new DefaultControlContext(luwrain);
 	editParams.name = strings.editAreaName();
 	editParams.content = base.fileText;
 	editParams.correctorFactory = (corrector)->{
@@ -192,7 +192,7 @@ public class App implements Application
 		}
 	    };
 
-	outputArea = new NavigationArea(new DefaultControlEnvironment(luwrain)) {
+	outputArea = new NavigationArea(new DefaultControlContext(luwrain)) {
 		final Lines outputModel = base.getOutputModel();
 		@Override public boolean onInputEvent(KeyboardEvent event)
 		{
