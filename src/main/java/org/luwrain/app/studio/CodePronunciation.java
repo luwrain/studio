@@ -42,20 +42,20 @@ final class CodePronunciation
 	final String indent = (indentLen > 0)?strings.codeIndent("" + indentLen):"";
 	if (line.trim().startsWith("//"))
 	{
-	    luwrain.say(indent + " " + strings.codeComments() + " " + line.trim().substring(2));
+	    luwrain.speak(indent + " " + strings.codeComments() + " " + line.trim().substring(2));
 	    return;
 	}
 	if (line.trim().equals("{"))
 	{
-	    luwrain.say(indent + " " + strings.codeBlockBegin());
+	    luwrain.speak(indent + " " + strings.codeBlockBegin());
 	    return;
 	}
 	if (line.trim().equals("}"))
 	{
-	    luwrain.say(indent + " " + strings.codeBlockEnd());
+	    luwrain.speak(indent + " " + strings.codeBlockEnd());
 	    return;
 	}
-	luwrain.say(indent + " " + luwrain.getSpokenText(line.trim(), Luwrain.SpokenTextType.PROGRAMMING));
+	luwrain.speak(indent + " " + luwrain.getSpokenText(line.trim(), Luwrain.SpokenTextType.PROGRAMMING));
     }
 
     private int getIndent(String line)
