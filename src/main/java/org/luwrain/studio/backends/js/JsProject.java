@@ -11,6 +11,8 @@ import org.luwrain.core.*;
 
 public final class JsProject implements  org.luwrain.studio.Project
 {
+    private File projFile = null;
+    
     @SerializedName("projname")
     private String projName = null;
 
@@ -28,6 +30,21 @@ private String mainFile = null;
 
     private String previouslyLoadedExtId = null;
 
+    void setProjectFile(File projFile)
+    {
+	NullCheck.notNull(projFile, "projFile");
+	this.projFile = projFile;
+    }
+
+    void finalizeLoading()
+    {
+	if (files == null)
+	    files = new LinkedList();
+	if (projName == null || projName.trim().isEmpty())
+	    projName = "The project";
+	if (appName == null || appName.trim().isEmpty())
+	    appName = "The project";
+    }
 
     @Override public org.luwrain.studio.RunControl run(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
     {
@@ -119,10 +136,9 @@ private String mainFile = null;
 	}
 	@Override public org.luwrain.studio.SourceFile[] getSourceFiles()
 	{
-	    Log.debug("proba", "requesting source files");
 	    final List<org.luwrain.studio.SourceFile> res = new LinkedList();
 	    for(String f: files)
-		res.add(new JsSourceFile(new File(f)));
+		res.add(new JsSourceFile(new File(projFile.getParentFile(), f)));
 	    return res.toArray(new org.luwrain.studio.SourceFile[res.size()]);
 	}
 	@Override public boolean equals(Object o)
