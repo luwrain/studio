@@ -30,8 +30,8 @@ final class Base
 {
     static final String CHARSET = "UTF-8";
 
-    private final Luwrain luwrain;
-    private final Strings strings;
+final Luwrain luwrain;
+final Strings strings;
     final Settings sett;
     final CodePronunciation codePronun;
     private final String treeRoot;
@@ -83,8 +83,11 @@ final class Base
 	final OutputControl output = new OutputControl(()->luwrain.runUiSafely(outputRedrawing));
 	final RunControl runControl = project.run(luwrain, output);
 	if (runControl == null)
-	    return false;
-	if (runControl.isSuitableForBackground())
+	{
+	    luwrain.message("Проект к запуску не готов.", Luwrain.MessageType.ERROR);
+	    return true;
+	}
+	if (runControl.isContinuous())
 	    return runBackground(runControl, outputRedrawing);
 	return runForeground(runControl);
     }

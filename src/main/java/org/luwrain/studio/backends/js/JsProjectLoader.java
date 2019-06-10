@@ -8,8 +8,6 @@ import com.google.gson.*;
 
 import org.luwrain.studio.Project;
 
-
-
 public final class JsProjectLoader
 {
     public JsProject load(File projFile) throws IOException

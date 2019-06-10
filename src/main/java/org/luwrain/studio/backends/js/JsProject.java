@@ -12,7 +12,7 @@ import org.luwrain.core.*;
 public final class JsProject implements  org.luwrain.studio.Project
 {
     private File projFile = null;
-    
+
     @SerializedName("projname")
     private String projName = null;
 
@@ -40,10 +40,12 @@ private String mainFile = null;
     {
 	if (files == null)
 	    files = new LinkedList();
+	if (mainFile == null || mainFile.isEmpty())
+	    mainFile = files.get(0);
 	if (projName == null || projName.trim().isEmpty())
 	    projName = "The project";
 	if (appName == null || appName.trim().isEmpty())
-	    appName = "The project";
+	    appName = projName;
     }
 
     @Override public org.luwrain.studio.RunControl run(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
@@ -64,18 +66,19 @@ private String mainFile = null;
     {
 	NullCheck.notNull(luwrain, "luwrain");
 	NullCheck.notNull(output, "output");
-	final String text = org.luwrain.util.FileUtils.readTextFileSingleString(new File(mainFile), "UTF-8");
+	final String text = org.luwrain.util.FileUtils.readTextFileSingleString(new File(projFile.getParentFile(), mainFile), "UTF-8");
 	final org.luwrain.core.script.Context context = new org.luwrain.core.script.Context();
 	context.output = (line)->{
 	    output.addLine(line);
 	};
-	final Callable callable = luwrain.runScriptInFuture(context, luwrain.getFileProperty("luwrain.dir.data"), text);
+	final Callable
+	callable = luwrain.runScriptInFuture(context, luwrain.getFileProperty("luwrain.dir.data"), text);
 	return new org.luwrain.studio.RunControl(){
 	    @Override public java.util.concurrent.Callable getCallableObj()
 	    {
 		return callable;
 	    }
-	    @Override public boolean isSuitableForBackground()
+	    @Override public boolean isContinuous()
 	    {
 		return true;
 	    }
@@ -99,7 +102,7 @@ private String mainFile = null;
 	    {
 		return callable;
 	    }
-	    @Override public boolean isSuitableForBackground()
+	    @Override public boolean isContinuous()
 	    {
 		return false;
 	    }
