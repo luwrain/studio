@@ -11,6 +11,7 @@ import org.luwrain.core.*;
 
 public final class JsProject implements  org.luwrain.studio.Project
 {
+    private File projDir = null;
     private File projFile = null;
 
     @SerializedName("projname")
@@ -34,6 +35,9 @@ private String mainFile = null;
     {
 	NullCheck.notNull(projFile, "projFile");
 	this.projFile = projFile;
+	this.projDir = projFile.getParentFile();
+	if (projDir == null)
+	    this.projDir = new File(".");
     }
 
     void finalizeLoading()
@@ -131,6 +135,11 @@ private String mainFile = null;
 	return false;
     }
 
+    @Override public org.luwrain.studio.SourceFile getMainSourceFile()
+    {
+	return new JsSourceFile(new File(projDir, mainFile));
+    }
+
     private final class RootFolder implements org.luwrain.studio.Folder
     {
 	@Override public org.luwrain.studio.Folder[] getSubfolders()
@@ -141,7 +150,7 @@ private String mainFile = null;
 	{
 	    final List<org.luwrain.studio.SourceFile> res = new LinkedList();
 	    for(String f: files)
-		res.add(new JsSourceFile(new File(projFile.getParentFile(), f)));
+		res.add(new JsSourceFile(new File(projDir, f)));
 	    return res.toArray(new org.luwrain.studio.SourceFile[res.size()]);
 	}
 	@Override public boolean equals(Object o)

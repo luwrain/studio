@@ -1,18 +1,3 @@
-/*
-   Copyright 2012-2018 Michael Pozhidaev <michael.pozhidaev@gmail.com>
-
-   This file is part of LUWRAIN.
-
-   LUWRAIN is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 3 of the License, or (at your option) any later version.
-
-   LUWRAIN is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-*/
 
 package org.luwrain.app.studio;
 
@@ -61,7 +46,7 @@ public class App implements Application
 	this.luwrain = luwrain;
 	this.base = new Base(luwrain, strings);
 	this.actionLists = new ActionLists(strings, base);
-	this.actions = new Actions(luwrain, base, strings);
+	this.actions = new Actions(base);
 	createAreas();
 	layout = new AreaLayoutHelper(()->{
 		luwrain.onNewAreaLayout();
@@ -149,7 +134,6 @@ public class App implements Application
 	    base.editCorrectorWrapper.setWrappedCorrector(corrector);
 	    return base.editCorrectorWrapper;
 	};
-
 	editArea = new EditArea(editParams) {
 		@Override public boolean onInputEvent(KeyboardEvent event)
 		{
@@ -277,6 +261,18 @@ public class App implements Application
 	}
 	base.activateProject(proj);
 	treeArea.refresh();
+	final SourceFile mainFile = proj.getMainSourceFile();
+	if (mainFile == null)
+	    return;
+	final SourceFile.Editing editing = mainFile.startEditing();
+	if (editing == null)
+	    return;
+	try {
+	    base.startEditing(editing);
+	}
+	catch(IOException e)
+	{
+	}
     }
 
     @Override public AreaLayout getAreaLayout()

@@ -7,8 +7,7 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 
 final class JsSourceFile implements org.luwrain.studio.SourceFile
-{
-    private final File file;
+{    private final File file;
 
     JsSourceFile(File file)
     {
