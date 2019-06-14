@@ -14,7 +14,7 @@
    General Public License for more details.
 */
 
-package org.luwrain.studio.backends.js;
+package org.luwrain.studio.backends.py;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -24,19 +24,13 @@ import java.util.concurrent.*;
 
 import org.luwrain.core.*;
 
-public final class JsProject implements  org.luwrain.studio.Project
+public final class PyProject implements  org.luwrain.studio.Project
 {
     private File projDir = null;
     private File projFile = null;
 
     @SerializedName("projname")
     private String projName = null;
-
-    @SerializedName("appname")
-    private String appName = null;
-
-    @SerializedName("type")
-    private String projType = null;
 
     @SerializedName("files")
     private List<String> files;
@@ -63,25 +57,9 @@ private String mainFile = null;
 	    mainFile = files.get(0);
 	if (projName == null || projName.trim().isEmpty())
 	    projName = "The project";
-	if (appName == null || appName.trim().isEmpty())
-	    appName = projName;
     }
 
     @Override public org.luwrain.studio.RunControl run(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
-    {
-	NullCheck.notNull(luwrain, "luwrain");
-        switch(projType)
-    {
-    case "simple":
-	return runSimple(luwrain, output);
-    case "app":
-	return runApp(luwrain);
-    default:
-	return null;
-    }
-}
-
-    private org.luwrain.studio.RunControl runSimple(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
     {
 	NullCheck.notNull(luwrain, "luwrain");
 	NullCheck.notNull(output, "output");
@@ -90,8 +68,7 @@ private String mainFile = null;
 	context.output = (line)->{
 	    output.addLine(line);
 	};
-	final Callable
-	callable = luwrain.runScriptInFuture(context, luwrain.getFileProperty("luwrain.dir.data"), text);
+	final Callable callable = luwrain.runScriptInFuture(context, luwrain.getFileProperty("luwrain.dir.data"), text);
 	return new org.luwrain.studio.RunControl(){
 	    @Override public java.util.concurrent.Callable getCallableObj()
 	    {
@@ -102,37 +79,6 @@ private String mainFile = null;
 		return true;
 	    }
 	};
-    }
-
-    private org.luwrain.studio.RunControl runApp(Luwrain luwrain) throws IOException
-    {
-	NullCheck.notNull(luwrain, "luwrain");
-	final String text = org.luwrain.util.FileUtils.readTextFileSingleString(new File(projDir, mainFile), "UTF-8");
-	final Callable callable = ()->{
-	    if (previouslyLoadedExtId != null && !previouslyLoadedExtId.isEmpty())
-		luwrain.unloadDynamicExtension(previouslyLoadedExtId);
-	    previouslyLoadedExtId = luwrain.loadScriptExtension(text);
-	    if (appName != null && !appName.trim().isEmpty())
-		luwrain.launchApp(appName);
-	    return null;
-	};
-	return new org.luwrain.studio.RunControl(){
-	    @Override public java.util.concurrent.Callable getCallableObj()
-	    {
-		return callable;
-	    }
-	    @Override public boolean isContinuous()
-	    {
-		return false;
-	    }
-	};
-    }
-
-    @Override public void close(Luwrain luwrain)
-    {
-	NullCheck.notNull(luwrain, "luwrain");
-	if (previouslyLoadedExtId != null && !previouslyLoadedExtId.isEmpty())
-	    luwrain.unloadDynamicExtension(previouslyLoadedExtId);
     }
 
             @Override public org.luwrain.studio.Folder getFoldersRoot()
@@ -148,11 +94,16 @@ private String mainFile = null;
     @Override public boolean build(org.luwrain.studio.Flavor flavor, org.luwrain.studio.Output output)
     {
 	return false;
+}
+
+
+    @Override public void close(Luwrain luwrain)
+{
     }
 
     @Override public org.luwrain.studio.SourceFile getMainSourceFile()
     {
-	return new JsSourceFile(new File(projDir, mainFile));
+	return new PySourceFile(new File(projDir, mainFile));
     }
 
     private final class RootFolder implements org.luwrain.studio.Folder
@@ -165,7 +116,7 @@ private String mainFile = null;
 	{
 	    final List<org.luwrain.studio.SourceFile> res = new LinkedList();
 	    for(String f: files)
-		res.add(new JsSourceFile(new File(projDir, f)));
+		res.add(new PySourceFile(new File(projDir, f)));
 	    return res.toArray(new org.luwrain.studio.SourceFile[res.size()]);
 	}
 	@Override public boolean equals(Object o)
