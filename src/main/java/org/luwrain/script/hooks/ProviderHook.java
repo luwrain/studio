@@ -25,7 +25,7 @@ public class ProviderHook
 {
     protected final Luwrain luwrain;
 
-    ProviderHook(Luwrain luwrain)
+    public ProviderHook(Luwrain luwrain)
     {
 	NullCheck.notNull(luwrain, "luwrain");
 	this.luwrain = luwrain;
