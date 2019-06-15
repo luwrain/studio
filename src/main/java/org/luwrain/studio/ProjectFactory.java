@@ -58,12 +58,10 @@ public final class ProjectFactory
 	    throw new IOException(HOOK_NAME + " has not returned any value");
 	final String projFileName = res.toString();
 	if (projFileName == null || projFileName.isEmpty())
-	    	    throw new IOException(HOOK_NAME + " has not returned any value");
+	    throw new IOException(HOOK_NAME + " has not returned any value");
 	final File projFile = new File(projFileName);
 	if (!projFile.exists() || !projFile.isFile())
 	    throw new IOException(HOOK_NAME + " has returned \'" + projFileName + "\' but it is not a file");
 	return load(projFile);
     }
-
-    
-}
+ }
