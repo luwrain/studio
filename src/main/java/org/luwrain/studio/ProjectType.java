@@ -57,9 +57,9 @@ public final class ProjectType implements Comparable
 
     @Override public boolean equals(Object o)
     {
-		if (o == null || !(o instanceof ProjectType))
-		    return false;
-		return id.equals(((ProjectType)o).id);
+	if (o == null || !(o instanceof ProjectType))
+	    return false;
+	return id.equals(((ProjectType)o).id);
     }
 
     @Override public int compareTo(Object o)
