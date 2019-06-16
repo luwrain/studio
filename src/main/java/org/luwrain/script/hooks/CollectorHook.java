@@ -53,7 +53,24 @@ public class CollectorHook
 		}
 	    });
 	if (ex.get() != null && ex.get() instanceof RuntimeException)
- throw (RuntimeException)ex.get();
+	    throw (RuntimeException)ex.get();
 	return res.toArray(new Object[res.size()]);
-	    }
+    }
+
+    public Object[] runForArrays(String hookName, Object[]args)
+    {
+	NullCheck.notNull(hookName, "hookName");
+	NullCheck.notNullItems(args, "args");
+	final List res = new LinkedList();
+	final Object[] objs = run(hookName, args);
+	for(Object o: objs)
+	{
+	    final List values = ScriptUtils.getArray(o);
+	    if (values == null)
+		throw new RuntimeException("The hook \'" + hookName + "\' has returned non-array value");
+	    for(Object oo: values)
+		res.add(oo);
+	}
+	return res.toArray(new Object[res.size()]);
+    }
 }
