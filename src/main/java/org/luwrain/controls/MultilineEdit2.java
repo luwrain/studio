@@ -12,51 +12,50 @@ import org.luwrain.util.*;
 //Completely skips EnvironmentEvent.CLEAR
 public class MultilineEdit2
 {
-public class ModificationResult
-{
-    protected final boolean performed;
-    protected final String stringArg;
-    protected final char charArg;
-
-    public ModificationResult(boolean performed, String stringArg, char charArg)
+    public class ModificationResult
     {
-	this.performed = performed;
-	this.stringArg = stringArg;
-	this.charArg = charArg;
+	protected final boolean performed;
+	protected final String stringArg;
+	protected final char charArg;
+
+	public ModificationResult(boolean performed, String stringArg, char charArg)
+	{
+	    this.performed = performed;
+	    this.stringArg = stringArg;
+	    this.charArg = charArg;
+	}
+
+	public ModificationResult(boolean performed)
+	{
+	    this(performed, null, '\0');
+	}
+
+	public ModificationResult(boolean performed, String stringArg)
+	{
+	    this(performed, stringArg, '\0');
+	}
+
+	public ModificationResult(boolean performed, char charArg)
+	{
+	    this(performed, null, charArg);
+	}
+
+	public final boolean isPerformed()
+	{
+	    return performed;
+	}
+
+	public final String getStringArg()
+	{
+	    return stringArg;
+	}
+
+	public final char getCharArg()
+	{
+	    return charArg;
+	}
     }
 
-    public ModificationResult(boolean performed)
-    {
-	this(performed, null, '\0');
-    }
-
-    public ModificationResult(boolean performed, String stringArg)
-    {
-	this(performed, stringArg, '\0');
-    }
-
-    public ModificationResult(boolean performed, char charArg)
-    {
-	this(performed, null, charArg);
-    }
-
-    public final boolean isPerformed()
-    {
-	return performed;
-    }
-
-    public final String getStringArg()
-    {
-	return stringArg;
-    }
-
-    public final char getCharArg()
-    {
-	return charArg;
-    }
-}
-    
-    
     //FIXME:getLineCount() never returns zero
     /**
      * The model for {@link MultilineEdit}. It is supposed that this
@@ -84,13 +83,15 @@ public class ModificationResult
 	String getTabSeq();
 	//Processes only chars within line bounds,  neither end of line not end of text not processed
 	ModificationResult deleteChar(int pos, int lineIndex);
-	
+
 	//Expects ending point always after starting
 	ModificationResult deleteRegion(int fromX, int fromY, int toX, int toY);
+
 	ModificationResult insertRegion(int x, int y, String[] lines);
-	
-    //Adds empty line with pos=0 and line=0 if previously there were no lines at all
+
+	//Adds empty line with pos=0 and line=0 if previously there were no lines at all
 	ModificationResult insertChars(int pos, int lineIndex, String str);
+
 	ModificationResult mergeLines(int firstLineIndex);
 
 	/**
@@ -109,9 +110,8 @@ public class ModificationResult
 
     public interface Appearance
     {
-
 	boolean onBackspaceDeleteChar(ModificationResult result);
-	    boolean onBackspaceMergeLines(ModificationResult result);
+	boolean onBackspaceMergeLines(ModificationResult result);
 	boolean onBackspaceTextBegin();
 	boolean onChar(ModificationResult result);
 	boolean onDeleteChar(ModificationResult result);
@@ -119,16 +119,14 @@ public class ModificationResult
 	boolean onDeleteCharTextEnd();
 	boolean onSplitLines(ModificationResult result);
 	boolean onTab(ModificationResult result);
-
     }
 
     protected final ControlContext context;
-        protected final Model model;
+    protected final Model model;
     protected final Appearance appearance;
     protected final AbstractRegionPoint regionPoint;
     protected final ClipboardTranslator clipboardTranslator;
     protected final RegionTextQueryTranslator regionTextQueryTranslator;
-
 
     public MultilineEdit2(ControlContext environment, Model model, AbstractRegionPoint regionPoint)
     {
@@ -151,8 +149,8 @@ public class ModificationResult
 		}
 		@Override public boolean onDeleteRegion(int fromX, int fromY, int toX, int toY)
 		{
-		   final ModificationResult res = model.deleteRegion(fromX, fromY, toX, toY);
-		   return res != null?res.isPerformed():null;
+		    final ModificationResult res = model.deleteRegion(fromX, fromY, toX, toY);
+		    return res != null?res.isPerformed():null;
 		}
 	    }, regionPoint, EnumSet.noneOf(ClipboardTranslator.Flags.class));
 	this.regionTextQueryTranslator = new RegionTextQueryTranslator(new LinesRegionTextQueryProvider(model), regionPoint, EnumSet.noneOf(RegionTextQueryTranslator.Flags.class));
@@ -162,20 +160,19 @@ public class ModificationResult
     {
 	NullCheck.notNull(event, "event");
 	if (!event.isSpecial())//&&
-	    //	    (!event.isModified() || event.withShiftOnly()))
 	    return onChar(event);
 	if (event.isModified())
 	    return false;
 	switch(event.getSpecial())
 	{
 	case BACKSPACE:
-return onBackspace(event);
+	    return onBackspace(event);
 	case DELETE:
-return onDelete(event);
+	    return onDelete(event);
 	case TAB:
-return onTab(event);
+	    return onTab(event);
 	case ENTER:
-return onEnter(event);
+	    return onEnter(event);
 	default:
 	    return false;
 	}
@@ -195,7 +192,7 @@ return onEnter(event);
 	default:
 	    if (clipboardTranslator.onSystemEvent(event, model.getHotPointX(), model.getHotPointY()))
 		return true;
-	return regionTextQueryTranslator.onSystemEvent(event, model.getHotPointX(), model.getHotPointY());
+	    return regionTextQueryTranslator.onSystemEvent(event, model.getHotPointX(), model.getHotPointY());
 	}
     }
 
@@ -216,8 +213,8 @@ return onEnter(event);
 	    final ModificationResult res = model.mergeLines(model.getHotPointY() - 1);
 	    return appearance.onBackspaceMergeLines(res);
 	}
-	    final ModificationResult res = model.deleteChar(model.getHotPointX() - 1, model.getHotPointY());
-	    return appearance.onBackspaceDeleteChar(res);
+	final ModificationResult res = model.deleteChar(model.getHotPointX() - 1, model.getHotPointY());
+	return appearance.onBackspaceDeleteChar(res);
     }
 
     protected boolean onDelete(KeyboardEvent event)
