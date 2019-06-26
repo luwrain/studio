@@ -90,7 +90,7 @@ public class MultilineEdit2
 	ModificationResult insertRegion(int x, int y, String[] lines);
 
 	//Adds empty line with pos=0 and line=0 if previously there were no lines at all
-	ModificationResult insertChars(int pos, int lineIndex, String str);
+	ModificationResult putChars(int pos, int lineIndex, String str);
 
 	ModificationResult mergeLines(int firstLineIndex);
 
@@ -240,7 +240,7 @@ public class MultilineEdit2
 	final String tabSeq = model.getTabSeq();
 	if (tabSeq == null)
 	    return false;
-	final ModificationResult res = model.insertChars(model.getHotPointX(), model.getHotPointY(), tabSeq);
+	final ModificationResult res = model.putChars(model.getHotPointX(), model.getHotPointY(), tabSeq);
 	return appearance.onTab(res);
     }
 
@@ -255,7 +255,7 @@ public class MultilineEdit2
 	final char c = event.getChar();
 	final String line = model.getLine(model.getHotPointY());
 	NullCheck.notNull(line, "line");
-	final ModificationResult res = model.insertChars(model.getHotPointX(), model.getHotPointY(), "" + c);
+	final ModificationResult res = model.putChars(model.getHotPointX(), model.getHotPointY(), "" + c);
 	return appearance.onChar(res);
     }
 
