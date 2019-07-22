@@ -18,9 +18,11 @@
 
 package org.luwrain.studio;
 
+import java.util.*;
 import java.io.*;
 
 import org.luwrain.core.*;
+import org.luwrain.script.*;
 import org.luwrain.script.hooks.*;
 import org.luwrain.studio.backends.js.JsProject;
 import org.luwrain.studio.backends.js.JsProjectLoader;
@@ -28,6 +30,16 @@ import org.luwrain.studio.backends.tex.TexProjectLoader;
 
 public final class ProjectFactory
 {
+    static public final String TYPES_LIST_HOOK = "luwrain.studio.project.types";
+    
+    private final Luwrain luwrain;
+
+    public ProjectFactory(Luwrain luwrain)
+    {
+	NullCheck.notNull(luwrain, "luwrain");
+	this.luwrain = luwrain;
+    }
+    
     static public Project load(File projFile) throws IOException
     {
 	NullCheck.notNull(projFile, "projFile");
@@ -64,4 +76,37 @@ public final class ProjectFactory
 	    throw new IOException(HOOK_NAME + " has returned \'" + projFileName + "\' but it is not a file");
 	return load(projFile);
     }
+
+    public ProjectType[] getNewProjectTypes()
+    {
+
+	final Object[] objs;
+	try {
+	    objs = new CollectorHook(luwrain).runForArrays(TYPES_LIST_HOOK, new Object[0]);
+	}
+	catch(RuntimeException e)
+	{
+	    luwrain.crash(e);
+	    return new ProjectType[0];
+	}
+	final List<ProjectType> res = new LinkedList();
+	for(Object o: objs)
+	    if (o != null)
+	{
+	    final Object idObj = ScriptUtils.getMember(o, "id");
+	    	    final Object orderIndexObj = ScriptUtils.getMember(o, "orderIndex");
+		    	    final Object titleObj = ScriptUtils.getMember(o, "title");
+			    if (idObj == null || titleObj == null || orderIndexObj == null)
+				continue;
+			    final String id = ScriptUtils.getStringValue(idObj);
+			    final Integer orderIndex = ScriptUtils.getIntegerValue(orderIndexObj);
+			    final String title = ScriptUtils.getStringValue(titleObj);
+			    if (id == null || id.isEmpty() ||
+				orderIndex == null || orderIndex.intValue() < 0 ||
+				title == null || title.isEmpty())
+				continue;
+			    res.add(new ProjectType(id, orderIndex.intValue(), title));
+	}
+	return res.toArray(new ProjectType[res.size()]);
+	    }
  }

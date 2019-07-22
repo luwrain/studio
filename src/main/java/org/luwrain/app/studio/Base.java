@@ -164,7 +164,17 @@ final Luwrain luwrain;
 	return new OutputModel();
     }
 
-    private class TreeModel implements CachedTreeModelSource
+    ProjectType[] getNewProjectTypes()
+    {
+	return new ProjectFactory(luwrain).getNewProjectTypes();
+    }
+
+    void closeApp()
+    {
+	luwrain.closeApp();
+    }
+
+        private class TreeModel implements CachedTreeModelSource
     {
 	@Override public Object getRoot()
 	{

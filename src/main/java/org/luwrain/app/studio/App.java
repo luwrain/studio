@@ -25,7 +25,7 @@ import org.luwrain.core.events.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 
-public class App implements Application
+public final class App implements Application
 {
     private Luwrain luwrain = null;
     private Strings strings = null;
@@ -33,6 +33,7 @@ public class App implements Application
     private Actions actions = null;
     private ActionLists actionLists = null;
 
+    private NewProjectArea newProjectArea = null;
     private TreeArea treeArea = null;
     private EditArea editArea = null;
     private NavigationArea outputArea = null;
@@ -66,13 +67,16 @@ public class App implements Application
 	layout = new AreaLayoutHelper(()->{
 		luwrain.onNewAreaLayout();
 		luwrain.announceActiveArea();
-	    }, new AreaLayout(AreaLayout.LEFT_RIGHT_BOTTOM, treeArea, editArea, outputArea));
+			    }, new AreaLayout(newProjectArea));
+		//	    }, new AreaLayout(AreaLayout.LEFT_RIGHT_BOTTOM, treeArea, editArea, outputArea));
 	loadProjectByArg();
 	return new InitResult();
     }
 
     private void createAreas()
     {
+	this.newProjectArea = new NewProjectArea(base, actions);
+	
 	final TreeArea.Params treeParams = new TreeArea.Params();
 	treeParams.context = new DefaultControlContext(luwrain);
 	treeParams.model = new CachedTreeModel(base.getTreeModel());
@@ -292,7 +296,7 @@ public class App implements Application
 
     @Override public AreaLayout getAreaLayout()
     {
-	return layout.getLayout();
+		return layout.getLayout();
     }
 
     @Override public String getAppName()
@@ -304,6 +308,6 @@ public class App implements Application
     {
 	if (base.getProject() != null)
 	    base.getProject().close(luwrain);
-	luwrain.closeApp();
+	base.closeApp();
     }
 }
