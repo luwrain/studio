@@ -23,7 +23,7 @@ import com.google.gson.annotations.*;
 import org.luwrain.core.*;
 import org.luwrain.studio.*;
 
-final class TexFolder implements Folder
+final class TexFolder implements Part
 {
         @SerializedName("name")
     private String name = "";
@@ -41,25 +41,28 @@ final class TexFolder implements Folder
 	    for(TexFolder f: subfolders)
 		f.setProject(proj);
 		if (sourceFiles != null)
-	    for(TexSourceFile f: sourceFiles)
+	    for(TexSourceFile2 f: sourceFiles)
 		f.setProject(proj);
     }
 
         @SerializedName("files")
-    private List<TexSourceFile> sourceFiles = null;
+    private List<TexSourceFile2> sourceFiles = null;
 
-    @Override public Folder[] getSubfolders()
+    @Override public Part [] getChildParts()
     {
 	if (subfolders == null)
-	    return new Folder[0];
-	return subfolders.toArray(new Folder[subfolders.size()]);
+	    return new Part[0];
+	return subfolders.toArray(new Part[subfolders.size()]);
     }
 
-    @Override public SourceFile[] getSourceFiles()
+    @Override public Editing startEditing()
     {
-	if (sourceFiles == null)
-	return new SourceFile[0];
-	return sourceFiles.toArray(new SourceFile[sourceFiles.size()]);
+	return null;
+    }
+
+    @Override public String getTitle()
+    {
+	return name;
     }
 
     @Override public String toString()
