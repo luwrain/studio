@@ -24,7 +24,7 @@ import org.luwrain.core.*;
 
 public interface Project
 {
-    Folder getFoldersRoot();
+    Part getPartsRoot();
     Flavor[] getBuildFlavors();
     boolean build(Flavor flavor, Output output);
     RunControl run(Luwrain luwrain, Output output) throws IOException;

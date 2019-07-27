@@ -183,6 +183,7 @@ final Luwrain luwrain;
 	@Override public Object[] getChildObjs(Object obj)
 	{
 	    NullCheck.notNull(obj, "obj");
+	    /*
 	    if (project == null)
 		return new Object[0];
 	    final Folder folder;
@@ -199,6 +200,8 @@ final Luwrain luwrain;
 	    for(SourceFile f: folder.getSourceFiles())
 		res.add(f);
 	    return res.toArray(new Object[res.size()]);
+	    */
+	    return null;
 	}
     }
 

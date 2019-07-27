@@ -68,9 +68,9 @@ final class TexProject implements  org.luwrain.studio.Project
 	NullCheck.notNull(luwrain, "luwrain");
     }
 
-            @Override public org.luwrain.studio.Folder getFoldersRoot()
+            @Override public org.luwrain.studio.Part getPartsRoot()
     {
-	return rootFolder;
+	return null;
     }
 
     @Override public org.luwrain.studio.Flavor[] getBuildFlavors()

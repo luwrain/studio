@@ -81,9 +81,9 @@ private String mainFile = null;
 	};
     }
 
-            @Override public org.luwrain.studio.Folder getFoldersRoot()
+            @Override public org.luwrain.studio.Part getPartsRoot()
     {
-	return new RootFolder();
+	return null;//FIXME:
     }
 
     @Override public org.luwrain.studio.Flavor[] getBuildFlavors()
