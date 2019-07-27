@@ -24,6 +24,5 @@ import org.luwrain.controls.*;
 
 public interface TextEditing extends Editing
 {
-    File getFile();	
-    EditArea.CorrectorFactory getEditCorrectorFactory();
+    EditArea2.Params getEditParams(ControlContext context);
 }

@@ -20,11 +20,11 @@ package org.luwrain.studio;
 
 import java.io.*;
 
-import org.luwrain.controls.*;
+//import org.luwrain.controls.*;
 
 public interface Part
 {
     String getTitle();
     Part[] getChildParts();
-    Editing startEditing();
+    Editing startEditing() throws IOException;
 }
