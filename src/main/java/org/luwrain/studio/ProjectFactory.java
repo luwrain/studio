@@ -31,6 +31,7 @@ import org.luwrain.studio.backends.tex.TexProjectLoader;
 public final class ProjectFactory
 {
     static public final String TYPES_LIST_HOOK = "luwrain.studio.project.types";
+        static public final String CREATE_HOOK = "luwrain.studio.project.create";
     
     private final Luwrain luwrain;
 
@@ -108,5 +109,20 @@ public final class ProjectFactory
 			    res.add(new ProjectType(id, orderIndex.intValue(), title));
 	}
 	return res.toArray(new ProjectType[res.size()]);
-	    }
+    }
+
+    public File create(String projType)
+    {
+	NullCheck.notEmpty(projType, "projType");
+	final Object res;
+	try {
+	    res = new org.luwrain.script.hooks.ProviderHook(luwrain).run(CREATE_HOOK, new Object[]{projType});
+	}
+	catch(RuntimeException e)
+	{
+	    luwrain.message(luwrain.i18n().getExceptionDescr(e));
+	    return null;
+	}
+	return null;
+    }
  }

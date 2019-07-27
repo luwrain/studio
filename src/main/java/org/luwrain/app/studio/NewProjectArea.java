@@ -2,19 +2,15 @@
 package org.luwrain.app.studio;
 
 import java.util.*;
-
-import com.vk.api.sdk.objects.wall.WallPost;
-import com.vk.api.sdk.objects.wall.WallPostFull;
-import com.vk.api.sdk.objects.wall.WallpostAttachment;
-import com.vk.api.sdk.objects.wall.WallpostAttachmentType;
-import com.vk.api.sdk.objects.wall.PostType;
+import java.io.*;
 
 import org.luwrain.core.*;
 import org.luwrain.core.events.*;
 import org.luwrain.core.queries.*;
 import org.luwrain.controls.*;
+import org.luwrain.studio.*;
 
-class NewProjectArea extends ListArea
+class NewProjectArea extends ListArea implements ListArea.ClickHandler
 {
     private final Luwrain luwrain;
     private final Strings strings;
@@ -28,6 +24,16 @@ class NewProjectArea extends ListArea
 	this.strings = base.strings;
 	this.base = base;
 	this.actions = actions;
+	setListClickHandler(this);
+    }
+
+    @Override public boolean onListClick(ListArea listArea,int index,Object obj)
+    {
+	if (obj == null || !(obj instanceof ProjectType))
+	    return false;
+	final ProjectType projType = (ProjectType)obj;
+	final File projFile = (new ProjectFactory(luwrain)).create(projType.getId());
+	return true;
     }
 
     @Override public boolean onInputEvent(KeyboardEvent event)
