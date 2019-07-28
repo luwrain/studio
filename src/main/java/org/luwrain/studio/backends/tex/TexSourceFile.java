@@ -24,7 +24,7 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 
-final class TexSourceFile implements SourceFile
+final class TexSourceFile implements Part
 {
     @SerializedName("name")
     private String name = null;
@@ -40,33 +40,24 @@ final class TexSourceFile implements SourceFile
 	this.proj = proj;
     }
 
-    @Override public String getSourceFileName()
+    @Override public String getTitle()
     {
 	return name != null?name:"NONAME";
     }
 
-    @Override public SourceFile.Editing startEditing()
+    @Override public Part[] getChildParts()
     {
-	return new SourceFile.Editing(){
-	    @Override public File getFile()
-	    {
-		return new File(proj.getProjectDir(), path);
-	    }
-	    @Override public EditArea.CorrectorFactory getEditCorrectorFactory()
-	    {
-		//FIXME:
-		return null;
-	    }
-	};
+	return new Part[0];
     }
 
-    @Override public void finishEditing()
+    @Override public Editing startEditing() throws IOException
     {
+	return new TexEditing(new File(proj.getProjectDir(), path));
     }
-
+    
     @Override public String toString()
     {
-	return getSourceFileName();
+	return getTitle();
     }
 
     @Override public boolean equals(Object o)

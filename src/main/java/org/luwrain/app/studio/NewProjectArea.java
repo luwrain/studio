@@ -10,7 +10,7 @@ import org.luwrain.core.queries.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 
-class NewProjectArea extends ListArea implements ListArea.ClickHandler
+abstract class NewProjectArea extends ListArea implements ListArea.ClickHandler
 {
     private final Luwrain luwrain;
     private final Strings strings;
@@ -27,12 +27,26 @@ class NewProjectArea extends ListArea implements ListArea.ClickHandler
 	setListClickHandler(this);
     }
 
+    abstract void onNewProject(Project proj);
+
     @Override public boolean onListClick(ListArea listArea,int index,Object obj)
     {
 	if (obj == null || !(obj instanceof ProjectType))
 	    return false;
 	final ProjectType projType = (ProjectType)obj;
-	final File projFile = (new ProjectFactory(luwrain)).create(projType.getId());
+	final ProjectFactory factory = new ProjectFactory(luwrain);
+	final File projFile = factory.create(projType.getId());
+	final Project proj;
+	try {
+	proj = factory.load(projFile);
+	}
+	catch(IOException e)
+	{
+	    luwrain.message(luwrain.i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
+	    return true;
+	}
+	if (proj != null)
+	    onNewProject(proj);
 	return true;
     }
 

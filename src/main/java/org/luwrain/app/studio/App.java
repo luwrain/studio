@@ -75,7 +75,12 @@ public final class App implements Application
 
     private void createAreas()
     {
-	this.newProjectArea = new NewProjectArea(base, actions);
+	this.newProjectArea = new NewProjectArea(base, actions){
+		@Override void onNewProject(Project project)
+		{
+		    NullCheck.notNull(project, "project");
+		}
+	    };
 	
 	final TreeArea.Params treeParams = new TreeArea.Params();
 	treeParams.context = new DefaultControlContext(luwrain);

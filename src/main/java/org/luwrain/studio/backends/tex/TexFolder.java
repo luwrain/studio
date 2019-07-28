@@ -31,6 +31,9 @@ final class TexFolder implements Part
     @SerializedName("subfolders")
     private List<TexFolder> subfolders = null;
 
+        @SerializedName("sourceFiles")
+    private List<TexSourceFile> sourceFiles = null;
+
     private TexProject proj = null;
 
     void setProject(TexProject proj)
@@ -41,12 +44,9 @@ final class TexFolder implements Part
 	    for(TexFolder f: subfolders)
 		f.setProject(proj);
 		if (sourceFiles != null)
-	    for(TexSourceFile2 f: sourceFiles)
+	    for(TexSourceFile f: sourceFiles)
 		f.setProject(proj);
     }
-
-        @SerializedName("files")
-    private List<TexSourceFile2> sourceFiles = null;
 
     @Override public Part [] getChildParts()
     {
