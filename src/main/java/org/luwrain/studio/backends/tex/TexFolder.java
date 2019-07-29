@@ -40,6 +40,8 @@ final class TexFolder implements Part
     {
 	NullCheck.notNull(proj, "proj");
 	this.proj = proj;
+	if (name == null)
+	    name = "-";
 	if (subfolders == null)
 	    subfolders = new LinkedList();
 			if (sourceFiles == null)

@@ -30,6 +30,11 @@ final class PySourceFile implements org.luwrain.studio.Part
 	this.file = file;
     }
 
+    void setProject(PyProject proj)
+    {
+
+    }
+
     @Override public String getTitle()
     {
 	return file.getName();
