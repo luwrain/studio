@@ -41,7 +41,7 @@ final Luwrain luwrain;
         private FutureTask runTask = null;
 
     final MutableLinesImpl fileText = new MutableLinesImpl();
-    SourceFile.Editing openedEditing = null;
+    Editing openedEditing = null;
     final EditCorrectorWrapper editCorrectorWrapper = new EditCorrectorWrapper();
     Object[] compilationOutput = new Object[0];
     final MutableLinesImpl outputText = new MutableLinesImpl();
@@ -132,8 +132,9 @@ final Luwrain luwrain;
 	return true;
     }
 
-    void startEditing(SourceFile.Editing editing) throws IOException
+    void startEditing(Editing editing) throws IOException
     {
+	/*
 	NullCheck.notNull(editing, "editing");
 	final File file = editing.getFile();
 	NullCheck.notNull(file, "file");
@@ -141,6 +142,7 @@ final Luwrain luwrain;
 	final String[] lines = FileUtils.universalLineSplitting(wholeText);
 	fileText.setLines(lines);
 	this.openedEditing = editing;
+	*/
     }
 
     PositionInfo getCompilationOutputPositionInfo(int index)

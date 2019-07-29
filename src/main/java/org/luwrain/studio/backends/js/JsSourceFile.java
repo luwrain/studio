@@ -21,7 +21,7 @@ import java.io.*;
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 
-final class JsSourceFile implements org.luwrain.studio.SourceFile
+final class JsSourceFile implements org.luwrain.studio.Part
 {    private final File file;
 
     JsSourceFile(File file)
@@ -30,40 +30,18 @@ final class JsSourceFile implements org.luwrain.studio.SourceFile
 	this.file = file;
     }
 
-    @Override public String getSourceFileName()
+    @Override public String getTitle()
     {
 	return file.getName();
     }
 
-    @Override public org.luwrain.studio.SourceFile.Editing startEditing()
+    @Override public org.luwrain.studio.Editing startEditing()
     {
-	return new org.luwrain.studio.SourceFile.Editing(){
-	    @Override public File getFile()
-	    {
-		return file;
-	    }
-	    @Override public EditArea.CorrectorFactory getEditCorrectorFactory()
-	    {
-		//FIXME:
-		return null;
-	    }
-	};
+	return null;
     }
 
-    @Override public void finishEditing()
+    @Override public org.luwrain.studio.Part[] getChildParts()
     {
-    }
-
-    @Override public String toString()
-    {
-	return file.getName();
-    }
-
-    @Override public boolean equals(Object o)
-    {
-	if (o == null || !(o instanceof JsSourceFile))
-	    return false;
-	final JsSourceFile f = (JsSourceFile)o;
-	return file.equals(f.file);
+	return new org.luwrain.studio.Part[0];
     }
 }

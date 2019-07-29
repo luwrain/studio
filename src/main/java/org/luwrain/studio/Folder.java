@@ -21,5 +21,4 @@ package org.luwrain.studio;
 public interface Folder
 {
     Folder[] getSubfolders();
-    SourceFile[] getSourceFiles();
 }

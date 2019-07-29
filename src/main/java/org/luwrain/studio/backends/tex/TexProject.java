@@ -83,7 +83,7 @@ final class TexProject implements  org.luwrain.studio.Project
 	return false;
     }
 
-    @Override public org.luwrain.studio.SourceFile getMainSourceFile()
+    @Override public org.luwrain.studio.Part getMainSourceFile()
     {
 	return null;
     }

@@ -295,9 +295,10 @@ return new EditArea2(editParams) {
 	}
 	base.activateProject(proj);
 	treeArea.refresh();
-	final SourceFile mainFile = proj.getMainSourceFile();
+	final Part mainFile = proj.getMainSourceFile();
 	if (mainFile == null)
 	    return;
+	/*
 	final SourceFile.Editing editing = mainFile.startEditing();
 	if (editing == null)
 	    return;
@@ -307,6 +308,7 @@ return new EditArea2(editParams) {
 	catch(IOException e)
 	{
 	}
+	*/
     }
 
     @Override public AreaLayout getAreaLayout()

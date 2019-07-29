@@ -150,7 +150,7 @@ private String mainFile = null;
 	return false;
     }
 
-    @Override public org.luwrain.studio.SourceFile getMainSourceFile()
+    @Override public org.luwrain.studio.Part getMainSourceFile()
     {
 	return new JsSourceFile(new File(projDir, mainFile));
     }
@@ -160,13 +160,6 @@ private String mainFile = null;
 	@Override public org.luwrain.studio.Folder[] getSubfolders()
 	{
 	    return new org.luwrain.studio.Folder[0];
-	}
-	@Override public org.luwrain.studio.SourceFile[] getSourceFiles()
-	{
-	    final List<org.luwrain.studio.SourceFile> res = new LinkedList();
-	    for(String f: files)
-		res.add(new JsSourceFile(new File(projDir, f)));
-	    return res.toArray(new org.luwrain.studio.SourceFile[res.size()]);
 	}
 	@Override public boolean equals(Object o)
 	{

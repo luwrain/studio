@@ -65,6 +65,7 @@ final class Actions
     boolean onRun(NavigationArea outputArea)
     {
 	NullCheck.notNull(outputArea, "outputArea");
+	/*
 	if (base.openedEditing != null)
 	{
 	    try {
@@ -84,10 +85,14 @@ final class Actions
 	    luwrain.message(luwrain.i18n().getExceptionDescr(e));
 	    return true;
 	}
+return false;
+	*/
+	return false;
     }
 
     boolean onSaveEdit()
     {
+	/*
 	if (base.openedEditing == null)
 	    return false;
 	try {
@@ -98,6 +103,7 @@ final class Actions
 	{
 	    luwrain.message(luwrain.i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
 	}
+	*/
 	return true;
     }
 
