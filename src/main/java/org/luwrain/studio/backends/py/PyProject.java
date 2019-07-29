@@ -106,11 +106,19 @@ private String mainFile = null;
 	return new PySourceFile(new File(projDir, mainFile));
     }
 
-    private final class RootFolder implements org.luwrain.studio.Folder
+    private final class RootFolder implements org.luwrain.studio.Part
     {
-	@Override public org.luwrain.studio.Folder[] getSubfolders()
+	@Override public org.luwrain.studio.Editing startEditing()
 	{
-	    return new org.luwrain.studio.Folder[0];
+	    return null;
+	}
+	@Override public org.luwrain.studio.Part[] getChildParts()
+	{
+	    return new org.luwrain.studio.Part[0];
+	}
+	@Override public String getTitle()
+	{
+	    return "kaka";
 	}
 	@Override public boolean equals(Object o)
 	{
