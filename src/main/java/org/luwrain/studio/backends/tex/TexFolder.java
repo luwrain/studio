@@ -40,19 +40,24 @@ final class TexFolder implements Part
     {
 	NullCheck.notNull(proj, "proj");
 	this.proj = proj;
-	if (subfolders != null)
+	if (subfolders == null)
+	    subfolders = new LinkedList();
+			if (sourceFiles == null)
+			    sourceFiles = new LinkedList();
 	    for(TexFolder f: subfolders)
 		f.setProject(proj);
-		if (sourceFiles != null)
 	    for(TexSourceFile f: sourceFiles)
 		f.setProject(proj);
     }
 
     @Override public Part [] getChildParts()
     {
-	if (subfolders == null)
-	    return new Part[0];
-	return subfolders.toArray(new Part[subfolders.size()]);
+	final List<Part> res = new LinkedList();
+	for(Part p: subfolders)
+	    res.add(p);
+	for(Part p: sourceFiles)
+	    res.add(p);
+	return res.toArray(new Part[res.size()]);
     }
 
     @Override public Editing startEditing()

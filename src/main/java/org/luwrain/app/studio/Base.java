@@ -34,10 +34,11 @@ final Luwrain luwrain;
     final Strings strings;
     final Settings sett;
     final CodePronunciation codePronun;
-    private final String treeRoot;
 
-    private Project project = null;
-    private FutureTask runTask = null;
+        private Project project = null;
+    private Object treeRoot;
+
+        private FutureTask runTask = null;
 
     final MutableLinesImpl fileText = new MutableLinesImpl();
     SourceFile.Editing openedEditing = null;
@@ -60,6 +61,7 @@ final Luwrain luwrain;
     {
 	NullCheck.notNull(proj, "proj");
 	this.project = proj;
+		this.treeRoot = proj.getPartsRoot();
     }
 
     Project getProject()
@@ -174,7 +176,7 @@ final Luwrain luwrain;
 	luwrain.closeApp();
     }
 
-        private class TreeModel implements CachedTreeModelSource
+        private final class TreeModel implements CachedTreeModelSource
     {
 	@Override public Object getRoot()
 	{
@@ -183,26 +185,17 @@ final Luwrain luwrain;
 	@Override public Object[] getChildObjs(Object obj)
 	{
 	    NullCheck.notNull(obj, "obj");
-	    /*
-	    if (project == null)
+	    if (project == null || !(obj instanceof Part))
 		return new Object[0];
-	    final Folder folder;
-	    if (obj == treeRoot)
-		folder = project.getFoldersRoot(); else
-		if (obj instanceof Folder)
-		    folder = (Folder)obj; else
+	    final Part part = (Part)obj;
+	    final Part[] res = part.getChildParts();
+	    if (res == null)
+		return new Object[0];
+	    for(int i = 0;i < res.length;i++)
+		if (res[i] == null)
 		    return new Object[0];
-	    if (folder == null)
-		return new Object[0];
-	    final List res = new LinkedList();
-	    for(Folder f: folder.getSubfolders())
-		res.add(f);
-	    for(SourceFile f: folder.getSourceFiles())
-		res.add(f);
-	    return res.toArray(new Object[res.size()]);
-	    */
-	    return null;
-	}
+	    return res;
+	    	}
     }
 
     private final class OutputControl implements org.luwrain.studio.Output
@@ -260,7 +253,6 @@ final Luwrain luwrain;
 	final String fileName;
 	final int lineNum;
 	final int colNum;
-
 	PositionInfo(String fileName, int lineNum, int colNum)
 	{
 	    NullCheck.notNull(fileName, "fileName");

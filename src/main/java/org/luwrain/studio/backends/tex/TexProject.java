@@ -70,7 +70,7 @@ final class TexProject implements  org.luwrain.studio.Project
 
             @Override public org.luwrain.studio.Part getPartsRoot()
     {
-	return null;
+	return rootFolder;
     }
 
     @Override public org.luwrain.studio.Flavor[] getBuildFlavors()

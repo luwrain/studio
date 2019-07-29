@@ -32,7 +32,7 @@ public final class ProjectFactory
 {
     static public final String TYPES_LIST_HOOK = "luwrain.studio.project.types";
         static public final String CREATE_HOOK = "luwrain.studio.project.create";
-    
+
     private final Luwrain luwrain;
 
     public ProjectFactory(Luwrain luwrain)
@@ -44,13 +44,14 @@ public final class ProjectFactory
     static public Project load(File projFile) throws IOException
     {
 	NullCheck.notNull(projFile, "projFile");
+	/*
 	final JsProjectLoader jsProjectLoader = new JsProjectLoader();
 	final JsProject jsProj = jsProjectLoader.load(projFile);
 	return jsProj;
-	/*
+	*/
+
 	final TexProjectLoader texLoader = new TexProjectLoader();
 	return texLoader.load(projFile);
-	*/
     }
 
     static public Project create(Luwrain luwrain, String projType, File destDir) throws IOException
@@ -80,7 +81,6 @@ public final class ProjectFactory
 
     public ProjectType[] getNewProjectTypes()
     {
-
 	final Object[] objs;
 	try {
 	    objs = new CollectorHook(luwrain).runForArrays(TYPES_LIST_HOOK, new Object[0]);
@@ -123,6 +123,8 @@ public final class ProjectFactory
 	    luwrain.message(luwrain.i18n().getExceptionDescr(e));
 	    return null;
 	}
-	return null;
+	if (res == null || !(res instanceof String))
+	    return null;
+	return new File((String)res);
     }
  }
