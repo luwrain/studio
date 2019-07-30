@@ -257,11 +257,6 @@ return new EditArea2(editParams) {
 		{
 		    return actionLists.getEditActions();
 		}
-		@Override public void announceLine(int index, String line)
-		{
-		    NullCheck.notNull(line, "line");
-		    base.codePronun.announceLine(line);
-		}
 	    };
 
     }

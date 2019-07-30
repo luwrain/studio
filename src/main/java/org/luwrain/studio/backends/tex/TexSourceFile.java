@@ -54,7 +54,7 @@ final class TexSourceFile implements Part
     {
 	return new TexEditing(new File(proj.getProjectDir(), path));
     }
-    
+
     @Override public String toString()
     {
 	return getTitle();

@@ -14,7 +14,7 @@
    General Public License for more details.
 */
 
-package org.luwrain.studio.backends.tex;
+package org.luwrain.studio.backends.py;
 
 import java.io.*;
 import java.util.*;
@@ -24,12 +24,12 @@ import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.util.*;
 
-final class TexEditing implements TextEditing
+final class PyEditing implements TextEditing
 {
     private final File file;
     private final MutableLinesImpl content;
 
-    TexEditing(File file) throws IOException
+    PyEditing(File file) throws IOException
     {
 	NullCheck.notNull(file, "files");
 	this.file = file;
@@ -38,14 +38,13 @@ final class TexEditing implements TextEditing
 	this.content = new MutableLinesImpl(lines);
     }
 
-    
     @Override public EditArea2.Params getEditParams(ControlContext context)
     {
 	NullCheck.notNull(context, "context");
 	final EditArea2.Params params = new EditArea2.Params();
 	params.context = context;
 	params.content = content;
-	params.appearance = new TexAppearance(context);
+	params.appearance = new EditUtils2.DefaultEditAreaAppearance(context);
 	params.editFactory = (editParams, corrector)->{
 	    final MultilineEdit2.Params p = new MultilineEdit2.Params();
 	    p.context = editParams.context;
