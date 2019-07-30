@@ -33,7 +33,6 @@ final class Base
 final Luwrain luwrain;
     final Strings strings;
     final Settings sett;
-    final CodePronunciation codePronun;
 
         private Project project = null;
     private Object treeRoot;
@@ -53,7 +52,6 @@ final Luwrain luwrain;
 	this.luwrain = luwrain;
 	this.strings = strings;
 	this.sett = Settings.create(luwrain.getRegistry());
-	this.codePronun = new CodePronunciation(luwrain, strings);
 	this.treeRoot = strings.treeRoot();
     }
 
