@@ -17,43 +17,47 @@
 package org.luwrain.studio.backends.py;
 
 import java.io.*;
+import java.util.*;
+import com.google.gson. annotations.*;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
+import org.luwrain.studio.*;
 
-final class PySourceFile implements org.luwrain.studio.Part
-{    private final File file;
+final class PySourceFile implements Part
+{
+    @SerializedName("name")
+    private String name = null;
 
-    PySourceFile(File file)
+    @SerializedName("path")
+    private String path = null;
+
+    private PyProject proj = null;
+
+        void setProject(PyProject proj)
     {
-	NullCheck.notNull(file, "file");
-	this.file = file;
-    }
-
-    void setProject(PyProject proj)
-    {
-
+	NullCheck.notNull(proj, "proj");
+	this.proj = proj;
     }
 
     @Override public String getTitle()
     {
-	return file.getName();
+	return name != null?name:"NONAME";
     }
 
-    @Override public org.luwrain.studio.Editing startEditing()
+    @Override public Part[] getChildParts()
     {
-	return null;
-	    }
-
-    @Override public org.luwrain.studio.Part[] getChildParts()
-    {
-	return new org.luwrain.studio.Part[0];
+	return new Part[0];
     }
 
+    @Override public Editing startEditing() throws IOException
+    {
+	return new PyEditing(new File(proj.getProjectDir(), path));
+    }
 
     @Override public String toString()
     {
-	return file.getName();
+	return getTitle();
     }
 
     @Override public boolean equals(Object o)
@@ -61,6 +65,6 @@ final class PySourceFile implements org.luwrain.studio.Part
 	if (o == null || !(o instanceof PySourceFile))
 	    return false;
 	final PySourceFile f = (PySourceFile)o;
-	return file.equals(f.file);
+	return path.equals(f.path);
     }
 }

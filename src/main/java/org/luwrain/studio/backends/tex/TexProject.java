@@ -54,6 +54,7 @@ final class TexProject implements  org.luwrain.studio.Project
 
     void finalizeLoading()
     {
+	if (rootFolder != null)
 	rootFolder.setProject(this);
     }
 

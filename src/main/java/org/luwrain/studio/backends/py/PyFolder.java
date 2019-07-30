@@ -45,15 +45,15 @@ final class PyFolder implements org.luwrain.studio.Part
 	    name = "-";
 	if (subfolders == null)
 	    subfolders = new LinkedList();
-			if (sourceFiles == null)
-			    sourceFiles = new LinkedList();
-	    for(PyFolder f: subfolders)
-		f.setProject(proj);
-	    for(PySourceFile f: sourceFiles)
-		f.setProject(proj);
+	if (sourceFiles == null)
+	    sourceFiles = new LinkedList();
+	for(PyFolder f: subfolders)
+	    f.setProject(proj);
+	for(PySourceFile f: sourceFiles)
+	    f.setProject(proj);
     }
 
-        @Override public org.luwrain.studio.Editing startEditing()
+    @Override public org.luwrain.studio.Editing startEditing()
     {
 	return null;
     }
@@ -73,8 +73,13 @@ final class PyFolder implements org.luwrain.studio.Part
 	return name;
     }
 
+    @Override public String toString()
+    {
+	return getTitle();
+    }
+
     @Override public boolean equals(Object o)
     {
-	    return o != null && (o instanceof PyFolder);
-	}
+	return o != null && (o instanceof PyFolder);
     }
+}

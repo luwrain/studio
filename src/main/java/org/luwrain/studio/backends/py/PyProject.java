@@ -29,16 +29,11 @@ public final class PyProject implements  org.luwrain.studio.Project
     private File projDir = null;
     private File projFile = null;
 
-    @SerializedName("projname")
+    @SerializedName("name")
     private String projName = null;
 
-    @SerializedName("files")
-    private List<String> files;
-
-    @SerializedName("mainfile")
-private String mainFile = null;
-
-    private String previouslyLoadedExtId = null;
+    @SerializedName("folders")
+    private PyFolder rootFolder = null;
 
     void setProjectFile(File projFile)
     {
@@ -51,18 +46,22 @@ private String mainFile = null;
 
     void finalizeLoading()
     {
-	if (files == null)
-	    files = new LinkedList();
-	if (mainFile == null || mainFile.isEmpty())
-	    mainFile = files.get(0);
+	if (rootFolder != null)
+	    rootFolder.setProject(this);
 	if (projName == null || projName.trim().isEmpty())
 	    projName = "The project";
+    }
+
+    File getProjectDir()
+    {
+	return projDir;
     }
 
     @Override public org.luwrain.studio.RunControl run(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
     {
 	NullCheck.notNull(luwrain, "luwrain");
 	NullCheck.notNull(output, "output");
+	/*
 	final String text = org.luwrain.util.FileUtils.readTextFileSingleString(new File(projFile.getParentFile(), mainFile), "UTF-8");
 	final org.luwrain.core.script.Context context = new org.luwrain.core.script.Context();
 	context.output = (line)->{
@@ -79,11 +78,13 @@ private String mainFile = null;
 		return true;
 	    }
 	};
+	*/
+	return null;
     }
 
             @Override public org.luwrain.studio.Part getPartsRoot()
     {
-	return null;//FIXME:
+	return rootFolder;
     }
 
     @Override public org.luwrain.studio.Flavor[] getBuildFlavors()
@@ -103,7 +104,7 @@ private String mainFile = null;
 
     @Override public org.luwrain.studio.Part getMainSourceFile()
     {
-	return new PySourceFile(new File(projDir, mainFile));
+	return null;
     }
 
     private final class RootFolder implements org.luwrain.studio.Part

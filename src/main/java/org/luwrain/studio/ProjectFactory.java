@@ -1,7 +1,7 @@
 /*
    Copyright 2012-2019 Michael Pozhidaev <msp@luwrain.org>
 
-   This file is part of LUWRAIN.
+c   This file is part of LUWRAIN.
 
    LUWRAIN is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -24,14 +24,19 @@ import java.io.*;
 import org.luwrain.core.*;
 import org.luwrain.script.*;
 import org.luwrain.script.hooks.*;
+import org.luwrain.util.*;
 import org.luwrain.studio.backends.js.JsProject;
 import org.luwrain.studio.backends.js.JsProjectLoader;
 import org.luwrain.studio.backends.tex.TexProjectLoader;
+import org.luwrain.studio.backends.py.*;
 
 public final class ProjectFactory
 {
+    static public final String KEY_TEX_PRESENTATION = "luwrain-project-tex-presentation";
+    static public final String KEY_PYTHON_CONSOLE = "luwrain-project-py-console";
+
     static public final String TYPES_LIST_HOOK = "luwrain.studio.project.types";
-        static public final String CREATE_HOOK = "luwrain.studio.project.create";
+    static public final String CREATE_HOOK = "luwrain.studio.project.create";
 
     private final Luwrain luwrain;
 
@@ -40,18 +45,30 @@ public final class ProjectFactory
 	NullCheck.notNull(luwrain, "luwrain");
 	this.luwrain = luwrain;
     }
-    
+
     static public Project load(File projFile) throws IOException
     {
 	NullCheck.notNull(projFile, "projFile");
-	/*
-	final JsProjectLoader jsProjectLoader = new JsProjectLoader();
-	final JsProject jsProj = jsProjectLoader.load(projFile);
-	return jsProj;
-	*/
-
-	final TexProjectLoader texLoader = new TexProjectLoader();
-	return texLoader.load(projFile);
+	switch(getProjectType(projFile))
+	{
+	case "tex":
+	    {
+		final TexProjectLoader texLoader = new TexProjectLoader();
+		return texLoader.load(projFile);
+	    }
+	case "py":
+	    {
+		final PyProjectLoader pyLoader = new PyProjectLoader();
+		return pyLoader.load(projFile);
+	    }
+	case "js":
+	    {
+		final JsProjectLoader jsProjectLoader = new JsProjectLoader();
+		return jsProjectLoader.load(projFile);
+	    }
+	default:
+	    return null;
+	}
     }
 
     static public Project create(Luwrain luwrain, String projType, File destDir) throws IOException
@@ -93,22 +110,24 @@ public final class ProjectFactory
 	final List<ProjectType> res = new LinkedList();
 	for(Object o: objs)
 	    if (o != null)
-	{
-	    final Object idObj = ScriptUtils.getMember(o, "id");
-	    	    final Object orderIndexObj = ScriptUtils.getMember(o, "orderIndex");
-		    	    final Object titleObj = ScriptUtils.getMember(o, "title");
-			    if (idObj == null || titleObj == null || orderIndexObj == null)
-				continue;
-			    final String id = ScriptUtils.getStringValue(idObj);
-			    final Integer orderIndex = ScriptUtils.getIntegerValue(orderIndexObj);
-			    final String title = ScriptUtils.getStringValue(titleObj);
-			    if (id == null || id.isEmpty() ||
-				orderIndex == null || orderIndex.intValue() < 0 ||
-				title == null || title.isEmpty())
-				continue;
-			    res.add(new ProjectType(id, orderIndex.intValue(), title));
-	}
-	return res.toArray(new ProjectType[res.size()]);
+	    {
+		final Object idObj = ScriptUtils.getMember(o, "id");
+		final Object orderIndexObj = ScriptUtils.getMember(o, "orderIndex");
+		final Object titleObj = ScriptUtils.getMember(o, "title");
+		if (idObj == null || titleObj == null || orderIndexObj == null)
+		    continue;
+		final String id = ScriptUtils.getStringValue(idObj);
+		final Integer orderIndex = ScriptUtils.getIntegerValue(orderIndexObj);
+		final String title = ScriptUtils.getStringValue(titleObj);
+		if (id == null || id.isEmpty() ||
+		    orderIndex == null || orderIndex.intValue() < 0 ||
+		    title == null || title.isEmpty())
+		    continue;
+		res.add(new ProjectType(id, orderIndex.intValue(), title));
+	    }
+	final ProjectType[] toSort = res.toArray(new ProjectType[res.size()]);
+	Arrays.sort(toSort);
+	return toSort;
     }
 
     public File create(String projType)
@@ -127,4 +146,15 @@ public final class ProjectFactory
 	    return null;
 	return new File((String)res);
     }
- }
+
+    static private String getProjectType(File projFile) throws IOException
+    {
+	NullCheck.notNull(projFile, "projFile");
+	final String text = FileUtils.readTextFileSingleString(projFile, "UTF-8");
+	if (text.contains(KEY_TEX_PRESENTATION))
+	    return "tex";
+	if (text.contains(KEY_PYTHON_CONSOLE))
+	    return "py";
+	return "";
+    }
+}
