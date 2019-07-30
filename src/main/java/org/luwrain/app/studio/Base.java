@@ -41,7 +41,6 @@ final Luwrain luwrain;
 
     final MutableLinesImpl fileText = new MutableLinesImpl();
     Editing openedEditing = null;
-    final EditCorrectorWrapper editCorrectorWrapper = new EditCorrectorWrapper();
     Object[] compilationOutput = new Object[0];
     final MutableLinesImpl outputText = new MutableLinesImpl();
 
