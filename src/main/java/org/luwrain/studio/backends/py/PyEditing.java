@@ -38,13 +38,13 @@ final class PyEditing implements TextEditing
 	this.content = new MutableLinesImpl(lines);
     }
 
-    @Override public EditArea2.Params getEditParams(ControlContext context)
+    @Override public EditArea.Params getEditParams(ControlContext context)
     {
 	NullCheck.notNull(context, "context");
-	final EditArea2.Params params = new EditArea2.Params();
+	final EditArea.Params params = new EditArea.Params();
 	params.context = context;
 	params.content = content;
-	params.appearance = new EditUtils2.DefaultEditAreaAppearance(context);
+	params.appearance = new EditUtils.DefaultEditAreaAppearance(context);
 	params.editFactory = (editParams, corrector)->{
 	    final MultilineEdit2.Params p = new MultilineEdit2.Params();
 	    p.context = editParams.context;

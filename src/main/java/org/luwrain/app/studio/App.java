@@ -221,8 +221,8 @@ public final class App implements Application
 	if (!(editing instanceof TextEditing))
 	    return null;
 	final TextEditing textEditing = (TextEditing)editing;
-	final EditArea2.Params editParams = textEditing.getEditParams(new DefaultControlContext(luwrain));
-return new EditArea2(editParams) {
+	final EditArea.Params editParams = textEditing.getEditParams(new DefaultControlContext(luwrain));
+return new EditArea(editParams) {
 		@Override public boolean onInputEvent(KeyboardEvent event)
 		{
 		    NullCheck.notNull(event, "event");

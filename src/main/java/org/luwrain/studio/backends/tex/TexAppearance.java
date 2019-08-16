@@ -24,7 +24,7 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 
-final class TexAppearance extends EditUtils2.DefaultEditAreaAppearance
+final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
 {
     static private final String HOOK_NAME = "luwrain.studio.tex.appearance";
 

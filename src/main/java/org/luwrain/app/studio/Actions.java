@@ -107,7 +107,7 @@ return false;
 	return true;
     }
 
-    boolean onOutputClick(int lineIndex, EditArea editArea)
+    boolean onOutputClick(int lineIndex, EditAreaOld editArea)
     {
 	final Base.PositionInfo posInfo = base.getCompilationOutputPositionInfo(lineIndex);
 	if (posInfo == null)
