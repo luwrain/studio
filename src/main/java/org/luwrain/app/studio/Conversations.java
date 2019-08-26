@@ -36,9 +36,6 @@ class Conversations
 
     File openProject()
     {
-	return Popups.path(luwrain, strings.openProjectPopupName(), strings.openProjectPopupPrefix(),
-			   (fileToCheck,announce)->{
-			       return true;
-			   });
-    }
+	return Popups.existingFile(luwrain, strings.openProjectPopupName(), strings.openProjectPopupPrefix(), new String[0]);
+	    }
     }
