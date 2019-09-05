@@ -34,6 +34,11 @@ class Conversations
 	this.strings = strings;
     }
 
+    File newProjectDir()
+    {
+	return Popups.existingDir(luwrain, "Создание проекта", "Каталог для нового проекта:");
+    }
+
     File openProject()
     {
 	return Popups.existingFile(luwrain, strings.openProjectPopupName(), strings.openProjectPopupPrefix(), new String[0]);

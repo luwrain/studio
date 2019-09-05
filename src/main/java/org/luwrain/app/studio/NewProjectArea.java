@@ -33,12 +33,14 @@ abstract class NewProjectArea extends ListArea implements ListArea.ClickHandler
     {
 	if (obj == null || !(obj instanceof ProjectType))
 	    return false;
+	final File destDir = actions.conv.newProjectDir();
 	final ProjectType projType = (ProjectType)obj;
+	if (destDir == null)
+	    return true;
 	final ProjectFactory factory = new ProjectFactory(luwrain);
-	final File projFile = factory.create(projType.getId());
 	final Project proj;
 	try {
-	proj = factory.load(projFile);
+proj = factory.create(projType.getId(), destDir);
 	}
 	catch(IOException e)
 	{
