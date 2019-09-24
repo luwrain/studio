@@ -155,9 +155,15 @@ final Luwrain luwrain;
 	return new PositionInfo(wrapper.ex.getFileName(), wrapper.ex.getLineNumber(), wrapper.ex.getColumnNumber());
     }
 
-    CachedTreeModelSource getTreeModel()
+    TreeArea.Params createTreeParams(TreeArea.ClickHandler clickHandler)
     {
-	return new TreeModel();
+	NullCheck.notNull(clickHandler, "clickHandler");
+	final TreeArea.Params params = new TreeArea.Params();
+	params.context = new DefaultControlContext(luwrain);
+	params.model = new CachedTreeModel(new TreeModel());
+	params.name = strings.treeAreaName();
+	params.clickHandler = clickHandler;
+	return params;
     }
 
     Lines getOutputModel()

@@ -31,15 +31,18 @@ final class Actions
     private final Base base;
     private final Strings strings;
 
+    final Layouts layouts;
     final Conversations conv;
 
-    Actions(Base base)
+    Actions(Base base, Layouts layouts)
     {
 	NullCheck.notNull(base, "base");
+	NullCheck.notNull(layouts, "layouts");
 	this.luwrain = base.luwrain;
 	this.base = base;
 	this.strings = base.strings;
 	this.conv = new Conversations(luwrain, strings);
+	this.layouts = layouts;
     }
 
     boolean onOpenProject(TreeArea treeArea)
@@ -60,6 +63,27 @@ final class Actions
 	base.activateProject(proj);
 	treeArea.refresh();
 	return true;
+    }
+
+    boolean onTreeClick(Object obj)
+    {
+	NullCheck.notNull(obj, "obj");
+
+	    if (!(obj instanceof Part))
+		return false;
+	    final Part part = (Part)obj;
+	    final Editing editing;
+	    try {
+	    editing = part.startEditing();
+	    }
+	    catch(IOException e)
+	    {
+		luwrain.message(luwrain.i18n().getExceptionDescr(e));
+		return true;
+	    }
+	    if (editing == null)
+		return false;
+	    return layouts.editing(editing);
     }
 
     boolean onRun(NavigationArea outputArea)

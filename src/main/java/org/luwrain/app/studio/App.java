@@ -62,7 +62,7 @@ public final class App implements Application
 	this.luwrain = luwrain;
 	this.base = new Base(luwrain, strings);
 	this.actionLists = new ActionLists(strings, base);
-	this.actions = new Actions(base);
+	this.actions = new Actions(base, createLayouts());
 	createAreas();
 	layout = new AreaLayoutHelper(()->{
 		luwrain.onNewAreaLayout();
@@ -86,36 +86,7 @@ public final class App implements Application
 		}
 	    };
 
-	final TreeArea.Params treeParams = new TreeArea.Params();
-	treeParams.context = new DefaultControlContext(luwrain);
-	treeParams.model = new CachedTreeModel(base.getTreeModel());
-	treeParams.name = strings.treeAreaName();
-	treeParams.clickHandler = (area,obj)->{
-	    NullCheck.notNull(obj, "obj");
-	    if (!(obj instanceof Part))
-		return false;
-	    final Part part = (Part)obj;
-	    final Editing editing;
-	    try {
-	    editing = part.startEditing();
-	    }
-	    catch(IOException e)
-	    {
-		luwrain.message(luwrain.i18n().getExceptionDescr(e));
-		return true;
-	    }
-	    if (editing == null)
-		return false;
-	    final Area workArea = createWorkArea(editing);
-	    if (workArea == null)
-		return false;
-	    this.workArea = workArea;
-	    layout.setBasicLayout(new AreaLayout(AreaLayout.LEFT_TOP_BOTTOM, treeArea, workArea, outputArea));
-		luwrain.setActiveArea(workArea);
-		return true;
-	};
-
- 	treeArea = new TreeArea(treeParams){
+ 	this.treeArea = new TreeArea(base.createTreeParams((area, obj)->actions.onTreeClick(obj))){
 		@Override public boolean onInputEvent(KeyboardEvent event)
 		{
 		    NullCheck.notNull(event, "event");
@@ -123,9 +94,12 @@ public final class App implements Application
 			switch(event.getSpecial())
 			{
 			case TAB:
-			    if (workArea == null)
-				return false;
-			    luwrain.setActiveArea(workArea);
+			    {
+				final Area nextArea = layout.getLayout().getNextArea(this);
+				if (nextArea == null)
+				    return false;
+				luwrain.setActiveArea(nextArea);
+			    }
 			    return true;
 			}
 		    return super.onInputEvent(event);
@@ -152,7 +126,6 @@ public final class App implements Application
 		}
 	    };
 
-
 	this.outputArea = new NavigationArea(new DefaultControlContext(luwrain)) {
 		final Lines outputModel = base.getOutputModel();
 		@Override public boolean onInputEvent(KeyboardEvent event)
@@ -170,8 +143,8 @@ public final class App implements Application
 			    luwrain.setActiveArea(workArea);
 			    return true;
 			    /*
-			case ENTER:
-			    return actions.onOutputClick(getHotPointY(), editArea);
+			      case ENTER:
+			      return actions.onOutputClick(getHotPointY(), editArea);
 			    */
 			}
 		    return super.onInputEvent(event);
@@ -186,8 +159,8 @@ public final class App implements Application
 		    case ACTION:
 			return onCommonActions(event);
 			/*
-		    case OK:
-			return actions.onOutputClick(getHotPointY(), editArea);
+			  case OK:
+			  return actions.onOutputClick(getHotPointY(), editArea);
 			*/
 		    case CLOSE:
 			closeApp();
@@ -200,7 +173,7 @@ public final class App implements Application
 		{
 		    return actionLists.getOutputActions();
 		}
-				@Override public int getLineCount()
+		@Override public int getLineCount()
 		{
 		    return outputModel.getLineCount();
 		}
@@ -215,6 +188,23 @@ public final class App implements Application
 	    };
     }
 
+    Layouts createLayouts()
+    {
+	return new Layouts(){
+	    @Override public boolean editing(Editing editing)
+	    {
+		NullCheck.notNull(editing, "editing");
+		final Area workArea = createWorkArea(editing);
+		if (workArea == null)
+		    return false;
+		App.this.workArea = workArea;
+		layout.setBasicLayout(new AreaLayout(AreaLayout.LEFT_TOP_BOTTOM, treeArea, workArea, outputArea));
+		luwrain.setActiveArea(workArea);
+		return true;
+	    }
+	};
+    }
+
     private Area createWorkArea(Editing editing)
     {
 	NullCheck.notNull(editing, "editing");
@@ -222,43 +212,47 @@ public final class App implements Application
 	    return null;
 	final TextEditing textEditing = (TextEditing)editing;
 	final EditArea.Params editParams = textEditing.getEditParams(new DefaultControlContext(luwrain));
-return new EditArea(editParams) {
-		@Override public boolean onInputEvent(KeyboardEvent event)
-		{
-		    NullCheck.notNull(event, "event");
-		    if (event.isSpecial() && !event.isModified())
-			switch(event.getSpecial())
+	return new EditArea(editParams) {
+	    @Override public boolean onInputEvent(KeyboardEvent event)
+	    {
+		NullCheck.notNull(event, "event");
+		if (event.isSpecial() && !event.isModified())
+		    switch(event.getSpecial())
+		    {
+		    case TAB:
 			{
-			case TAB:
-			    luwrain.setActiveArea(outputArea);
+			    final Area nextArea = layout.getLayout().getNextArea(this);
+			    if (nextArea == null)
+				return false;
+			    luwrain.setActiveArea(nextArea);
 			    return true;
 			}
-		    return super.onInputEvent(event);
-		}
-		@Override public boolean onSystemEvent(EnvironmentEvent event)
-		{
-		    NullCheck.notNull(event, "event");
-		    if (event.getType() != EnvironmentEvent.Type.REGULAR)
-			return super.onSystemEvent(event);
-		    switch(event.getCode())
-		    {
-		    case ACTION:
-			return onCommonActions(event);
-		    case SAVE:
-			return actions.onSaveEdit();
-		    case CLOSE:
-			closeApp();
-			return true;
-		    default:
-			return super.onSystemEvent(event);
 		    }
-		}
-		@Override public Action[] getAreaActions()
+		return super.onInputEvent(event);
+	    }
+	    @Override public boolean onSystemEvent(EnvironmentEvent event)
+	    {
+		NullCheck.notNull(event, "event");
+		if (event.getType() != EnvironmentEvent.Type.REGULAR)
+		    return super.onSystemEvent(event);
+		switch(event.getCode())
 		{
-		    return actionLists.getEditActions();
+		case ACTION:
+		    return onCommonActions(event);
+		case SAVE:
+		    return actions.onSaveEdit();
+		case CLOSE:
+		    closeApp();
+		    return true;
+		default:
+		    return super.onSystemEvent(event);
 		}
-	    };
-
+	    }
+	    @Override public Action[] getAreaActions()
+	    {
+		return actionLists.getEditActions();
+	    }
+	};
     }
 
     private boolean onCommonActions(EnvironmentEvent event)
@@ -266,9 +260,9 @@ return new EditArea(editParams) {
 	NullCheck.notNull(event, "event");
 	if (ActionEvent.isAction(event, "open-project"))
 	    return actions.onOpenProject(treeArea);
-		if (ActionEvent.isAction(event, "run"))
+	if (ActionEvent.isAction(event, "run"))
 	    return actions.onRun(outputArea);
-			return false;
+	return false;
     }
 
     private void loadProjectByArg()
@@ -294,21 +288,21 @@ return new EditArea(editParams) {
 	if (mainFile == null)
 	    return;
 	/*
-	final SourceFile.Editing editing = mainFile.startEditing();
-	if (editing == null)
-	    return;
-	try {
-	    base.startEditing(editing);
-	}
-	catch(IOException e)
-	{
-	}
+	  final SourceFile.Editing editing = mainFile.startEditing();
+	  if (editing == null)
+	  return;
+	  try {
+	  base.startEditing(editing);
+	  }
+	  catch(IOException e)
+	  {
+	  }
 	*/
     }
 
     @Override public AreaLayout getAreaLayout()
     {
-		return layout.getLayout();
+	return layout.getLayout();
     }
 
     @Override public String getAppName()
