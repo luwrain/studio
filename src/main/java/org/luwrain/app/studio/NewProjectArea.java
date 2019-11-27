@@ -113,7 +113,14 @@ proj = factory.create(projType.getId(), destDir);
 	final ListArea.Params params = new ListArea.Params();
 	params.context = new DefaultControlContext(luwrain);
 	params.model = new ListUtils.FixedModel(base.getNewProjectTypes());
-	params.appearance = new ListUtils.DefaultAppearance(params.context);
+	params.appearance = new ListUtils.DefaultAppearance(params.context){
+		@Override public void announceItem(Object item, Set<Flags> flags)
+		{
+		    NullCheck.notNull(item, "item");
+		    NullCheck.notNull(flags, "flags");
+		    luwrain.setEventResponse(DefaultEventResponse.listItem(luwrain.getSpeakableText(item.toString(), Luwrain.SpeakableTextType.NATURAL)));
+		}
+	    };
 	params.name = "Новый проект";//FIXME:
 	return params;
     }
