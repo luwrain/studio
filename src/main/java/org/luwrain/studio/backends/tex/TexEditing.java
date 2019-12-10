@@ -47,12 +47,12 @@ final class TexEditing implements TextEditing
 	params.content = content;
 	params.appearance = new TexAppearance(context);
 	params.editFactory = (editParams, corrector)->{
-	    final MultilineEdit2.Params p = new MultilineEdit2.Params();
+	    final MultilineEdit.Params p = new MultilineEdit.Params();
 	    p.context = editParams.context;
 	    p.model = corrector;
 	    p.appearance = editParams.appearance;
 	    p.regionPoint = editParams.regionPoint;
-	    return new MultilineEdit2(p);
+	    return new MultilineEdit(p);
 	};
 	params.name = file.getName();
 	return params;
