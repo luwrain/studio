@@ -1,3 +1,18 @@
+/*
+   Copyright 2012-2020 Michael Pozhidaev <msp@luwrain.org>
+
+   This file is part of LUWRAIN.
+
+   LUWRAIN is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 3 of the License, or (at your option) any later version.
+
+   LUWRAIN is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+*/
 
 package org.luwrain.app.studio;
 
@@ -12,23 +27,11 @@ import org.luwrain.util.*;
 
 final class Actions
 {
-    private final Luwrain luwrain;
-    private final Base base;
-    private final Strings strings;
+    private final Luwrain luwrain = null;
+    private final Strings strings = null;
 
-    final Layouts layouts;
-    final Conversations conv;
-
-    Actions(Base base, Layouts layouts)
-    {
-	NullCheck.notNull(base, "base");
-	NullCheck.notNull(layouts, "layouts");
-	this.luwrain = base.luwrain;
-	this.base = base;
-	this.strings = base.strings;
-	this.conv = new Conversations(luwrain, strings);
-	this.layouts = layouts;
-    }
+    final Layouts layouts = null;
+    final Conversations conv = null;
 
     /*
     boolean onOpenProject(TreeArea treeArea)
@@ -100,12 +103,16 @@ return false;
 
     boolean onOutputClick(int lineIndex, EditArea editArea)
     {
+	/*
 	final Base.PositionInfo posInfo = base.getCompilationOutputPositionInfo(lineIndex);
 	if (posInfo == null)
 	    return false;
 	//FIXME:ensure the corresponding file is opened
 	editArea.setHotPoint(posInfo.colNum > 0?posInfo.colNum:0, posInfo.lineNum - 1);
 	luwrain.setActiveArea(editArea);
+	return true;
+    }
+	*/
 	return true;
     }
 }

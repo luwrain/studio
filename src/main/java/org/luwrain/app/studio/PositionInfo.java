@@ -18,13 +18,18 @@ package org.luwrain.app.studio;
 
 import org.luwrain.core.*;
 
-interface Settings
-{
-    static public final String PATH = "/org/luwrain/studio";
-    
-    static Settings create(Registry registry)
+final class PositionInfo
     {
-	NullCheck.notNull(registry, "registry");
-	return RegistryProxy.create(registry, PATH, Settings.class);
+	final String fileName;
+	final int lineNum;
+	final int colNum;
+	PositionInfo(String fileName, int lineNum, int colNum)
+	{
+	    NullCheck.notNull(fileName, "fileName");
+	    if (lineNum <= 0)
+		throw new IllegalArgumentException("lineNum (" + lineNum + ") must be greater than zero");
+	    this.fileName = fileName;
+	    this.lineNum = lineNum;
+	    this.colNum = colNum;
+	}
     }
-}
