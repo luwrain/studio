@@ -1,18 +1,3 @@
-/*
-   Copyright 2012-2019 Michael Pozhidaev <msp@luwrain.org>
-
-   This file is part of LUWRAIN.
-
-   LUWRAIN is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 3 of the License, or (at your option) any later version.
-
-   LUWRAIN is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-*/
 
 package org.luwrain.app.studio;
 
@@ -24,246 +9,116 @@ import org.luwrain.core.*;
 import org.luwrain.core.events.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
+import org.luwrain.template.*;
 
-public final class App implements Application
+public final class App extends AppBase<Strings>
 {
-    private Luwrain luwrain = null;
-    private Strings strings = null;
-    private Base base = null;
-    private Actions actions = null;
-    private ActionLists actionLists = null;
-
-    private NewProjectArea newProjectArea = null;
-    private TreeArea treeArea = null;
-    private Area workArea = null;
-    private NavigationArea outputArea = null;
-    private AreaLayoutHelper layout = null;
-
     private final String arg;
+
+    private Project project = null;
+    private Object treeRoot;
+
+    
 
     public App()
     {
-	arg = null;
+	this(null);
     }
 
     public App(String arg)
     {
+	super(Strings.NAME, Strings.class);
 	NullCheck.notNull(arg, "arg");
 	this.arg = arg;
     }
 
-    @Override public InitResult onLaunchApp(Luwrain luwrain)
+	@Override protected boolean onAppInit()
+	{
+	    this.treeRoot = getStrings().treeRoot();
+	    return true;
+	}
+
+    /*
+    boolean runProject(Runnable outputRedrawing) throws IOException
     {
-	NullCheck.notNull(luwrain, "luwrain");
-	final Object o =  luwrain.i18n().getStrings(Strings.NAME);
-	if (o == null || !(o instanceof Strings))
-	    return new InitResult(InitResult.Type.NO_STRINGS_OBJ, Strings.NAME);
-	strings = (Strings)o;
-	this.luwrain = luwrain;
-	this.base = new Base(luwrain, strings);
-	this.actionLists = new ActionLists(strings, base);
-	this.actions = new Actions(base, createLayouts());
-	createAreas();
-	layout = new AreaLayoutHelper(()->{
-		luwrain.onNewAreaLayout();
-		luwrain.announceActiveArea();
-			    }, new AreaLayout(newProjectArea));
-		//	    }, new AreaLayout(AreaLayout.LEFT_RIGHT_BOTTOM, treeArea, editArea, outputArea));
-	loadProjectByArg();
-	return new InitResult();
+	NullCheck.notNull(outputRedrawing, "outputRedrawing");
+	if (project == null || isProjectRunning())
+	    return false;
+	outputText.clear();
+	compilationOutput = new Object[0];
+	outputRedrawing.run();
+	final OutputControl output = new OutputControl(()->luwrain.runUiSafely(outputRedrawing));
+	final RunControl runControl = project.run(luwrain, output);
+	if (runControl == null)
+	{
+	    luwrain.message("Проект к запуску не готов.", Luwrain.MessageType.ERROR);
+	    return true;
+	}
+	if (runControl.isContinuous())
+	    return runBackground(runControl, outputRedrawing);
+	return runForeground(runControl);
+    }
+    */
+
+    private boolean runBackground(RunControl runControl, Runnable outputRedrawing)
+    {
+	/*
+	NullCheck.notNull(runControl, "runControl");
+	NullCheck.notNull(outputRedrawing, "outputRedrawing");
+	this.runTask = new FutureTask(()->{
+		try {
+		    runControl.getCallableObj().call();
+		    luwrain.playSound(Sounds.DONE);
+		}
+		catch(javax.script.ScriptException e)
+		{
+		    compilationOutput = new Object[]{new ScriptExceptionWrapper(e), ""};
+		    luwrain.runUiSafely(outputRedrawing);
+		    luwrain.playSound(Sounds.ERROR);
+		}
+		catch(Exception e)
+		{
+		    luwrain.crash(e);
+		}
+	    }, null);
+	luwrain.executeBkg(runTask);
+	*/
+	return true;
     }
 
-    private void createAreas()
+    private boolean runForeground(RunControl runControl)
     {
-	this.newProjectArea = new NewProjectArea(base, actions){
-		@Override void onNewProject(Project project)
-		{
-		    NullCheck.notNull(project, "project");
-		    base.activateProject(project);
-		    layout.setBasicArea(treeArea);
-		    treeArea.refresh();
-		    luwrain.message("Готово");
-		}
-	    };
-
- 	this.treeArea = new TreeArea(base.createTreeParams((area, obj)->actions.onTreeClick(obj))){
-		@Override public boolean onInputEvent(KeyboardEvent event)
-		{
-		    NullCheck.notNull(event, "event");
-		    if (event.isSpecial() && !event.isModified())
-			switch(event.getSpecial())
-			{
-			case TAB:
-			    {
-				final Area nextArea = layout.getLayout().getNextArea(this);
-				if (nextArea == null)
-				    return false;
-				luwrain.setActiveArea(nextArea);
-			    }
-			    return true;
-			}
-		    return super.onInputEvent(event);
-		}
-		@Override public boolean onSystemEvent(EnvironmentEvent event)
-		{
-		    NullCheck.notNull(event, "event");
-		    if (event.getType() != EnvironmentEvent.Type.REGULAR)
-			return super.onSystemEvent(event);
-		    switch(event.getCode())
-		    {
-		    case ACTION:
-			return onCommonActions(event);
-		    case CLOSE:
-			closeApp();
-			return true;
-		    default:
-			return super.onSystemEvent(event);
-		    }
-		}
-		@Override public Action[] getAreaActions()
-		{
-		    return actionLists.getTreeActions();
-		}
-	    };
-
-	this.outputArea = new NavigationArea(new DefaultControlContext(luwrain)) {
-		final Lines outputModel = base.getOutputModel();
-		@Override public boolean onInputEvent(KeyboardEvent event)
-		{
-		    NullCheck.notNull(event, "event");
-		    if (event.isSpecial() && !event.isModified())
-			switch(event.getSpecial())
-			{
-			case TAB:
-			    luwrain.setActiveArea(treeArea);
-			    return true;
-			case BACKSPACE:
-			    if (workArea == null)
-				return false;
-			    luwrain.setActiveArea(workArea);
-			    return true;
-			    /*
-			      case ENTER:
-			      return actions.onOutputClick(getHotPointY(), editArea);
-			    */
-			}
-		    return super.onInputEvent(event);
-		}
-		@Override public boolean onSystemEvent(EnvironmentEvent event)
-		{
-		    NullCheck.notNull(event, "event");
-		    if (event.getType() != EnvironmentEvent.Type.REGULAR)
-			return super.onSystemEvent(event);
-		    switch(event.getCode())
-		    {
-		    case ACTION:
-			return onCommonActions(event);
-			/*
-			  case OK:
-			  return actions.onOutputClick(getHotPointY(), editArea);
-			*/
-		    case CLOSE:
-			closeApp();
-			return true;
-		    default:
-			return super.onSystemEvent(event);
-		    }
-		}
-		@Override public Action[] getAreaActions()
-		{
-		    return actionLists.getOutputActions();
-		}
-		@Override public int getLineCount()
-		{
-		    return outputModel.getLineCount();
-		}
-		@Override public String getLine(int index)
-		{
-		    return outputModel.getLine(index);
-		}
-		@Override public String getAreaName()
-		{
-		    return strings.outputAreaName();
-		}
-	    };
+	/*
+	NullCheck.notNull(runControl, "runControl");
+	try {
+	    runControl.getCallableObj().call();
+	    luwrain.playSound(Sounds.DONE);
+	}
+	catch(Exception e)
+	{
+	    luwrain.crash(e);
+	}
+	return true;
+	*/
+	return false;
     }
+
+
 
     Layouts createLayouts()
     {
 	return new Layouts(){
-	    @Override public boolean editing(Editing editing)
-	    {
-		NullCheck.notNull(editing, "editing");
-		final Area workArea = createWorkArea(editing);
-		if (workArea == null)
-		    return false;
-		App.this.workArea = workArea;
-		layout.setBasicLayout(new AreaLayout(AreaLayout.LEFT_TOP_BOTTOM, treeArea, workArea, outputArea));
-		luwrain.setActiveArea(workArea);
-		return true;
-	    }
 	};
     }
 
-    private Area createWorkArea(Editing editing)
+        void activateProject(Project proj)
     {
-	NullCheck.notNull(editing, "editing");
-	if (!(editing instanceof TextEditing))
-	    return null;
-	final TextEditing textEditing = (TextEditing)editing;
-	final EditArea.Params editParams = textEditing.getEditParams(new DefaultControlContext(luwrain));
-	return new EditArea(editParams) {
-	    @Override public boolean onInputEvent(KeyboardEvent event)
-	    {
-		NullCheck.notNull(event, "event");
-		if (event.isSpecial() && !event.isModified())
-		    switch(event.getSpecial())
-		    {
-		    case TAB:
-			{
-			    final Area nextArea = layout.getLayout().getNextArea(this);
-			    if (nextArea == null)
-				return false;
-			    luwrain.setActiveArea(nextArea);
-			    return true;
-			}
-		    }
-		return super.onInputEvent(event);
-	    }
-	    @Override public boolean onSystemEvent(EnvironmentEvent event)
-	    {
-		NullCheck.notNull(event, "event");
-		if (event.getType() != EnvironmentEvent.Type.REGULAR)
-		    return super.onSystemEvent(event);
-		switch(event.getCode())
-		{
-		case ACTION:
-		    return onCommonActions(event);
-		case SAVE:
-		    return actions.onSaveEdit();
-		case CLOSE:
-		    closeApp();
-		    return true;
-		default:
-		    return super.onSystemEvent(event);
-		}
-	    }
-	    @Override public Action[] getAreaActions()
-	    {
-		return actionLists.getEditActions();
-	    }
-	};
+	NullCheck.notNull(proj, "proj");
+	this.project = proj;
+		this.treeRoot = proj.getPartsRoot();
     }
 
-    private boolean onCommonActions(EnvironmentEvent event)
-    {
-	NullCheck.notNull(event, "event");
-	if (ActionEvent.isAction(event, "open-project"))
-	    return actions.onOpenProject(treeArea);
-	if (ActionEvent.isAction(event, "run"))
-	    return actions.onRun(outputArea);
-	return false;
-    }
+
 
     private void loadProjectByArg()
     {
@@ -279,11 +134,11 @@ public final class App implements Application
 	catch(IOException e)
 	{
 	    //FIXME: this notification isn't heard
-	    luwrain.message(luwrain.i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
+	    getLuwrain().message(getLuwrain().i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
 	    return;
 	}
-	base.activateProject(proj);
-	treeArea.refresh();
+activateProject(proj);
+//	treeArea.refresh();
 	final Part mainFile = proj.getMainSourceFile();
 	if (mainFile == null)
 	    return;
@@ -300,20 +155,19 @@ public final class App implements Application
 	*/
     }
 
-    @Override public AreaLayout getAreaLayout()
+        Project getProject()
     {
-	return layout.getLayout();
+	return project;
     }
 
-    @Override public String getAppName()
+    Object getTreeRoot()
     {
-	return strings.appName();
+	return treeRoot;
     }
 
-    @Override public void closeApp()
+
+    @Override public AreaLayout getDefaultAreaLayout()
     {
-	if (base.getProject() != null)
-	    base.getProject().close(luwrain);
-	base.closeApp();
+	return null;//layout.getLayout();
     }
 }

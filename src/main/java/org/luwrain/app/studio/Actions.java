@@ -1,18 +1,3 @@
-/*
-   Copyright 2012-2019 Michael Pozhidaev <msp@luwrain.org>
-
-   This file is part of LUWRAIN.
-
-   LUWRAIN is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 3 of the License, or (at your option) any later version.
-
-   LUWRAIN is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-*/
 
 package org.luwrain.app.studio;
 
@@ -45,6 +30,7 @@ final class Actions
 	this.layouts = layouts;
     }
 
+    /*
     boolean onOpenProject(TreeArea treeArea)
     {
 	NullCheck.notNull(treeArea, "treeArea");
@@ -64,27 +50,8 @@ final class Actions
 	treeArea.refresh();
 	return true;
     }
+    */
 
-    boolean onTreeClick(Object obj)
-    {
-	NullCheck.notNull(obj, "obj");
-
-	    if (!(obj instanceof Part))
-		return false;
-	    final Part part = (Part)obj;
-	    final Editing editing;
-	    try {
-	    editing = part.startEditing();
-	    }
-	    catch(IOException e)
-	    {
-		luwrain.message(luwrain.i18n().getExceptionDescr(e));
-		return true;
-	    }
-	    if (editing == null)
-		return false;
-	    return layouts.editing(editing);
-    }
 
     boolean onRun(NavigationArea outputArea)
     {
