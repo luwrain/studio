@@ -29,37 +29,19 @@ import org.luwrain.template.*;
 public final class MainLayout extends LayoutBase
 {
     private final App app;
-    private TreeArea treeArea = null;
+    private final ProjectTreeArea projectTreeArea;
     private EditArea editArea;
     private NavigationArea outputArea = null;
 
     private final Editing editing;
 
-    MainLayout(App app, Editing editing)
+    MainLayout(App app, ProjectTreeArea projectTreeArea, Editing editing)
     {
 	NullCheck.notNull(app, "app");
+	NullCheck.notNull(projectTreeArea, "projectTreeArea");
 	this .app = app;
- 	this.treeArea = new TreeArea(createTreeParams()){
-		@Override public boolean onInputEvent(KeyboardEvent event)
-		{
-		    NullCheck.notNull(event, "event");
-		    if (app.onInputEvent(this, event))
-			return true;
-		    return super.onInputEvent(event);
-		}
-		@Override public boolean onSystemEvent(EnvironmentEvent event)
-		{
-		    NullCheck.notNull(event, "event");
-		    if (app.onSystemEvent(this, event))
-			return true;
-		    return super.onSystemEvent(event);
-		}
-		@Override public Action[] getAreaActions()
-		{
-		    return new Action[0];
-		}
-	    };
-	this.editing = editing;
+			this.editing = editing;
+ 	this.projectTreeArea = projectTreeArea;
 	if (editing != null && (editing instanceof TextEditing))
 	{
 	    final TextEditing textEditing = (TextEditing)editing;
@@ -120,69 +102,15 @@ public final class MainLayout extends LayoutBase
 	    };
     }
 
-    MainLayout(App app)
+    MainLayout(App app, ProjectTreeArea projectTreeArea)
     {
-	this(app, null);
+	this(app, projectTreeArea, null);
     }
 
-    private TreeArea.Params createTreeParams()
+    AreaLayout getLayout()
     {
-	final TreeArea.Params params = new TreeArea.Params();
-	params.context = new DefaultControlContext(app.getLuwrain());
-	params.model = new CachedTreeModel(new TreeModel(app));
-	params.name = app.getStrings().treeAreaName();
-	//	params.clickHandler = clickHandler;
-	return params;
-    }
-
-    boolean onTreeClick(Object obj)
-    {
-	NullCheck.notNull(obj, "obj");
-	/*
-	    if (!(obj instanceof Part))
-		return false;
-	    final Part part = (Part)obj;
-	    final Editing editing;
-	    try {
-	    editing = part.startEditing();
-	    }
-	    catch(IOException e)
-	    {
-		luwrain.message(luwrain.i18n().getExceptionDescr(e));
-		return true;
-	    }
-	    if (editing == null)
-		return false;
-	    return layouts.editing(editing);
-	*/
-	return false;
-    }
-
-    static private final class TreeModel implements CachedTreeModelSource
-    {
-	private final App app;
-	TreeModel(App app)
-	{
-	    NullCheck.notNull(app, "app");
-	    this.app = app;
-	}
-	@Override public Object getRoot()
-	{
-	    return app.getTreeRoot();
-	}
-	@Override public Object[] getChildObjs(Object obj)
-	{
-	    NullCheck.notNull(obj, "obj");
-	    if (app.getProject() == null || !(obj instanceof Part))
-		return new Object[0];
-	    final Part part = (Part)obj;
-	    final Part[] res = part.getChildParts();
-	    if (res == null)
-		return new Object[0];
-	    for(int i = 0;i < res.length;i++)
-		if (res[i] == null)
-		    return new Object[0];
-	    return res;
-	}
+	if (editArea == null)
+	    return new AreaLayout(projectTreeArea);
+	return new AreaLayout(AreaLayout.LEFT_RIGHT, projectTreeArea, editArea);
     }
 }

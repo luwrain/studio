@@ -57,24 +57,22 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
     {
 	if (obj == null || !(obj instanceof ProjectType))
 	    return false;
-	/*
-	final File destDir = actions.conv.newProjectDir();
 	final ProjectType projType = (ProjectType)obj;
+	final File destDir = app.conv().newProjectDir();
 	if (destDir == null)
 	    return true;
-	final ProjectFactory factory = new ProjectFactory(luwrain);
+	final ProjectFactory factory = new ProjectFactory(app.getLuwrain());
 	final Project proj;
 	try {
-proj = factory.create(projType.getId(), destDir);
+	    proj = factory.create(projType.getId(), destDir);
 	}
 	catch(IOException e)
 	{
-	    luwrain.message(luwrain.i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
+	    app.getLuwrain().crash(e);
 	    return true;
 	}
 	if (proj != null)
-	    onNewProject(proj);
-	*/
+	    app.activateProject(proj);
 	return true;
     }
 

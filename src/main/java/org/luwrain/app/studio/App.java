@@ -29,16 +29,17 @@ import org.luwrain.template.*;
 public final class App extends AppBase<Strings>
 {
     private final String arg;
+    private Conversations conv = null;
 
-    private Object treeRoot;
+    private Object treeRoot = null;
     private Project project = null;
+    private ProjectTreeArea projectTreeArea = null;
+    private final List<Editing> editings = new LinkedList();
+
     private NewProjectLayout newProjectLayout = null;
 
-        final MutableLinesImpl fileText = new MutableLinesImpl();
-    Editing openedEditing = null;
     private Object[] compilationOutput = new Object[0];
-        private final MutableLinesImpl outputText = new MutableLinesImpl();
-
+    private final MutableLinesImpl outputText = new MutableLinesImpl();
 
     public App()
     {
@@ -51,13 +52,15 @@ public final class App extends AppBase<Strings>
 	this.arg = arg;
     }
 
-    @Override protected boolean onAppInit()
+    @Override protected boolean onAppInit() throws IOException
     {
 	this.treeRoot = getStrings().treeRoot();
+	this.conv = new Conversations(this);
 	this.newProjectLayout = new NewProjectLayout(this);
 	setAppName(getStrings().appName());
-	    return true;
-	}
+	loadProjectByArg();
+	return true;
+    }
 
     /*
     boolean runProject(Runnable outputRedrawing) throws IOException
@@ -130,57 +133,43 @@ public final class App extends AppBase<Strings>
 	};
     }
 
-        void activateProject(Project proj)
+    void activateProject(Project proj)
     {
 	NullCheck.notNull(proj, "proj");
 	this.project = proj;
-		this.treeRoot = proj.getPartsRoot();
+	this.treeRoot = proj.getPartsRoot();
+	this.projectTreeArea = new ProjectTreeArea(this);
     }
 
-    private void loadProjectByArg()
+    private void loadProjectByArg() throws IOException
     {
 	if (arg == null || arg.isEmpty())
 	    return;
 	final File file = new File(arg);
 	if (!file.exists() || file.isDirectory())
 	    return;
-	final Project proj;
-	try {
-	    proj = ProjectFactory.load(file);
-	}
-	catch(IOException e)
-	{
-	    //FIXME: this notification isn't heard
-	    getLuwrain().message(getLuwrain().i18n().getExceptionDescr(e), Luwrain.MessageType.ERROR);
-	    return;
-	}
+	final Project proj = ProjectFactory.load(file);
 activateProject(proj);
-//	treeArea.refresh();
 	final Part mainFile = proj.getMainSourceFile();
 	if (mainFile == null)
 	    return;
-	try {
 	  final Editing editing = mainFile.startEditing();
 	  if (editing == null)
 	  return;
 startEditing(editing);
-	  }
-	  catch(IOException e)
-	  {
-	  }
     }
 
         void startEditing(Editing editing) throws IOException
     {
-	/*
 	NullCheck.notNull(editing, "editing");
-	final File file = editing.getFile();
-	NullCheck.notNull(file, "file");
-	final String wholeText = FileUtils.readTextFileSingleString(file, CHARSET);
-	final String[] lines = FileUtils.universalLineSplitting(wholeText);
-	fileText.setLines(lines);
-	this.openedEditing = editing;
-	*/
+	Editing e = null;
+	for(Editing ee: editings)
+	    if (editing.equals(ee))
+		e = ee;
+	if (e == null)
+	    editings.add(editing);
+	final MainLayout mainLayout = new MainLayout(this, projectTreeArea, editing);
+	getLayout().setBasicLayout(mainLayout.getLayout());
     }
 
         PositionInfo getCompilationOutputPositionInfo(int index)
@@ -196,9 +185,6 @@ startEditing(editing);
 	return new PositionInfo(wrapper.ex.getFileName(), wrapper.ex.getLineNumber(), wrapper.ex.getColumnNumber());
     }
 
-
-
-
     Project getProject()
     {
 	return project;
@@ -212,6 +198,11 @@ startEditing(editing);
     Object getTreeRoot()
     {
 	return treeRoot;
+    }
+
+    Conversations conv()
+    {
+	return this.conv;
     }
 
     @Override public AreaLayout getDefaultAreaLayout()
