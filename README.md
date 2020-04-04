@@ -1,13 +1,9 @@
 
-# Studio: integrated development environment (IDE)
+# Studio
 
-This repository contains integrated development environment (IDE) designed for using by the blind.
-It's based on [LUWRAIN](https://github.com/luwrain/luwrain/) and at the early stage of its evolution.
-In the future it is supposed to be suitable for development tasks on Java, C++ and JavaScript.
-This list, likely, will be extended depending on the requests which we can get.
-We would like to make it suitable especially for the beginners,
-because the first steps usually are the most difficult.
+LUWRAIN Studio is a text editor for the blind based on LUWRAIN.
 
-
-
-
+LUWRAIN is a platform for the creation of apps for the blind and partially-sighted.
+It provides a Java API for constructing highly-distributable apps
+with the user interface adjusted to the perception of blind people.
+Please visit [luwrain.org](http://luwrain.org/?lang=en) for further information.
