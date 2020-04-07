@@ -50,6 +50,13 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 			return true;
 		    return super.onSystemEvent(event);
 		}
+		@Override public boolean onAreaQuery(AreaQuery query)
+		{
+		    NullCheck.notNull(query, "query");
+		    if (app.onAreaQuery(this, query))
+			return true;
+		    return super.onAreaQuery(query);
+		}
 	    };
     }
 
@@ -94,7 +101,8 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 		    app.getLuwrain().setEventResponse(DefaultEventResponse.listItem(app.getLuwrain().getSpeakableText(item.toString(), Luwrain.SpeakableTextType.NATURAL)));
 		}
 	    };
-	params.name = "Новый проект";//FIXME:
+	params.clickHandler = this;
+	params.name = app.getStrings().newProjectAreaName();
 	return params;
     }
 }

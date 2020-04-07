@@ -39,4 +39,5 @@ public interface Strings
     String outputAreaName();
     String treeAreaName();
     String treeRoot();
+    String newProjectAreaName();
 }
