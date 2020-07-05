@@ -46,7 +46,7 @@ public final class MainLayout extends LayoutBase
 	{
 	    final TextEditing textEditing = (TextEditing)editing;
 	    this.editArea = new EditArea(textEditing.getEditParams(new DefaultControlContext(app.getLuwrain()))) {
-		    @Override public boolean onInputEvent(KeyboardEvent event)
+		    @Override public boolean onInputEvent(InputEvent event)
 		    {
 			NullCheck.notNull(event, "event");
 			if (app.onInputEvent(this, event))
@@ -69,7 +69,7 @@ public final class MainLayout extends LayoutBase
 	    editArea = null;
 	this.outputArea = new NavigationArea(new DefaultControlContext(app.getLuwrain())) {
 		final Lines outputModel = app.getOutputModel();
-		@Override public boolean onInputEvent(KeyboardEvent event)
+		@Override public boolean onInputEvent(InputEvent event)
 		{
 		    NullCheck.notNull(event, "event");
 		    if (app.onInputEvent(this, event))

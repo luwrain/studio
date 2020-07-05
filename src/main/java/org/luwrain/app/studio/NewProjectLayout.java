@@ -36,7 +36,7 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	NullCheck.notNull(app, "app");
 	this.app = app;
 	this.newProjectArea = new ListArea(createParams()){
-		@Override public boolean onInputEvent(KeyboardEvent event)
+		@Override public boolean onInputEvent(InputEvent event)
 		{
 		    NullCheck.notNull(event, "event");
 		    if (app.onInputEvent(this, event))

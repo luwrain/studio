@@ -37,7 +37,7 @@ public final class ProjectTreeArea extends TreeArea
 	this .app = app;
     }
 
-    		@Override public boolean onInputEvent(KeyboardEvent event)
+    		@Override public boolean onInputEvent(InputEvent event)
 		{
 		    NullCheck.notNull(event, "event");
 		    if (app.onInputEvent(this, event))
