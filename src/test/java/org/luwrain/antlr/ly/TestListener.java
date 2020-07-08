@@ -12,6 +12,19 @@ class TestListener implements LilypondListener
     @Override public void exitCommand(LilypondParser.CommandContext ctx) {}
     @Override public void enterValue(LilypondParser.ValueContext ctx) {}
     @Override public void exitValue(LilypondParser.ValueContext ctx) {}
+
+        @Override public void enterString(LilypondParser.StringContext ctx) {}
+    @Override public void exitString(LilypondParser.StringContext ctx) {}
+
+            @Override public void enterPrimitive(LilypondParser.PrimitiveContext ctx) {}
+    @Override public void exitPrimitive(LilypondParser.PrimitiveContext ctx) {}
+
+                @Override public void enterSeq(LilypondParser.SeqContext ctx) {}
+    @Override public void exitSeq(LilypondParser.SeqContext ctx) {}
+
+
+
+    
     @Override public void enterEveryRule(ParserRuleContext ctx) {}
     @Override public void exitEveryRule(ParserRuleContext ctx) {}
         @Override public void visitTerminal(TerminalNode node) {}

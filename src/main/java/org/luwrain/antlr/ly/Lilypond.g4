@@ -14,8 +14,20 @@ command
     ;
 
 value
-    : '{' IDENT '}'
+    : seq | primitive 
     ;
+
+seq : '{' IDENT '}'
+    ;
+
+primitive
+    : string
+    ;
+
+string
+    : '"' ~('"')+ '"'
+    ;
+
 
 IDENT
     :   [A-Za-z0-9]+
