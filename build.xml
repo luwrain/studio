@@ -59,7 +59,7 @@
     </jar>
   </target>
   <target name="junit" depends="jar-test">
-    <junit printsummary="yes">
+    <junit printsummary="withOutAndErr">
       <classpath>
         <path refid="classpath"/>
         <path refid="mainjar"/>

@@ -14,6 +14,11 @@ class TestListener implements LilypondListener
     @Override public void exitValue(LilypondParser.ValueContext ctx) {}
     @Override public void enterEveryRule(ParserRuleContext ctx) {}
     @Override public void exitEveryRule(ParserRuleContext ctx) {}
-    @Override public void visitErrorNode(ErrorNode node) {}
-    @Override public void visitTerminal(TerminalNode node) {}
+        @Override public void visitTerminal(TerminalNode node) {}
+
+        @Override public void visitErrorNode(ErrorNode node)
+    {
+	throw new IllegalStateException(node.toString());
+    }
+    
 }
