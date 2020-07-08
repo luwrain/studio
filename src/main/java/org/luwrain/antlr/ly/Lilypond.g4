@@ -6,7 +6,7 @@ package org.luwrain.antlr.ly;
 }
 
 score
-    : block* EOF
+    : command* EOF
     ;
 
 command
