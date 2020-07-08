@@ -7,7 +7,7 @@ import org.antlr.v4.runtime.*;
 import org.luwrain.antlr.java.JavaListener;
 import org.luwrain.antlr.java.JavaParser;
 
-public class JavaParsingListener implements JavaListener
+public class ParsingListener implements JavaListener
 {
     @Override public void enterAdditionalBound(JavaParser.AdditionalBoundContext ctx) {}
     @Override public void enterAdditiveExpression(JavaParser.AdditiveExpressionContext ctx) {}
