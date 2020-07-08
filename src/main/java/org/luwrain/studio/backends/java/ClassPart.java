@@ -9,21 +9,12 @@ import org.luwrain.core.*;
 
 public class ClassPart implements Part
 {
-    protected final String pkgName, name;
+    protected final String name;
 
-    public ClassPart(String pkgName, String name)
+    public ClassPart(String name)
     {
-	NullCheck.notNull(pkgName, "pkgName");
 	NullCheck.notNull(name, "name");
-	this.pkgName = pkgName;
 	this.name = name;
-    }
-
-    public String getFullName()
-    {
-	if (pkgName.isEmpty())
-	    return name;
-	return pkgName + "." + name;
     }
 
     public String getName()
