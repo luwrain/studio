@@ -5,6 +5,7 @@ import java.util.*;
 
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+import org.antlr.v4.runtime.atn.*;
 
 import org.luwrain.core.*;
 import org.luwrain.antlr.java.*;
@@ -20,6 +21,7 @@ public final class Parser
 	final JavaLexer lexer = new JavaLexer(CharStreams.fromString(text));
 	final CommonTokenStream tokens = new CommonTokenStream(lexer);
 final JavaParser parser = new JavaParser(tokens);
+parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 final ParseTree tree = parser.compilationUnit();
 final ParseTreeWalker walker = new ParseTreeWalker();
 final ParsingListener listener = new ParsingListener(){
@@ -27,7 +29,6 @@ final ParsingListener listener = new ParsingListener(){
 	{
 	    classes.add(new ClassPart(namingContext + ctx.normalClassDeclaration().identifier().Identifier().toString()));
 	}
-
 		    @Override public void enterPackageDeclaration(JavaParser.PackageDeclarationContext ctx) 
 	{
 	    JavaParser.PackageNameContext c = ctx.packageName();
@@ -39,8 +40,6 @@ final ParsingListener listener = new ParsingListener(){
 	    }
 	    namingContext = s;
 	}
-
-	
     };
 walker.walk(listener, tree);
 	    }
