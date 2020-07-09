@@ -11,14 +11,17 @@ import org.luwrain.core.*;
 
 public final class Project implements  org.luwrain.studio.Project
 {
-    private File projDir = null;
-    private File projFile = null;
-
     @SerializedName("name")
     private String projName = null;
 
-    @SerializedName("folders")
+        @SerializedName("files")
+    private List<String> files = null;
+
+
     private Folder rootFolder = null;
+        private File projDir = null;
+    private File projFile = null;
+    private SourceFile[] sourceFiles = new SourceFile[0];
 
     void setProjectFile(File projFile)
     {
@@ -31,10 +34,6 @@ public final class Project implements  org.luwrain.studio.Project
 
     void finalizeLoading()
     {
-	if (rootFolder != null)
-	    rootFolder.setProject(this);
-	if (projName == null || projName.trim().isEmpty())
-	    projName = "The project";
     }
 
     File getProjectDir()
@@ -82,7 +81,6 @@ public final class Project implements  org.luwrain.studio.Project
 	return false;
 }
 
-
     @Override public void close(Luwrain luwrain)
 {
     }
@@ -92,25 +90,4 @@ public final class Project implements  org.luwrain.studio.Project
 	return null;
     }
 
-    private final class RootFolder implements org.luwrain.studio.Part
-    {
-	@Override public org.luwrain.studio.Editing startEditing()
-	{
-	    return null;
-	}
-	@Override public org.luwrain.studio.Part[] getChildParts()
-	{
-	    return new org.luwrain.studio.Part[0];
-	}
-	@Override public String getTitle()
-	{
-	    return "kaka";
-	}
-	@Override public boolean equals(Object o)
-	{
-	    		{
-	    return o != null && (o instanceof RootFolder);
-	}
-    }
-    }
 }

@@ -9,7 +9,7 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 
-final class PySourceFile implements Part
+final class SourceFile implements Part
 {
     @SerializedName("name")
     private String name = null;
@@ -47,9 +47,9 @@ final class PySourceFile implements Part
 
     @Override public boolean equals(Object o)
     {
-	if (o == null || !(o instanceof PySourceFile))
+	if (o == null || !(o instanceof SourceFile))
 	    return false;
-	final PySourceFile f = (PySourceFile)o;
+	final SourceFile f = (SourceFile)o;
 	return path.equals(f.path);
     }
 }
