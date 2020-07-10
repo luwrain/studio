@@ -125,6 +125,11 @@ public final class MainLayout extends LayoutBase
 	*/
     }
 
+    void refresh()
+    {
+	treeArea.refresh();
+    }
+
     AreaLayout getLayout()
     {
 	    return new AreaLayout(treeArea);
@@ -135,7 +140,7 @@ public final class MainLayout extends LayoutBase
     {
 	final TreeArea.Params params = new TreeArea.Params();
 	params.context = new DefaultControlContext(app.getLuwrain());
-	params.model = new CachedTreeModel(new TreeModel(app));
+	params.model = new CachedTreeModel(new TreeModel());
 	params.name = app.getStrings().treeAreaName();
 	params.clickHandler = (treeArea, obj)->{
 	NullCheck.notNull(treeArea, "treeArea");
@@ -161,17 +166,13 @@ public final class MainLayout extends LayoutBase
 	return params;
     }
 
-    static private final class TreeModel implements CachedTreeModelSource
+    private final class TreeModel implements CachedTreeModelSource
     {
-	private final App app;
-	TreeModel(App app)
-	{
-	    NullCheck.notNull(app, "app");
-	    this.app = app;
-	}
 	@Override public Object getRoot()
 	{
-	    return app.getTreeRoot();
+	    if (app.getProject() == null)
+		return app.getStrings().treeRoot();
+	    return app.getProject().getPartsRoot();
 	}
 	@Override public Object[] getChildObjs(Object obj)
 	{
@@ -188,5 +189,4 @@ public final class MainLayout extends LayoutBase
 	    return res;
 	}
     }
-
 }

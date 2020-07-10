@@ -30,15 +30,14 @@ public final class App extends AppBase<Strings>
 {
     private final String arg;
     private Conversations conv = null;
+    private MainLayout mainLayout = null;
+    private NewProjectLayout newProjectLayout = null;
 
     private Object treeRoot = null;
-    private Project project = null;
+    private Project proj = null;
     //private ProjectTreeArea projectTreeArea = null;
     Editing editing = null;
     private final List<Editing> editings = new LinkedList();
-
-    private NewProjectLayout newProjectLayout = null;
-
     private Object[] compilationOutput = new Object[0];
     private final MutableLinesImpl outputText = new MutableLinesImpl();
 
@@ -56,8 +55,9 @@ public final class App extends AppBase<Strings>
     @Override protected boolean onAppInit() throws IOException
     {
 		this.conv = new Conversations(this);
+		this.mainLayout = new MainLayout(this);
+			this.newProjectLayout = new NewProjectLayout(this);
 	this.treeRoot = getStrings().treeRoot();
-	this.newProjectLayout = new NewProjectLayout(this);
 	setAppName(getStrings().appName());
 	loadProjectByArg();
 	return true;
@@ -137,9 +137,9 @@ public final class App extends AppBase<Strings>
     void activateProject(Project proj)
     {
 	NullCheck.notNull(proj, "proj");
-	this.project = proj;
+	this.proj = proj;
 	this.treeRoot = proj.getPartsRoot();
-	//	this.projectTreeArea = new ProjectTreeArea(this);
+	this.mainLayout.refresh();
     }
 
     private void loadProjectByArg() throws IOException
@@ -191,19 +191,36 @@ startEditing(editing);
 	return new PositionInfo(wrapper.ex.getFileName(), wrapper.ex.getLineNumber(), wrapper.ex.getColumnNumber());
     }
 
+        boolean onInputEvent(Area area, InputEvent event, Runnable closing)
+    {
+	NullCheck.notNull(area, "area");
+	if (event.isSpecial())
+	    switch(event.getSpecial())
+	    {
+	    case ESCAPE:
+		if (closing != null)
+		    closing.run(); else
+		    closeApp();
+		return true;
+	    }
+	return super.onInputEvent(area, event);
+    }
+
+    @Override public boolean onInputEvent(Area area, InputEvent event)
+    {
+	NullCheck.notNull(area, "area");
+	NullCheck.notNull(event, "event");
+	return onInputEvent(area, event, null);
+    }
+
     Project getProject()
     {
-	return project;
+	return this.proj;
     }
 
     Lines getOutputModel()
     {
 	return new OutputModel();
-    }
-
-    Object getTreeRoot()
-    {
-	return treeRoot;
     }
 
     Conversations conv()
@@ -213,7 +230,9 @@ startEditing(editing);
 
     @Override public AreaLayout getDefaultAreaLayout()
     {
-	return newProjectLayout.getLayout();
+	if (this.proj == null)
+	    	return newProjectLayout.getLayout();
+	    return mainLayout.getLayout();
     }
 
         private final class OutputModel implements Lines

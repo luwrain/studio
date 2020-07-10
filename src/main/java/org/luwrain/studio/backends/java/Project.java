@@ -18,6 +18,7 @@ package org.luwrain.studio.backends.java;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.*;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -25,6 +26,8 @@ import org.luwrain.core.*;
 
 public final class Project implements  org.luwrain.studio.Project
 {
+    static final String LOG_COMPONENT = "studio-java";
+    
     @SerializedName("key")
     private String key = null;
 
@@ -37,9 +40,10 @@ public final class Project implements  org.luwrain.studio.Project
     private File projDir = null;
     private File projFile = null;
     private RootFolder rootFolder = null;
-    private List<SourceFile> sourceFiles = new LinkedList();
+    private final List<SourceFile> sourceFiles = new LinkedList();
+    private Executor executor = Executors.newFixedThreadPool(4);
 
-    void prepare(File projFile)
+    void prepare(File projFile) throws IOException
     {
 	NullCheck.notNull(projFile, "projFile");
 	this.projFile = projFile;
@@ -48,10 +52,20 @@ public final class Project implements  org.luwrain.studio.Project
 	    this.projDir = new File(".");
 	if (this.projName == null || this.projName.trim().isEmpty())
 	    this.projName = "Java project";
-	this.rootFolder = new RootFolder(projName);
+	loadSources();
+	this.rootFolder = new RootFolder(this);
     }
 
-    private void readSource(File f)
+    private void loadSources() throws IOException
+    {
+	for(String s: sources)
+	    if (s != null && !s.isEmpty())
+	{
+	    readSource(new File(projDir, s));
+	}
+    }
+
+    private void readSource(File f) throws IOException
     {
 	NullCheck.notNull(f, "f");
 	if (f.isDirectory())
@@ -72,6 +86,28 @@ public final class Project implements  org.luwrain.studio.Project
     {
 	return projDir;
     }
+
+    String getName()
+    {
+	return projName;
+    }
+
+    Executor getExecutor()
+    {
+	return this.executor;
+    }
+
+    long getPreloadFileSizeLimit()
+    {
+	return 102400;
+    }
+
+    SourceFile[] getSourceFiles()
+    {
+	return sourceFiles.toArray(new SourceFile[sourceFiles.size()]);
+    }
+
+    
 
     @Override public org.luwrain.studio.RunControl run(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
     {
@@ -100,7 +136,7 @@ public final class Project implements  org.luwrain.studio.Project
 
             @Override public org.luwrain.studio.Part getPartsRoot()
     {
-	return rootFolder;
+	return this.rootFolder;
     }
 
     @Override public org.luwrain.studio.Flavor[] getBuildFlavors()

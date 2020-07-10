@@ -23,16 +23,18 @@ import org.luwrain.studio.*;
 
 final class RootFolder implements org.luwrain.studio.Part
 {
-    private final String projName;
+    private final Project proj;
     private final ClassesRoot classesRoot;
     private final FilesRoot filesRoot;
+    private SourceFile[] sourceFiles = new SourceFile[0];
 
-    RootFolder(String projName)
+    RootFolder(Project proj)
     {
-	NullCheck.notNull(projName, "projName");
-	this .projName = projName;
+	NullCheck.notNull(proj, "proj");
+	this .proj = proj;
 	this.classesRoot = new ClassesRoot();
 	this.filesRoot = new FilesRoot();
+	this.sourceFiles = proj.getSourceFiles();
     }
 
     @Override public org.luwrain.studio.Editing startEditing()
@@ -47,7 +49,12 @@ final class RootFolder implements org.luwrain.studio.Part
 
     @Override public String getTitle()
     {
-	return projName;
+	return proj.getName();
+    }
+
+    @Override public String toString()
+    {
+	return getTitle();
     }
 
     @Override public boolean equals(Object o)
@@ -55,7 +62,7 @@ final class RootFolder implements org.luwrain.studio.Part
 	    return o != null && (o instanceof RootFolder);
 	}
 
-	static private final class ClassesRoot implements org.luwrain.studio.Part
+    private final class ClassesRoot implements org.luwrain.studio.Part
 {
     @Override public org.luwrain.studio.Editing startEditing()
     {
@@ -69,13 +76,17 @@ final class RootFolder implements org.luwrain.studio.Part
     {
 	return "Classes";
     }
-    @Override public boolean equals(Object o)
+        @Override public String toString()
+    {
+	return getTitle();
+    }
+        @Override public boolean equals(Object o)
     {
 	    return o != null && (o instanceof ClassesRoot);
     }
 	}
 
-    	static private final class FilesRoot implements org.luwrain.studio.Part
+    	private final class FilesRoot implements org.luwrain.studio.Part
 {
     @Override public org.luwrain.studio.Editing startEditing()
     {
@@ -83,13 +94,17 @@ final class RootFolder implements org.luwrain.studio.Part
     }
     @Override public org.luwrain.studio.Part[] getChildParts()
     {
-	return new Part[0];
+	return sourceFiles;
     }
     @Override public String getTitle()
     {
 	return "Files";
     }
-    @Override public boolean equals(Object o)
+        @Override public String toString()
+    {
+	return getTitle();
+    }
+        @Override public boolean equals(Object o)
     {
 	    return o != null && (o instanceof FilesRoot);
     }

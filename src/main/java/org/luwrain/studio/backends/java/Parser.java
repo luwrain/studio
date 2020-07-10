@@ -30,34 +30,41 @@ public final class Parser
     private List<ClassPart> classes = new LinkedList();
     private String namingContext = "";
 
-    void parse(String text)
+    void parse(String[] lines)
     {
-	NullCheck.notNull(text, "text");
-	final JavaLexer lexer = new JavaLexer(CharStreams.fromString(text));
+	NullCheck.notNullItems(lines, "lines");
+	final String lineSep = System.lineSeparator();
+	final StringBuilder text = new StringBuilder();
+	for(String s: lines)
+	    text.append(s).append(lineSep);
+	final JavaLexer lexer = new JavaLexer(CharStreams.fromString(new String(text)));
 	final CommonTokenStream tokens = new CommonTokenStream(lexer);
-final JavaParser parser = new JavaParser(tokens);
-parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-final ParseTree tree = parser.compilationUnit();
-final ParseTreeWalker walker = new ParseTreeWalker();
-final ParsingListener listener = new ParsingListener(){
-	    @Override public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) 
-	{
-	    classes.add(new ClassPart(namingContext + ctx.normalClassDeclaration().identifier().Identifier().toString()));
-	}
-		    @Override public void enterPackageDeclaration(JavaParser.PackageDeclarationContext ctx) 
-	{
-	    JavaParser.PackageNameContext c = ctx.packageName();
-	    String s = "";
-	    while (c != null)
-	    {
-		s = c.identifier().Identifier().toString() + "." + s;
-		c = c.packageName();
-	    }
-	    namingContext = s;
-	}
-    };
-walker.walk(listener, tree);
-	    }
+	final JavaParser parser = new JavaParser(tokens);
+	parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
+	final ParseTree tree = parser.compilationUnit();
+	final ParseTreeWalker walker = new ParseTreeWalker();
+	final ParsingListener listener = new ParsingListener(){
+		@Override public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) 
+		{
+		    if (ctx.normalClassDeclaration() != null)
+		    {
+		    classes.add(new ClassPart(namingContext + ctx.normalClassDeclaration().identifier().Identifier().toString()));
+		    }
+		}
+		@Override public void enterPackageDeclaration(JavaParser.PackageDeclarationContext ctx) 
+		{
+		    JavaParser.PackageNameContext c = ctx.packageName();
+		    String s = "";
+		    while (c != null)
+		    {
+			s = c.identifier().Identifier().toString() + "." + s;
+			c = c.packageName();
+		    }
+		    namingContext = s;
+		}
+	    };
+	walker.walk(listener, tree);
+    }
 
     public ClassPart[] getClasses()
     {
