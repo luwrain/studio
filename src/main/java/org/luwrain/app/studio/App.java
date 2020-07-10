@@ -33,7 +33,8 @@ public final class App extends AppBase<Strings>
 
     private Object treeRoot = null;
     private Project project = null;
-    private ProjectTreeArea projectTreeArea = null;
+    //private ProjectTreeArea projectTreeArea = null;
+    Editing editing = null;
     private final List<Editing> editings = new LinkedList();
 
     private NewProjectLayout newProjectLayout = null;
@@ -54,8 +55,8 @@ public final class App extends AppBase<Strings>
 
     @Override protected boolean onAppInit() throws IOException
     {
+		this.conv = new Conversations(this);
 	this.treeRoot = getStrings().treeRoot();
-	this.conv = new Conversations(this);
 	this.newProjectLayout = new NewProjectLayout(this);
 	setAppName(getStrings().appName());
 	loadProjectByArg();
@@ -138,7 +139,7 @@ public final class App extends AppBase<Strings>
 	NullCheck.notNull(proj, "proj");
 	this.project = proj;
 	this.treeRoot = proj.getPartsRoot();
-	this.projectTreeArea = new ProjectTreeArea(this);
+	//	this.projectTreeArea = new ProjectTreeArea(this);
     }
 
     private void loadProjectByArg() throws IOException
@@ -148,7 +149,12 @@ public final class App extends AppBase<Strings>
 	final File file = new File(arg);
 	if (!file.exists() || file.isDirectory())
 	    return;
-	final Project proj = ProjectFactory.load(file);
+	final Project proj = new ProjectFactory(getLuwrain()).load(file);
+	if (proj == null)
+	{
+	    //FIXME:message
+	    return;
+	}
 activateProject(proj);
 	final Part mainFile = proj.getMainSourceFile();
 	if (mainFile == null)
@@ -168,7 +174,7 @@ startEditing(editing);
 		e = ee;
 	if (e == null)
 	    editings.add(editing);
-	final MainLayout mainLayout = new MainLayout(this, projectTreeArea, editing);
+	final MainLayout mainLayout = new MainLayout(this);
 	getLayout().setBasicLayout(mainLayout.getLayout());
     }
 
@@ -260,6 +266,12 @@ startEditing(editing);
 	}
     }
 
+
+
+    
+interface Layouts
+{
+    }
 
 
 }

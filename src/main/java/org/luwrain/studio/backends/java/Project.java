@@ -1,39 +1,71 @@
+/*
+   Copyright 2012-2020 Michael Pozhidaev <msp@luwrain.org>
+
+   This file is part of LUWRAIN.
+
+   LUWRAIN is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 3 of the License, or (at your option) any later version.
+
+   LUWRAIN is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+*/
 
 package org.luwrain.studio.backends.java;
 
-import com.google.gson.annotations.SerializedName;
-
 import java.io.*;
 import java.util.*;
-import java.util.concurrent.*;
+
+import com.google.gson.annotations.SerializedName;
 
 import org.luwrain.core.*;
 
 public final class Project implements  org.luwrain.studio.Project
 {
+    @SerializedName("key")
+    private String key = null;
+
     @SerializedName("name")
     private String projName = null;
 
-        @SerializedName("files")
-    private List<String> files = null;
+    @SerializedName("sources")
+    private List<String> sources = null;
 
-
-    private Folder rootFolder = null;
-        private File projDir = null;
+    private File projDir = null;
     private File projFile = null;
-    private SourceFile[] sourceFiles = new SourceFile[0];
+    private RootFolder rootFolder = null;
+    private List<SourceFile> sourceFiles = new LinkedList();
 
-    void setProjectFile(File projFile)
+    void prepare(File projFile)
     {
 	NullCheck.notNull(projFile, "projFile");
 	this.projFile = projFile;
 	this.projDir = projFile.getParentFile();
 	if (projDir == null)
 	    this.projDir = new File(".");
+	if (this.projName == null || this.projName.trim().isEmpty())
+	    this.projName = "Java project";
+	this.rootFolder = new RootFolder(projName);
     }
 
-    void finalizeLoading()
+    private void readSource(File f)
     {
+	NullCheck.notNull(f, "f");
+	if (f.isDirectory())
+	{
+	    final File[] items = f.listFiles();
+	    if (items != null)
+		for(File i: items)
+		    readSource(i);
+	    return;
+	}
+	final String name = f.getName();
+	if (name.length() < 6 || !name.toUpperCase().endsWith(".JAVA"))
+	    return;
+	sourceFiles.add(new SourceFile(this, f));
     }
 
     File getProjectDir()

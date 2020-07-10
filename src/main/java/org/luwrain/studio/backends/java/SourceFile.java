@@ -1,33 +1,43 @@
+/*
+   Copyright 2012-2020 Michael Pozhidaev <msp@luwrain.org>
+
+   This file is part of LUWRAIN.
+
+   LUWRAIN is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 3 of the License, or (at your option) any later version.
+
+   LUWRAIN is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+*/
 
 package org.luwrain.studio.backends.java;
 
 import java.io.*;
 import java.util.*;
-import com.google.gson. annotations.*;
 
 import org.luwrain.core.*;
-import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 
 final class SourceFile implements Part
 {
-    @SerializedName("name")
-    private String name = null;
+            private final Project proj;
+    private final File file;
 
-    @SerializedName("path")
-    private String path = null;
-
-    private Project proj = null;
-
-        void setProject(Project proj)
+    SourceFile(Project proj, File file)
     {
 	NullCheck.notNull(proj, "proj");
+	NullCheck.notNull(file, "file");
 	this.proj = proj;
+	this.file = file;
     }
 
     @Override public String getTitle()
     {
-	return name != null?name:"NONAME";
+	return file.getName();
     }
 
     @Override public Part[] getChildParts()
@@ -37,7 +47,7 @@ final class SourceFile implements Part
 
     @Override public Editing startEditing() throws IOException
     {
-	return new Editing(new File(proj.getProjectDir(), path));
+	return new Editing(file);
     }
 
     @Override public String toString()
@@ -50,6 +60,6 @@ final class SourceFile implements Part
 	if (o == null || !(o instanceof SourceFile))
 	    return false;
 	final SourceFile f = (SourceFile)o;
-	return path.equals(f.path);
+	return file.equals(f.file);
     }
 }

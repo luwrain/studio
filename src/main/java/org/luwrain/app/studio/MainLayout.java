@@ -29,21 +29,43 @@ import org.luwrain.template.*;
 public final class MainLayout extends LayoutBase
 {
     private final App app;
-    private final ProjectTreeArea projectTreeArea;
-    private EditArea editArea;
-    private NavigationArea outputArea = null;
+    private final TreeArea treeArea;
+    private final EditArea editArea = null;
+    private final NavigationArea outputArea = null;
 
-    private final Editing editing;
-
-    MainLayout(App app, ProjectTreeArea projectTreeArea, Editing editing)
+    MainLayout(App app)
     {
 	NullCheck.notNull(app, "app");
-	NullCheck.notNull(projectTreeArea, "projectTreeArea");
 	this .app = app;
-			this.editing = editing;
- 	this.projectTreeArea = projectTreeArea;
-	if (editing != null && (editing instanceof TextEditing))
-	{
+ 	this.treeArea = new TreeArea(createTreeParams()){
+
+				    @Override public boolean onInputEvent(InputEvent event)
+		    {
+			NullCheck.notNull(event, "event");
+			if (app.onInputEvent(this, event))
+			    return true;
+			return super.onInputEvent(event);
+		    }
+		    @Override public boolean onSystemEvent(EnvironmentEvent event)
+		    {
+			NullCheck.notNull(event, "event");
+			if (app.onSystemEvent(this, event))
+			    return true;
+			return super.onSystemEvent(event);
+		    }
+		@Override public boolean onAreaQuery(AreaQuery query)
+		{
+		    NullCheck.notNull(query, "query");
+		    if (app.onAreaQuery(this, query))
+			return true;
+		    return super.onAreaQuery(query);
+		}
+		    @Override public Action[] getAreaActions()
+		    {
+			return null;
+		    }
+	    };
+	/*
 	    final TextEditing textEditing = (TextEditing)editing;
 	    this.editArea = new EditArea(textEditing.getEditParams(new DefaultControlContext(app.getLuwrain()))) {
 		    @Override public boolean onInputEvent(InputEvent event)
@@ -100,17 +122,71 @@ public final class MainLayout extends LayoutBase
 		    return app.getStrings().outputAreaName();
 		}
 	    };
-    }
-
-    MainLayout(App app, ProjectTreeArea projectTreeArea)
-    {
-	this(app, projectTreeArea, null);
+	*/
     }
 
     AreaLayout getLayout()
     {
-	if (editArea == null)
-	    return new AreaLayout(projectTreeArea);
-	return new AreaLayout(AreaLayout.LEFT_RIGHT, projectTreeArea, editArea);
+	    return new AreaLayout(treeArea);
+	    //	return new AreaLayout(AreaLayout.LEFT_RIGHT, projectTreeArea, editArea);
     }
+
+        private TreeArea.Params createTreeParams()
+    {
+	final TreeArea.Params params = new TreeArea.Params();
+	params.context = new DefaultControlContext(app.getLuwrain());
+	params.model = new CachedTreeModel(new TreeModel(app));
+	params.name = app.getStrings().treeAreaName();
+	params.clickHandler = (treeArea, obj)->{
+	NullCheck.notNull(treeArea, "treeArea");
+	    if (obj == null || !(obj instanceof Part))
+		return false;
+	/*
+	    final Part part = (Part)obj;
+	    final Editing editing;
+	    try {
+	    editing = part.startEditing();
+	    }
+	    catch(IOException e)
+	    {
+		app.getLuwrain().message(app.getLuwrain().i18n().getExceptionDescr(e));
+		return true;
+	    }
+	    if (editing == null)
+		return false;
+	    //	    return layouts.editing(editing);
+	    */
+	return false;
+	};
+	return params;
+    }
+
+    static private final class TreeModel implements CachedTreeModelSource
+    {
+	private final App app;
+	TreeModel(App app)
+	{
+	    NullCheck.notNull(app, "app");
+	    this.app = app;
+	}
+	@Override public Object getRoot()
+	{
+	    return app.getTreeRoot();
+	}
+	@Override public Object[] getChildObjs(Object obj)
+	{
+	    NullCheck.notNull(obj, "obj");
+	    if (app.getProject() == null || !(obj instanceof Part))
+		return new Object[0];
+	    final Part part = (Part)obj;
+	    final Part[] res = part.getChildParts();
+	    if (res == null)
+		return new Object[0];
+	    for(int i = 0;i < res.length;i++)
+		if (res[i] == null)
+		    return new Object[0];
+	    return res;
+	}
+    }
+
 }

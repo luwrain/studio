@@ -30,7 +30,6 @@ final class Actions
     private final Luwrain luwrain = null;
     private final Strings strings = null;
 
-    final Layouts layouts = null;
     final Conversations conv = null;
 
     /*

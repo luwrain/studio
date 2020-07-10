@@ -1,7 +1,7 @@
 /*
-   Copyright 2012-2019 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2020 Michael Pozhidaev <msp@luwrain.org>
 
-c   This file is part of LUWRAIN.
+   This file is part of LUWRAIN.
 
    LUWRAIN is free software; you can redistribute it and/or
    modify it under the terms of the GNU General Public
@@ -14,8 +14,6 @@ c   This file is part of LUWRAIN.
    General Public License for more details.
 */
 
-//LWR_API 1.0
-
 package org.luwrain.studio;
 
 import java.util.*;
@@ -25,6 +23,8 @@ import org.luwrain.core.*;
 import org.luwrain.script.*;
 import org.luwrain.script.hooks.*;
 import org.luwrain.util.*;
+
+import org.luwrain.studio.backends.java.JavaProjectLoader;
 import org.luwrain.studio.backends.js.JsProject;
 import org.luwrain.studio.backends.js.JsProjectLoader;
 import org.luwrain.studio.backends.tex.TexProjectLoader;
@@ -32,6 +32,7 @@ import org.luwrain.studio.backends.py.*;
 
 public final class ProjectFactory
 {
+        static public final String KEY_JAVA = "luwrain-project-java";
     static public final String KEY_TEX_PRESENTATION = "luwrain-project-tex-presentation";
     static public final String KEY_PYTHON_CONSOLE = "luwrain-project-py-console";
 
@@ -46,23 +47,24 @@ public final class ProjectFactory
 	this.luwrain = luwrain;
     }
 
-    static public Project load(File projFile) throws IOException
+    public Project load(File projFile) throws IOException
     {
 	NullCheck.notNull(projFile, "projFile");
 	switch(getProjectType(projFile))
 	{
-	case "tex":
-	    {
+	    	case "java": {
+		final JavaProjectLoader loader = new JavaProjectLoader();
+		return loader.load(projFile);
+	    }
+	case "tex": {
 		final TexProjectLoader texLoader = new TexProjectLoader();
 		return texLoader.load(projFile);
 	    }
-	case "py":
-	    {
+	case "py": {
 		final PyProjectLoader pyLoader = new PyProjectLoader();
 		return pyLoader.load(projFile);
 	    }
-	case "js":
-	    {
+	case "js": {
 		final JsProjectLoader jsProjectLoader = new JsProjectLoader();
 		return jsProjectLoader.load(projFile);
 	    }
@@ -129,10 +131,12 @@ public final class ProjectFactory
 	return toSort;
     }
 
-    static private String getProjectType(File projFile) throws IOException
+    private String getProjectType(File projFile) throws IOException
     {
 	NullCheck.notNull(projFile, "projFile");
 	final String text = FileUtils.readTextFileSingleString(projFile, "UTF-8");
+		if (text.contains(KEY_JAVA))
+	    return "java";
 	if (text.contains(KEY_TEX_PRESENTATION))
 	    return "tex";
 	if (text.contains(KEY_PYTHON_CONSOLE))
