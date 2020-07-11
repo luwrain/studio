@@ -36,6 +36,10 @@ final class TexProject implements  org.luwrain.studio.Project
     private File projDir = null;
     private IDE ide = null;
 
+    @Override public void close()
+    {
+    }
+
     void setProjectFile(File projFile)
     {
 	final File parent = projFile.getParentFile();

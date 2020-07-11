@@ -24,6 +24,7 @@ import org.luwrain.core.*;
 
 public interface Project
 {
+    void close();
     Part getPartsRoot();
     Flavor[] getBuildFlavors();
     boolean build(Flavor flavor, Output output);

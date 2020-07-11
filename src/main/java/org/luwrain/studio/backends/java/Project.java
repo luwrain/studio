@@ -27,7 +27,7 @@ import org.luwrain.core.*;
 public final class Project implements  org.luwrain.studio.Project
 {
     static final String LOG_COMPONENT = "studio-java";
-    
+
     @SerializedName("key")
     private String key = null;
 
@@ -39,13 +39,22 @@ public final class Project implements  org.luwrain.studio.Project
 
     private File projDir = null;
     private File projFile = null;
+    private org.luwrain.studio.IDE ide;
+    private boolean closed = false;
     private RootFolder rootFolder = null;
     private final List<SourceFile> sourceFiles = new LinkedList();
     private Executor executor = Executors.newFixedThreadPool(4);
 
-    void prepare(File projFile) throws IOException
+    @Override public void close()
     {
+	this.closed = true;
+    }
+
+    void prepare(org.luwrain.studio.IDE ide, File projFile) throws IOException
+    {
+	NullCheck.notNull(ide, "ide");
 	NullCheck.notNull(projFile, "projFile");
+	this.ide = ide;
 	this.projFile = projFile;
 	this.projDir = projFile.getParentFile();
 	if (projDir == null)
@@ -80,6 +89,16 @@ public final class Project implements  org.luwrain.studio.Project
 	if (name.length() < 6 || !name.toUpperCase().endsWith(".JAVA"))
 	    return;
 	sourceFiles.add(new SourceFile(this, f));
+    }
+
+    org.luwrain.studio.IDE getIde()
+    {
+	return this.ide;
+    }
+
+    boolean isClosed()
+    {
+	return this.closed;
     }
 
     File getProjectDir()

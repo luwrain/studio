@@ -31,6 +31,10 @@ private String mainFile = null;
 
     private String previouslyLoadedExtId = null;
 
+    @Override public void close()
+    {
+    }
+
     void setProjectFile(File projFile)
     {
 	NullCheck.notNull(projFile, "projFile");

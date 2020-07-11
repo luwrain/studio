@@ -43,6 +43,8 @@ final class SourceFile implements Part
 
     void update()
     {
+	if (proj.isClosed())
+	    return;
 	try {
 	    if (file.length() > proj.getPreloadFileSizeLimit())
 	    {

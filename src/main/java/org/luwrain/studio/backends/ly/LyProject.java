@@ -35,6 +35,10 @@ public final class LyProject implements  org.luwrain.studio.Project
     @SerializedName("folders")
     private LyFolder rootFolder = null;
 
+    @Override public void close()
+    {
+    }
+
     void setProjectFile(File projFile)
     {
 	NullCheck.notNull(projFile, "projFile");

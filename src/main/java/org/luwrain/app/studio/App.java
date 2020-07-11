@@ -128,6 +128,19 @@ public final class App extends AppBase<Strings>
 	return false;
     }
 
+    IDE getIde()
+    {
+	return new IDE(){
+	    @Override public void onFoldersUpdate()
+		{
+		}
+	    @Override public Luwrain getLuwrainObj()
+	    {
+		return getLuwrain();
+	    }
+	};
+    }
+
     Layouts createLayouts()
     {
 	return new Layouts(){
@@ -149,7 +162,7 @@ public final class App extends AppBase<Strings>
 	final File file = new File(arg);
 	if (!file.exists() || file.isDirectory())
 	    return;
-	final Project proj = new ProjectFactory(getLuwrain()).load(file);
+	final Project proj = new ProjectFactory(getIde()).load(file);
 	if (proj == null)
 	{
 	    //FIXME:message
@@ -233,6 +246,14 @@ startEditing(editing);
 	if (this.proj == null)
 	    	return newProjectLayout.getLayout();
 	    return mainLayout.getLayout();
+    }
+
+    @Override public void closeApp()
+    {
+	if (proj != null)
+	    proj.close();
+	proj = null;
+	super.closeApp();
     }
 
         private final class OutputModel implements Lines

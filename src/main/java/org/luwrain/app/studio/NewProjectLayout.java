@@ -68,7 +68,7 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	final File destDir = app.conv().newProjectDir();
 	if (destDir == null)
 	    return true;
-	final ProjectFactory factory = new ProjectFactory(app.getLuwrain());
+	final ProjectFactory factory = new ProjectFactory(app.getIde());
 	final Project proj;
 	try {
 	    proj = factory.create(projType.getId(), destDir);
@@ -92,7 +92,7 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
     {
 	final ListArea.Params params = new ListArea.Params();
 	params.context = new DefaultControlContext(app.getLuwrain());
-	params.model = new ListUtils.FixedModel(new ProjectFactory(app.getLuwrain()).getNewProjectTypes());
+	params.model = new ListUtils.FixedModel(new ProjectFactory(app.getIde()).getNewProjectTypes());
 	params.appearance = new ListUtils.DefaultAppearance(params.context){
 		@Override public void announceItem(Object item, Set<Flags> flags)
 		{

@@ -39,12 +39,14 @@ public final class ProjectFactory
     static public final String TYPES_LIST_HOOK = "luwrain.studio.project.types";
     static public final String CREATE_HOOK = "luwrain.studio.project.create";
 
+    private final IDE ide;
     private final Luwrain luwrain;
 
-    public ProjectFactory(Luwrain luwrain)
+    public ProjectFactory(IDE ide)
     {
-	NullCheck.notNull(luwrain, "luwrain");
-	this.luwrain = luwrain;
+	NullCheck.notNull(ide, "ide");
+	this.ide = ide;
+	this.luwrain = ide.getLuwrainObj();
     }
 
     public Project load(File projFile) throws IOException
@@ -54,7 +56,7 @@ public final class ProjectFactory
 	{
 	    	case "java": {
 		final JavaProjectLoader loader = new JavaProjectLoader();
-		return loader.load(projFile);
+		return loader.load(ide, projFile);
 	    }
 	case "tex": {
 		final TexProjectLoader texLoader = new TexProjectLoader();
