@@ -25,7 +25,7 @@ import org.luwrain.script.hooks.*;
 import org.luwrain.util.*;
 
 import org.luwrain.studio.backends.java.JavaProjectLoader;
-import org.luwrain.studio.backends.js.JsProject;
+//import org.luwrain.studio.backends.js.JsProject;
 import org.luwrain.studio.backends.js.JsProjectLoader;
 import org.luwrain.studio.backends.tex.TexProjectLoader;
 import org.luwrain.studio.backends.py.*;

@@ -18,20 +18,30 @@ package org.luwrain.studio.backends.js;
 
 import java.io.*;
 
-import com.google.gson.annotations.SerializedName;
-import com.google.gson.*;
+import org.luwrain.core.*;
+import org.luwrain.controls.*;
 
-import org.luwrain.studio.Project;
+final class SourceFile implements org.luwrain.studio.Part
+{    private final File file;
 
-public final class JsProjectLoader
-{
-    public Project load(File projFile) throws IOException
+    SourceFile(File file)
     {
-	final Gson gson = new Gson();
-	final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(projFile)));
-	final org.luwrain.studio.backends.js.Project proj = gson.fromJson(reader, org.luwrain.studio.backends.js.Project.class);
-	proj.setProjectFile(projFile);
-	proj.finalizeLoading();
-	return proj;
+	NullCheck.notNull(file, "file");
+	this.file = file;
+    }
+
+    @Override public String getTitle()
+    {
+	return file.getName();
+    }
+
+    @Override public org.luwrain.studio.Editing startEditing()
+    {
+	return null;
+    }
+
+    @Override public org.luwrain.studio.Part[] getChildParts()
+    {
+	return new org.luwrain.studio.Part[0];
     }
 }

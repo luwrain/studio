@@ -1,3 +1,18 @@
+/*
+   Copyright 2012-2020 Michael Pozhidaev <msp@luwrain.org>
+
+   This file is part of LUWRAIN.
+
+   LUWRAIN is free software; you can redistribute it and/or
+   modify it under the terms of the GNU General Public
+   License as published by the Free Software Foundation; either
+   version 3 of the License, or (at your option) any later version.
+
+   LUWRAIN is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   General Public License for more details.
+*/
 
 package org.luwrain.studio.backends.js;
 
@@ -9,7 +24,7 @@ import java.util.concurrent.*;
 
 import org.luwrain.core.*;
 
-public final class JsProject implements  org.luwrain.studio.Project
+public final class Project implements  org.luwrain.studio.Project
 {
     private File projDir = null;
     private File projFile = null;
@@ -141,7 +156,7 @@ private String mainFile = null;
 
     @Override public org.luwrain.studio.Part getMainSourceFile()
     {
-	return new JsSourceFile(new File(projDir, mainFile));
+	return new SourceFile(new File(projDir, mainFile));
     }
 
     private final class RootFolder implements org.luwrain.studio.Part
