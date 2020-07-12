@@ -141,9 +141,20 @@ public final class App extends AppBase<Strings>
 	};
     }
 
-    Layouts createLayouts()
+    void layout(AreaLayout layout)
+    {
+	NullCheck.notNull(layout, "layout");
+	getLayout().setBasicLayout(layout);
+    }
+
+    Layouts layouts()
     {
 	return new Layouts(){
+	    @Override public void main()
+	    {
+		getLayout().setBasicLayout(mainLayout.getLayout());
+		getLuwrain().announceActiveArea();
+	    }
 	};
     }
 
@@ -153,22 +164,35 @@ public final class App extends AppBase<Strings>
 	this.proj = proj;
 	this.treeRoot = proj.getPartsRoot();
 	this.mainLayout.refresh();
+	layouts().main();
     }
 
-    private void loadProjectByArg() throws IOException
+    private void loadProjectByArg()
     {
 	if (arg == null || arg.isEmpty())
 	    return;
 	final File file = new File(arg);
 	if (!file.exists() || file.isDirectory())
 	    return;
-	final Project proj = new ProjectFactory(getIde()).load(file);
-	if (proj == null)
-	{
-	    //FIXME:message
-	    return;
-	}
-activateProject(proj);
+	final TaskId taskId = newTaskId();
+	runTask(taskId, ()->{
+		final Project proj;
+		try {
+		    proj = new ProjectFactory(getIde()).load(file);
+		}
+		catch(IOException e)
+		{
+		    getLuwrain().crash(e);
+		    return;
+		}
+		if (proj == null)
+		{
+		    //FIXME:message
+		    return;
+		}
+		finishedTask(taskId, ()->{
+			activateProject(proj);
+			/*
 	final Part mainFile = proj.getMainSourceFile();
 	if (mainFile == null)
 	    return;
@@ -176,6 +200,9 @@ activateProject(proj);
 	  if (editing == null)
 	  return;
 startEditing(editing);
+*/
+	    });
+	    });
     }
 
         void startEditing(Editing editing) throws IOException
@@ -306,12 +333,8 @@ startEditing(editing);
 	}
     }
 
-
-
-    
-interface Layouts
-{
+    interface Layouts
+    {
+	void main();
     }
-
-
 }

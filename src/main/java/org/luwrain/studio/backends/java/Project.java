@@ -43,11 +43,12 @@ public final class Project implements  org.luwrain.studio.Project
     private boolean closed = false;
     private RootFolder rootFolder = null;
     private final List<SourceFile> sourceFiles = new LinkedList();
-    private Executor executor = Executors.newFixedThreadPool(4);
+    private ExecutorService executor = Executors.newFixedThreadPool(4);
 
     @Override public void close()
     {
 	this.closed = true;
+	this.executor.shutdownNow();
     }
 
     void prepare(org.luwrain.studio.IDE ide, File projFile) throws IOException

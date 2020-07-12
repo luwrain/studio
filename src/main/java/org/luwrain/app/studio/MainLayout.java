@@ -26,20 +26,26 @@ import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.template.*;
 
-public final class MainLayout extends LayoutBase
+public final class MainLayout extends LayoutBase implements TreeArea.ClickHandler
 {
     private final App app;
     private final TreeArea treeArea;
-    private final EditArea editArea = null;
+    private final EditArea editArea;
     private final NavigationArea outputArea = null;
+    private final Editing editing;
 
-    MainLayout(App app)
+    MainLayout(App app, TreeArea treeArea, Editing editing)
     {
 	NullCheck.notNull(app, "app");
 	this .app = app;
- 	this.treeArea = new TreeArea(createTreeParams()){
-
-				    @Override public boolean onInputEvent(InputEvent event)
+	this.editing = editing;
+	if (treeArea != null)
+	{
+	    this.treeArea = treeArea;
+	    this.treeArea.setClickHandler(this);
+	} else
+	    this.treeArea = new TreeArea(createTreeParams()){
+		    @Override public boolean onInputEvent(InputEvent event)
 		    {
 			NullCheck.notNull(event, "event");
 			if (app.onInputEvent(this, event))
@@ -53,19 +59,20 @@ public final class MainLayout extends LayoutBase
 			    return true;
 			return super.onSystemEvent(event);
 		    }
-		@Override public boolean onAreaQuery(AreaQuery query)
-		{
-		    NullCheck.notNull(query, "query");
-		    if (app.onAreaQuery(this, query))
-			return true;
-		    return super.onAreaQuery(query);
-		}
+		    @Override public boolean onAreaQuery(AreaQuery query)
+		    {
+			NullCheck.notNull(query, "query");
+			if (app.onAreaQuery(this, query))
+			    return true;
+			return super.onAreaQuery(query);
+		    }
 		    @Override public Action[] getAreaActions()
 		    {
 			return null;
 		    }
-	    };
-	/*
+		};
+	if (editing != null && editing instanceof TextEditing)
+	{
 	    final TextEditing textEditing = (TextEditing)editing;
 	    this.editArea = new EditArea(textEditing.getEditParams(new DefaultControlContext(app.getLuwrain()))) {
 		    @Override public boolean onInputEvent(InputEvent event)
@@ -89,6 +96,7 @@ public final class MainLayout extends LayoutBase
 		};
 	} else
 	    editArea = null;
+	/*
 	this.outputArea = new NavigationArea(new DefaultControlContext(app.getLuwrain())) {
 		final Lines outputModel = app.getOutputModel();
 		@Override public boolean onInputEvent(InputEvent event)
@@ -125,6 +133,41 @@ public final class MainLayout extends LayoutBase
 	*/
     }
 
+    MainLayout(App app)
+    {
+	this(app, null, null);
+    }
+
+    @Override public boolean onTreeClick(TreeArea treeArea, Object obj)
+    {
+	NullCheck.notNull(treeArea, "treeArea");
+	if (obj == null || !(obj instanceof Part))
+	    return false;
+	final Part part = (Part)obj;
+	final Editing editing;
+	try {
+	    editing = part.startEditing();
+	}
+	catch(IOException e)
+	{
+	    app.getLuwrain().crash(e);
+	    return true;
+	}
+	if (editing == null)
+	    return false;
+	final MainLayout newLayout = new MainLayout(app, treeArea, editing);
+	app.layout(newLayout.getLayout());
+	newLayout.activate();
+	return true;
+    }
+
+    void activate()
+    {
+	if (editing != null && editArea != null)
+	    app.getLuwrain().setActiveArea(editArea); else
+	    app.getLuwrain().announceActiveArea();
+    }
+
     void refresh()
     {
 	treeArea.refresh();
@@ -132,8 +175,9 @@ public final class MainLayout extends LayoutBase
 
     AreaLayout getLayout()
     {
+	if (editArea == null)
 	    return new AreaLayout(treeArea);
-	    //	return new AreaLayout(AreaLayout.LEFT_RIGHT, projectTreeArea, editArea);
+	    	return new AreaLayout(AreaLayout.LEFT_RIGHT, treeArea, editArea);
     }
 
         private TreeArea.Params createTreeParams()
@@ -142,28 +186,8 @@ public final class MainLayout extends LayoutBase
 	params.context = new DefaultControlContext(app.getLuwrain());
 	params.model = new CachedTreeModel(new TreeModel());
 	params.name = app.getStrings().treeAreaName();
-	params.clickHandler = (treeArea, obj)->{
-	NullCheck.notNull(treeArea, "treeArea");
-	    if (obj == null || !(obj instanceof Part))
-		return false;
-	/*
-	    final Part part = (Part)obj;
-	    final Editing editing;
-	    try {
-	    editing = part.startEditing();
-	    }
-	    catch(IOException e)
-	    {
-		app.getLuwrain().message(app.getLuwrain().i18n().getExceptionDescr(e));
-		return true;
-	    }
-	    if (editing == null)
-		return false;
-	    //	    return layouts.editing(editing);
-	    */
-	return false;
-	};
-	return params;
+	params.clickHandler = this;
+		return params;
     }
 
     private final class TreeModel implements CachedTreeModelSource
