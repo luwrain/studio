@@ -25,19 +25,22 @@ import org.luwrain.script.hooks.*;
 import org.luwrain.util.*;
 
 import org.luwrain.studio.backends.java.JavaProjectLoader;
-//import org.luwrain.studio.backends.js.JsProject;
+import org.luwrain.studio.backends.ly.LyProjectLoader;
 import org.luwrain.studio.backends.js.JsProjectLoader;
 import org.luwrain.studio.backends.tex.TexProjectLoader;
 import org.luwrain.studio.backends.py.*;
 
 public final class ProjectFactory
 {
-        static public final String KEY_JAVA = "luwrain-project-java";
-    static public final String KEY_TEX_PRESENTATION = "luwrain-project-tex-presentation";
-    static public final String KEY_PYTHON_CONSOLE = "luwrain-project-py-console";
+        static public final String
+	    KEY_JAVA = "luwrain-project-java",
+	    	    KEY_LILYPOND = "luwrain-project-lilypond",
+	    KEY_TEX_PRESENTATION = "luwrain-project-tex-presentation",
+	    KEY_PYTHON_CONSOLE = "luwrain-project-py-console";
 
-    static public final String TYPES_LIST_HOOK = "luwrain.studio.project.types";
-    static public final String CREATE_HOOK = "luwrain.studio.project.create";
+    static public final String
+	TYPES_LIST_HOOK = "luwrain.studio.project.types",
+	CREATE_HOOK = "luwrain.studio.project.create";
 
     private final IDE ide;
     private final Luwrain luwrain;
@@ -56,6 +59,10 @@ public final class ProjectFactory
 	{
 	    	case "java": {
 		final JavaProjectLoader loader = new JavaProjectLoader();
+		return loader.load(ide, projFile);
+	    }
+		    	    	case "ly": {
+		final LyProjectLoader loader = new LyProjectLoader();
 		return loader.load(ide, projFile);
 	    }
 	case "tex": {
@@ -137,8 +144,10 @@ public final class ProjectFactory
     {
 	NullCheck.notNull(projFile, "projFile");
 	final String text = FileUtils.readTextFileSingleString(projFile, "UTF-8");
-		if (text.contains(KEY_JAVA))
+	if (text.contains(KEY_JAVA))
 	    return "java";
+	if (text.contains(KEY_LILYPOND))
+	    return "ly";
 	if (text.contains(KEY_TEX_PRESENTATION))
 	    return "tex";
 	if (text.contains(KEY_PYTHON_CONSOLE))
