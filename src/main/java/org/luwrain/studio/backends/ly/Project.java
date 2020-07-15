@@ -23,42 +23,31 @@ import java.util.*;
 import java.util.concurrent.*;
 
 import org.luwrain.core.*;
+import org.luwrain.studio.util.*;
 
-final class Project implements  org.luwrain.studio.Project
+final class Project extends ProjectBase implements  org.luwrain.studio.Project
 {
-    private File projDir = null;
-    private File projFile = null;
-
     @SerializedName("name")
     private String projName = null;
 
-    @SerializedName("folders")
+    @SerializedName("sources")
+    private List<String> sources = null;
+
     private LyFolder rootFolder = null;
 
-    @Override public void close()
+    public void init(org.luwrain.studio.IDE ide, File projFile) throws IOException
     {
-    }
-
-    void setProjectFile(File projFile)
-    {
+	NullCheck.notNull(ide, "ide");
 	NullCheck.notNull(projFile, "projFile");
-	this.projFile = projFile;
-	this.projDir = projFile.getParentFile();
-	if (projDir == null)
-	    this.projDir = new File(".");
+	super.initBase(ide, projFile);
     }
 
-    void finalizeLoading()
+        @Override protected void readSourceFile(File f) throws IOException
     {
-	if (rootFolder != null)
-	    rootFolder.setProject(this);
-	if (projName == null || projName.trim().isEmpty())
-	    projName = "The project";
     }
 
-    File getProjectDir()
+        @Override public void close()
     {
-	return projDir;
     }
 
     @Override public org.luwrain.studio.RunControl run(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException

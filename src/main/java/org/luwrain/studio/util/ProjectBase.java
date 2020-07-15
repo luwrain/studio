@@ -26,10 +26,21 @@ import org.luwrain.core.*;
 
 public class ProjectBase
 {
-    private File projDir = null;
-    private File projFile = null;
-    private org.luwrain.studio.IDE ide = null;
-    
+    private transient File projDir = null;
+    private transient File projFile = null;
+    private transient org.luwrain.studio.IDE ide = null;
+
+    protected void initBase(org.luwrain.studio.IDE ide, File projFile)
+    {
+	NullCheck.notNull(ide, "ide");
+	NullCheck.notNull(projFile, "projFile");
+	this.ide = ide;
+	this.projFile = projFile;
+	this.projDir = projFile.getParentFile();
+	if (projDir == null)
+	    this.projDir = new File(".");
+    }
+
     protected void findSourceFiles(File f, String suff) throws IOException
     {
 	NullCheck.notNull(f, "f");
@@ -52,17 +63,17 @@ public class ProjectBase
     {
     }
 
-    org.luwrain.studio.IDE getIde()
+    public org.luwrain.studio.IDE getIde()
     {
 	return this.ide;
     }
 
-    File getProjectDir()
+    public File getProjectDir()
     {
 	return projDir;
     }
 
-    File getProjectFile()
+    public File getProjectFile()
     {
 	return this.projFile;
 }

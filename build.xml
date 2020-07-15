@@ -73,13 +73,4 @@
       </batchtest>
     </junit>
   </target>
-  <target name="junit-report">
-    <mkdir dir="/tmp/lwr-report"/>
-    <junitreport todir="/tmp/lwr-report">
-      <fileset dir="..">
-        <include name="**/TEST-*.xml"/>
-      </fileset>
-      <report format="noframes" todir="/tmp/lwr-report/"/>
-    </junitreport>
-  </target>
 </project>

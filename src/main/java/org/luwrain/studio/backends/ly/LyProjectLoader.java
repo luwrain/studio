@@ -21,17 +21,19 @@ import java.io.*;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.*;
 
+import org.luwrain.core.*;
 import org.luwrain.studio.Project;
 
 public final class LyProjectLoader
 {
-    public Project load(File projFile) throws IOException
+    public Project load(org.luwrain.studio.IDE ide, File projFile) throws IOException
     {
+	NullCheck.notNull(ide, "ide");
+	NullCheck.notNull(projFile, "projFile");
 	final Gson gson = new Gson();
 	final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(projFile)));
 	final org.luwrain.studio.backends.ly.Project proj = gson.fromJson(reader, org.luwrain.studio.backends.ly.Project.class);
-	proj.setProjectFile(projFile);
-	proj.finalizeLoading();
+	proj.init(ide, projFile);
 	return proj;
     }
 }
