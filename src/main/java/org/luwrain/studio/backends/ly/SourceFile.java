@@ -22,6 +22,7 @@ import com.google.gson. annotations.*;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
+import org.luwrain.antlr.ly.*;
 import org.luwrain.studio.*;
 
 final class SourceFile implements Part
