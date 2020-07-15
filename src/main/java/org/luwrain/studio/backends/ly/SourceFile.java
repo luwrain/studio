@@ -33,9 +33,9 @@ final class SourceFile implements Part
     @SerializedName("path")
     private String path = null;
 
-    private LyProject proj = null;
+    private Project proj = null;
 
-        void setProject(LyProject proj)
+        void setProject(Project proj)
     {
 	NullCheck.notNull(proj, "proj");
 	this.proj = proj;
@@ -53,7 +53,7 @@ final class SourceFile implements Part
 
     @Override public Editing startEditing() throws IOException
     {
-	return new LyEditing(new File(proj.getProjectDir(), path));
+	return new Editing(new File(proj.getProjectDir(), path));
     }
 
     @Override public String toString()

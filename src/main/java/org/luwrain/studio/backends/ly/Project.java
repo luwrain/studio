@@ -24,7 +24,7 @@ import java.util.concurrent.*;
 
 import org.luwrain.core.*;
 
-public final class LyProject implements  org.luwrain.studio.Project
+final class Project implements  org.luwrain.studio.Project
 {
     private File projDir = null;
     private File projFile = null;

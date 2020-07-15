@@ -35,9 +35,9 @@ final class LyFolder implements org.luwrain.studio.Part
     @SerializedName("sourceFiles")
     private List<SourceFile> sourceFiles = null;
 
-    private LyProject proj = null;
+    private Project proj = null;
 
-    void setProject(LyProject proj)
+    void setProject(Project proj)
     {
 	NullCheck.notNull(proj, "proj");
 	this.proj = proj;

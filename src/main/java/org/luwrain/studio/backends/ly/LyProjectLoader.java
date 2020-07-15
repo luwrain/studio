@@ -25,11 +25,11 @@ import org.luwrain.studio.Project;
 
 public final class LyProjectLoader
 {
-    public LyProject load(File projFile) throws IOException
+    public Project load(File projFile) throws IOException
     {
 	final Gson gson = new Gson();
 	final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(projFile)));
-	final LyProject proj = gson.fromJson(reader, LyProject.class);
+	final org.luwrain.studio.backends.ly.Project proj = gson.fromJson(reader, org.luwrain.studio.backends.ly.Project.class);
 	proj.setProjectFile(projFile);
 	proj.finalizeLoading();
 	return proj;

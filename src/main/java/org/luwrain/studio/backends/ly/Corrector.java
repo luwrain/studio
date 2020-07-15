@@ -23,9 +23,9 @@ import org.luwrain.controls.*;
 import org.luwrain.controls.MultilineEdit.ModificationResult;
 import org.luwrain.studio.util.*;
 
-final class LyCorrector extends ProgrammingCorrector
+final class Corrector extends ProgrammingCorrector
 {
-    LyCorrector(MultilineEditCorrector basicCorrector)
+    Corrector(MultilineEditCorrector basicCorrector)
     {
 	super(basicCorrector);
     }

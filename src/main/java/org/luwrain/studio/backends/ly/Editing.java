@@ -24,12 +24,12 @@ import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.util.*;
 
-final class LyEditing implements TextEditing
+final class Editing implements TextEditing
 {
     private final File file;
     private final MutableLinesImpl content;
 
-    LyEditing(File file) throws IOException
+    Editing(File file) throws IOException
     {
 	NullCheck.notNull(file, "files");
 	this.file = file;
