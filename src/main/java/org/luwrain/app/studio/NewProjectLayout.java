@@ -24,7 +24,7 @@ import org.luwrain.core.*;
 import org.luwrain.core.events.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
-import org.luwrain.template.*;
+import org.luwrain.app.base.*;
 
 final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 {
