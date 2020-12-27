@@ -231,28 +231,6 @@ startEditing(editing);
 	return new PositionInfo(wrapper.ex.getFileName(), wrapper.ex.getLineNumber(), wrapper.ex.getColumnNumber());
     }
 
-        boolean onInputEvent(Area area, InputEvent event, Runnable closing)
-    {
-	NullCheck.notNull(area, "area");
-	if (event.isSpecial())
-	    switch(event.getSpecial())
-	    {
-	    case ESCAPE:
-		if (closing != null)
-		    closing.run(); else
-		    closeApp();
-		return true;
-	    }
-	return super.onInputEvent(area, event);
-    }
-
-    @Override public boolean onInputEvent(Area area, InputEvent event)
-    {
-	NullCheck.notNull(area, "area");
-	NullCheck.notNull(event, "event");
-	return onInputEvent(area, event, null);
-    }
-
     Project getProject()
     {
 	return this.proj;
