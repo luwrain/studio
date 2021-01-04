@@ -81,18 +81,11 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	}
 	if (editing == null)
 	    return false;
-	final MainLayout newLayout = new MainLayout(app, treeArea, editing);
+	final TextEditingLayout newLayout = new TextEditingLayout(app, this, (TextEditing)editing);
 	app.layout(newLayout.getLayout());
 	newLayout.activate();
 	return true;
     }
-
-        void refresh()
-    {
-	treeArea.refresh();
-    }
-
-
 
         private TreeArea.Params createTreeParams()
     {
@@ -102,6 +95,11 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	params.name = app.getStrings().treeAreaName();
 	params.clickHandler = this;
 		return params;
+    }
+
+    AreaLayout getLayout()
+    {
+	return new AreaLayout(treeArea);
     }
 
     private final class TreeModel implements CachedTreeModelSource

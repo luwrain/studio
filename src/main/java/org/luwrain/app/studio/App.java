@@ -30,12 +30,11 @@ public final class App extends AppBase<Strings>
 {
     private final String arg;
     private Conversations conv = null;
-    private MainLayout mainLayout = null;
+    private ProjectBaseLayout projectBaseLayout = null;
     private NewProjectLayout newProjectLayout = null;
 
     private Object treeRoot = null;
     private Project proj = null;
-    //private ProjectTreeArea projectTreeArea = null;
     Editing editing = null;
     private final List<Editing> editings = new LinkedList();
     private Object[] compilationOutput = new Object[0];
@@ -55,7 +54,7 @@ public final class App extends AppBase<Strings>
     @Override protected boolean onAppInit() throws IOException
     {
 		this.conv = new Conversations(this);
-		this.mainLayout = new MainLayout(this);
+		this.projectBaseLayout = new ProjectBaseLayout(this);
 			this.newProjectLayout = new NewProjectLayout(this);
 	this.treeRoot = getStrings().treeRoot();
 	setAppName(getStrings().appName());
@@ -150,9 +149,9 @@ public final class App extends AppBase<Strings>
     Layouts layouts()
     {
 	return new Layouts(){
-	    @Override public void main()
+	    @Override public void projectBase()
 	    {
-		getLayout().setBasicLayout(mainLayout.getLayout());
+				getLayout().setBasicLayout(projectBaseLayout.getLayout());
 		getLuwrain().announceActiveArea();
 	    }
 	};
@@ -163,8 +162,8 @@ public final class App extends AppBase<Strings>
 	NullCheck.notNull(proj, "proj");
 	this.proj = proj;
 	this.treeRoot = proj.getPartsRoot();
-	this.mainLayout.refresh();
-	layouts().main();
+	projectBaseLayout.treeArea.refresh();
+	layouts().projectBase();
     }
 
     private void loadProjectByArg()
@@ -214,8 +213,8 @@ startEditing(editing);
 		e = ee;
 	if (e == null)
 	    editings.add(editing);
-	final MainLayout mainLayout = new MainLayout(this);
-	getLayout().setBasicLayout(mainLayout.getLayout());
+	final TextEditingLayout textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
+	getLayout().setBasicLayout(textEditingLayout.getLayout());
     }
 
         PositionInfo getCompilationOutputPositionInfo(int index)
@@ -250,7 +249,7 @@ startEditing(editing);
     {
 	if (this.proj == null)
 	    	return newProjectLayout.getLayout();
-	    return mainLayout.getLayout();
+	    return projectBaseLayout.getLayout();
     }
 
     @Override public void closeApp()
@@ -313,6 +312,6 @@ startEditing(editing);
 
     interface Layouts
     {
-	void main();
+	void projectBase();
     }
 }
