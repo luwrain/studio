@@ -52,7 +52,7 @@ final class Editing implements TextEditing
 	return params;
     }
 
-    @Override public void finishEditing()
+    @Override public void closeEditing()
     {
     }
 }

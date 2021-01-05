@@ -24,5 +24,5 @@ import org.luwrain.controls.*;
 
 public interface Editing
 {
-    void finishEditing();
+    void closeEditing();
 }

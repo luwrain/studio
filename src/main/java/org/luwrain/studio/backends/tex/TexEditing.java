@@ -38,7 +38,6 @@ final class TexEditing implements TextEditing
 	this.content = new MutableLinesImpl(lines);
     }
 
-    
     @Override public EditArea.Params getEditParams(ControlContext context)
     {
 	NullCheck.notNull(context, "context");
@@ -53,7 +52,7 @@ final class TexEditing implements TextEditing
 	return params;
     }
 
-    @Override public void finishEditing()
+    @Override public void closeEditing()
     {
     }
 }

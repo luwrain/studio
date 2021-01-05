@@ -36,6 +36,7 @@ final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
     @Override public void announceLine(int index, String line)
     {
 	NullCheck.notNull(line, "line");
+	/*
 	try {
 	    if (context.runHooks(HOOK_NAME + ".custom", new Object[]{new Integer(index), line}, Luwrain.HookStrategy.CHAIN_OF_RESPONSIBILITY))
 		return;
@@ -48,8 +49,10 @@ final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
 	    context.say(context.getI18n().getExceptionDescr(e));
 	    return;
 	}
+	*/
 	if (line.trim().isEmpty())
-	    context.setEventResponse(DefaultEventResponse.hint(Hint.EMPTY_LINE)); else
-	    context.setEventResponse(DefaultEventResponse.text(line));
+	    context.setEventResponse(DefaultEventResponse.hint(line.isEmpty()?Hint.EMPTY_LINE:Hint.SPACES)); else
+	    context.setEventResponse(DefaultEventResponse.text(context.getSpeakableText(line, Luwrain.SpeakableTextType.PROGRAMMING)));
+
     }
 }
