@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2020 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -64,37 +64,34 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 		};
     }
 
-        @Override public boolean onTreeClick(TreeArea treeArea, Object obj)
+    @Override public boolean onTreeClick(TreeArea treeArea, Object obj)
     {
 	NullCheck.notNull(treeArea, "treeArea");
 	if (obj == null || !(obj instanceof Part))
 	    return false;
 	final Part part = (Part)obj;
 	try {
-final Editing editing = part.startEditing();
-	if (editing == null)
-	    return false;
-	app.startEditing(editing);
-	return true;
-		}
+	    final Editing editing = part.startEditing();
+	    if (editing == null)
+		return false;
+	    app.startEditing(editing);
+	    return true;
+	}
 	catch(IOException e)
 	{
 	    app.getLuwrain().crash(e);
 	    return true;
 	}
-
-
-	
     }
 
-        private TreeArea.Params createTreeParams()
+    private TreeArea.Params createTreeParams()
     {
 	final TreeArea.Params params = new TreeArea.Params();
 	params.context = new DefaultControlContext(app.getLuwrain());
 	params.model = new CachedTreeModel(new TreeModel());
 	params.name = app.getStrings().treeAreaName();
 	params.clickHandler = this;
-		return params;
+	return params;
     }
 
     AreaLayout getLayout()
