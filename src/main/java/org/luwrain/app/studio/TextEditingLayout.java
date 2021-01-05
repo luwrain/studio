@@ -41,40 +41,46 @@ public final class TextEditingLayout extends LayoutBase
 	NullCheck.notNull(textEditing, "textEditing");
 	this .app = app;
 	this.textEditing = textEditing;
-	    this.treeArea = projectBaseLayout.treeArea;
-	    this.editArea = new EditArea(textEditing.getEditParams(new DefaultControlContext(app.getLuwrain()))) {
-		    @Override public boolean onInputEvent(InputEvent event)
-		    {
-			NullCheck.notNull(event, "event");
-			if (app.onInputEvent(this, event))
-			    return true;
-			return super.onInputEvent(event);
-		    }
-		    @Override public boolean onSystemEvent(SystemEvent event)
-		    {
-			NullCheck.notNull(event, "event");
-			if (event.getType() == SystemEvent.Type.REGULAR)
-			    switch(event.getCode())
-			    {
-			    case SAVE:
-				return onSave();
-			    }
-			if (app.onSystemEvent(this, event, textEditing.getActions()))
-			    return true;
-			return super.onSystemEvent(event);
-		    }
-		    @Override public boolean onAreaQuery(AreaQuery query)
-		    {
-			NullCheck.notNull(query, "query");
-			if (app.onAreaQuery(this, query))
-			    return true;
-			return super.onAreaQuery(query);
-		    }
-		    @Override public Action[] getAreaActions()
-		    {
-			return textEditing.getActions().getAreaActions();
-		    }
-		};
+	this.treeArea = projectBaseLayout.treeArea;
+	this.editArea = new EditArea(textEditing.getEditParams(new DefaultControlContext(app.getLuwrain()){
+		@Override public void onAreaNewHotPoint(Area area)
+		{
+		    textEditing.onNewHotPoint();
+		    super.onAreaNewHotPoint(area);
+		}
+	    })) {
+		@Override public boolean onInputEvent(InputEvent event)
+		{
+		    NullCheck.notNull(event, "event");
+		    if (app.onInputEvent(this, event))
+			return true;
+		    return super.onInputEvent(event);
+		}
+		@Override public boolean onSystemEvent(SystemEvent event)
+		{
+		    NullCheck.notNull(event, "event");
+		    if (event.getType() == SystemEvent.Type.REGULAR)
+			switch(event.getCode())
+			{
+			case SAVE:
+			    return onSave();
+			}
+		    if (app.onSystemEvent(this, event, textEditing.getActions()))
+			return true;
+		    return super.onSystemEvent(event);
+		}
+		@Override public boolean onAreaQuery(AreaQuery query)
+		{
+		    NullCheck.notNull(query, "query");
+		    if (app.onAreaQuery(this, query))
+			return true;
+		    return super.onAreaQuery(query);
+		}
+		@Override public Action[] getAreaActions()
+		{
+		    return textEditing.getActions().getAreaActions();
+		}
+	    };
 	/*
 	this.outputArea = new NavigationArea(new DefaultControlContext(app.getLuwrain())) {
 		final Lines outputModel = app.getOutputModel();

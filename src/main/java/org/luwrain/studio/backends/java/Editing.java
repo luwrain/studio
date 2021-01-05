@@ -63,6 +63,10 @@ final class Editing implements TextEditing
 	return new LayoutBase.Actions();
     }
 
+    @Override public void onNewHotPoint()
+    {
+    }
+
     @Override public void closeEditing()
     {
     }

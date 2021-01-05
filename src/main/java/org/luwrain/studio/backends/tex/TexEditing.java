@@ -22,22 +22,16 @@ import java.util.*;
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
-import org.luwrain.util.*;
+import org.luwrain.studio.backends.*;
+//import org.luwrain.util.*;
 import org.luwrain.app.base.*;
 
-final class TexEditing implements TextEditing
+final class TexEditing extends TextEditingBase
 {
-    private final File file;
-    private final MutableLinesImpl content;
-
     TexEditing(File file) throws IOException
     {
-	NullCheck.notNull(file, "files");
-	this.file = file;
-	final String text = FileUtils.readTextFileSingleString(file, "UTF-8");
-	final String[] lines = FileUtils.universalLineSplitting(text);
-	this.content = new MutableLinesImpl(lines);
-    }
+	super(file);
+	    }
 
     @Override public EditArea.Params getEditParams(ControlContext context)
     {
@@ -47,24 +41,18 @@ final class TexEditing implements TextEditing
 	params.content = content;
 	params.appearance = new TexAppearance(context);
 	params.editFactory = (editParams)->{
-	    return new MultilineEdit(editParams);
+this.edit = new MultilineEdit(editParams);
+return this.edit;
 	};
 	params.name = file.getName();
 	return params;
     }
-
-        @Override public boolean save() throws IOException
-    {
-	return false;
-    }
-
 
             @Override public LayoutBase.Actions getActions()
     {
 	return new LayoutBase.Actions();
     }
 
-    
     @Override public void closeEditing()
     {
     }
