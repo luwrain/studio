@@ -70,21 +70,21 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	if (obj == null || !(obj instanceof Part))
 	    return false;
 	final Part part = (Part)obj;
-	final Editing editing;
 	try {
-	    editing = part.startEditing();
-	}
+final Editing editing = part.startEditing();
+	if (editing == null)
+	    return false;
+	app.startEditing(editing);
+	return true;
+		}
 	catch(IOException e)
 	{
 	    app.getLuwrain().crash(e);
 	    return true;
 	}
-	if (editing == null)
-	    return false;
-	final TextEditingLayout newLayout = new TextEditingLayout(app, this, (TextEditing)editing);
-	app.layout(newLayout.getLayout());
-	newLayout.activate();
-	return true;
+
+
+	
     }
 
         private TreeArea.Params createTreeParams()

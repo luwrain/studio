@@ -36,7 +36,7 @@ public final class App extends AppBase<Strings>
     private Object treeRoot = null;
     private Project proj = null;
     Editing editing = null;
-    private final List<Editing> editings = new LinkedList();
+    private final List<Editing> editings = new ArrayList();
     private Object[] compilationOutput = new Object[0];
     private final MutableLinesImpl outputText = new MutableLinesImpl();
 
@@ -213,8 +213,9 @@ startEditing(editing);
 		e = ee;
 	if (e == null)
 	    editings.add(editing);
-	final TextEditingLayout textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
-	getLayout().setBasicLayout(textEditingLayout.getLayout());
+	final TextEditingLayout layout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
+	getLayout().setBasicLayout(layout.getLayout());
+	getLuwrain().setActiveArea(layout.editArea);
     }
 
         PositionInfo getCompilationOutputPositionInfo(int index)

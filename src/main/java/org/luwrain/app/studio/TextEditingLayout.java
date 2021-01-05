@@ -29,9 +29,9 @@ import org.luwrain.app.base.*;
 public final class TextEditingLayout extends LayoutBase
 {
     private final App app;
-    private final TreeArea treeArea;
-    private final EditArea editArea;
-    private final NavigationArea outputArea = null;
+    final TreeArea treeArea;
+    final EditArea editArea;
+    final NavigationArea outputArea = null;
     private final TextEditing textEditing;
 
     TextEditingLayout(App app, ProjectBaseLayout projectBaseLayout, TextEditing textEditing)
