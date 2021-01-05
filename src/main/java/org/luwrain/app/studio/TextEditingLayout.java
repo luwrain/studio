@@ -53,13 +53,26 @@ public final class TextEditingLayout extends LayoutBase
 		    @Override public boolean onSystemEvent(SystemEvent event)
 		    {
 			NullCheck.notNull(event, "event");
-			if (app.onSystemEvent(this, event))
+			if (event.getType() == SystemEvent.Type.REGULAR)
+			    switch(event.getCode())
+			    {
+			    case SAVE:
+				return onSave();
+			    }
+			if (app.onSystemEvent(this, event, textEditing.getActions()))
 			    return true;
 			return super.onSystemEvent(event);
 		    }
+		    @Override public boolean onAreaQuery(AreaQuery query)
+		    {
+			NullCheck.notNull(query, "query");
+			if (app.onAreaQuery(this, query))
+			    return true;
+			return super.onAreaQuery(query);
+		    }
 		    @Override public Action[] getAreaActions()
 		    {
-			return null;
+			return textEditing.getActions().getAreaActions();
 		    }
 		};
 	/*
@@ -97,6 +110,18 @@ public final class TextEditingLayout extends LayoutBase
 		}
 	    };
 	*/
+    }
+
+    private boolean onSave()
+    {
+	try {
+	    return this.textEditing.save();
+	}
+	catch(IOException e)
+	{
+	    app.getLuwrain().crash(e);
+	    return true;
+	}
     }
 
     AreaLayout getLayout()

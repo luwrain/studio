@@ -20,9 +20,12 @@ package org.luwrain.studio;
 
 import java.io.*;
 
-import org.luwrain.controls.*;
+import org.luwrain.app.base.*;
 
 public interface Editing
 {
-    void closeEditing();
+        void closeEditing();
+    LayoutBase.Actions getActions();
+    boolean save() throws IOException;
+
 }

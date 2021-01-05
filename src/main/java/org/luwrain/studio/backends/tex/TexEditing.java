@@ -23,6 +23,7 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.util.*;
+import org.luwrain.app.base.*;
 
 final class TexEditing implements TextEditing
 {
@@ -52,6 +53,18 @@ final class TexEditing implements TextEditing
 	return params;
     }
 
+        @Override public boolean save() throws IOException
+    {
+	return false;
+    }
+
+
+            @Override public LayoutBase.Actions getActions()
+    {
+	return new LayoutBase.Actions();
+    }
+
+    
     @Override public void closeEditing()
     {
     }
