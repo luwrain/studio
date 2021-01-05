@@ -25,7 +25,7 @@ import org.luwrain.controls.*;
 import org.luwrain.antlr.ly.*;
 import org.luwrain.studio.*;
 
-final class SourceFile implements Part
+final class LyFile implements Part
 {
     @SerializedName("name")
     private String name = null;
@@ -53,7 +53,7 @@ final class SourceFile implements Part
 
     @Override public Editing startEditing() throws IOException
     {
-	return new Editing(new File(proj.getProjectDir(), path));
+	return new LyEditing(new File(proj.getProjectDir(), path));
     }
 
     @Override public String toString()
@@ -63,9 +63,9 @@ final class SourceFile implements Part
 
     @Override public boolean equals(Object o)
     {
-	if (o == null || !(o instanceof SourceFile))
+	if (o == null || !(o instanceof LyFile))
 	    return false;
-	final SourceFile f = (SourceFile)o;
+	final LyFile f = (LyFile)o;
 	return path.equals(f.path);
     }
 }

@@ -33,7 +33,7 @@ final class LyFolder implements org.luwrain.studio.Part
     private List<LyFolder> subfolders = null;
 
     @SerializedName("sourceFiles")
-    private List<SourceFile> sourceFiles = null;
+    private List<LyFile> sourceFiles = null;
 
     private Project proj = null;
 
@@ -49,7 +49,7 @@ final class LyFolder implements org.luwrain.studio.Part
 	    sourceFiles = new LinkedList();
 	for(LyFolder f: subfolders)
 	    f.setProject(proj);
-	for(SourceFile f: sourceFiles)
+	for(LyFile f: sourceFiles)
 	    f.setProject(proj);
     }
 
@@ -63,7 +63,7 @@ final class LyFolder implements org.luwrain.studio.Part
 	final List<Part> res = new LinkedList();
 	for(LyFolder f: subfolders)
 	    res.add(f);
-	for(SourceFile f: sourceFiles)
+	for(LyFile f: sourceFiles)
 	    res.add(f);
 	return res.toArray(new Part[res.size()]);
     }
