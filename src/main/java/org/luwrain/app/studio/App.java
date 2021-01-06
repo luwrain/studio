@@ -25,6 +25,8 @@ import org.luwrain.core.events.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.app.base.*;
+import org.luwrain.core.script2.*;
+import org.luwrain.script2.*;
 
 public final class App extends AppBase<Strings>
 {
@@ -33,6 +35,7 @@ public final class App extends AppBase<Strings>
     private ProjectBaseLayout projectBaseLayout = null;
     private NewProjectLayout newProjectLayout = null;
 
+    private ScriptCore scriptCore = null;
     private Object treeRoot = null;
     private Project proj = null;
     Editing editing = null;
@@ -54,6 +57,7 @@ public final class App extends AppBase<Strings>
     @Override protected boolean onAppInit() throws IOException
     {
 		this.conv = new Conversations(this);
+		loadScriptCore();
 		this.projectBaseLayout = new ProjectBaseLayout(this);
 			this.newProjectLayout = new NewProjectLayout(this);
 	this.treeRoot = getStrings().treeRoot();
@@ -61,6 +65,15 @@ public final class App extends AppBase<Strings>
 	loadProjectByArg();
 	return true;
     }
+
+    private void loadScriptCore() throws IOException
+    {
+	this.scriptCore = new ScriptCore(getLuwrain());
+	final File scriptsDir = new File(new File(getLuwrain().getFileProperty("luwrain.dir.data"), "studio"), "js");
+	final File[] scripts = scriptsDir.listFiles();
+	if (scripts == null)
+	    return;
+	 }
 
     /*
     boolean runProject(Runnable outputRedrawing) throws IOException

@@ -17,9 +17,11 @@
 package org.luwrain.studio;
 
 import org.luwrain.core.*;
+import org.luwrain.core.script2.*;
 
 public interface IDE
 {
     void onFoldersUpdate();
     Luwrain getLuwrainObj();
+    ScriptCore getScriptCore();
 }
