@@ -20,8 +20,8 @@ import java.util.*;
 import java.io.*;
 
 import org.luwrain.core.*;
-import org.luwrain.script.*;
-import org.luwrain.script.hooks.*;
+import org.luwrain.script2.*;
+import org.luwrain.script2.hooks.*;
 import org.luwrain.util.*;
 
 import org.luwrain.studio.backends.java.JavaProjectLoader;
@@ -89,7 +89,7 @@ public final class ProjectFactory
 	NullCheck.notNull(destDir, "destDir");
 	final Object res;
 	try {
-	    res = new ProviderHook(luwrain).run(CREATE_HOOK, new Object[]{projType, destDir.getAbsolutePath()});
+	    res = new ProviderHook(ide.getScriptCore()).run(CREATE_HOOK, new Object[]{projType, destDir.getAbsolutePath()});
 	}
 	catch(RuntimeException e)
 	{
@@ -110,7 +110,7 @@ public final class ProjectFactory
     {
 	final Object[] objs;
 	try {
-	    objs = new CollectorHook(luwrain).runForArrays(TYPES_LIST_HOOK, new Object[0]);
+	    objs = new CollectorHook(ide.getScriptCore()).runForArrays(TYPES_LIST_HOOK, new Object[0]);
 	}
 	catch(RuntimeException e)
 	{
@@ -126,9 +126,9 @@ public final class ProjectFactory
 		final Object titleObj = ScriptUtils.getMember(o, "title");
 		if (idObj == null || titleObj == null || orderIndexObj == null)
 		    continue;
-		final String id = ScriptUtils.getStringValue(idObj);
-		final Integer orderIndex = ScriptUtils.getIntegerValue(orderIndexObj);
-		final String title = ScriptUtils.getStringValue(titleObj);
+		final String id = ScriptUtils.asString(idObj);
+		final Integer orderIndex = ScriptUtils.asInt(orderIndexObj);
+		final String title = ScriptUtils.asString(titleObj);
 		if (id == null || id.isEmpty() ||
 		    orderIndex == null || orderIndex.intValue() < 0 ||
 		    title == null || title.isEmpty())

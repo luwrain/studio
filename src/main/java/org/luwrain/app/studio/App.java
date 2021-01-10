@@ -30,6 +30,8 @@ import org.luwrain.script2.*;
 
 public final class App extends AppBase<Strings>
 {
+    static public final String LOG_COMPONENT = "studio";
+
     private final String arg;
     private Conversations conv = null;
     private ProjectBaseLayout projectBaseLayout = null;
@@ -73,6 +75,12 @@ public final class App extends AppBase<Strings>
 	final File[] scripts = scriptsDir.listFiles();
 	if (scripts == null)
 	    return;
+	for(File f: scripts)
+	    if (f != null)
+	    {
+		Log.debug(LOG_COMPONENT, "loading " + f.getAbsolutePath());
+		scriptCore.load(f);
+	    }
 	 }
 
     /*
@@ -143,6 +151,10 @@ public final class App extends AppBase<Strings>
     IDE getIde()
     {
 	return new IDE(){
+	    @Override public ScriptCore getScriptCore()
+	    {
+		return scriptCore;
+	    }
 	    @Override public void onFoldersUpdate()
 		{
 		}
@@ -264,6 +276,13 @@ startEditing(editing);
 	if (this.proj == null)
 	    	return newProjectLayout.getLayout();
 	    return projectBaseLayout.getLayout();
+    }
+
+    @Override public boolean onEscape(InputEvent event)
+    {
+	NullCheck.notNull(event, "event");
+	closeApp();
+	return true;
     }
 
     @Override public void closeApp()
