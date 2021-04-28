@@ -35,11 +35,11 @@ class Conversations
 
     File newProjectDir()
     {
-	return Popups.existingDir(luwrain, "Создание проекта", "Каталог для нового проекта:");
+	return Popups.existingDir(luwrain, "Каталог нового проекта:");
     }
 
     File openProject()
     {
-	return Popups.existingFile(luwrain, strings.openProjectPopupName(), strings.openProjectPopupPrefix(), new String[0]);
+	return Popups.existingFile(luwrain, strings.openProjectPopupPrefix());
 	    }
     }
