@@ -56,7 +56,7 @@ public final class App extends AppBase<Strings>
 	this.arg = arg;
     }
 
-    @Override protected boolean onAppInit() throws IOException
+    @Override protected AreaLayout onAppInit() throws IOException
     {
 		this.conv = new Conversations(this);
 		loadScriptCore();
@@ -65,7 +65,9 @@ public final class App extends AppBase<Strings>
 	this.treeRoot = getStrings().treeRoot();
 	setAppName(getStrings().appName());
 	loadProjectByArg();
-	return true;
+		if (this.proj == null)
+	    	return newProjectLayout.getLayout();
+	    return projectBaseLayout.getLayout();
     }
 
     private void loadScriptCore() throws IOException
@@ -269,13 +271,6 @@ startEditing(editing);
     Conversations conv()
     {
 	return this.conv;
-    }
-
-    @Override public AreaLayout getDefaultAreaLayout()
-    {
-	if (this.proj == null)
-	    	return newProjectLayout.getLayout();
-	    return projectBaseLayout.getLayout();
     }
 
     @Override public boolean onEscape(InputEvent event)
