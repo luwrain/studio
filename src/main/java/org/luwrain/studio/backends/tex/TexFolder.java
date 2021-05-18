@@ -23,7 +23,7 @@ import com.google.gson.annotations.*;
 import org.luwrain.core.*;
 import org.luwrain.studio.*;
 
-final class TexFolder implements Part
+public final class TexFolder implements Part
 {
         @SerializedName("name")
     private String name = "";
@@ -34,7 +34,7 @@ final class TexFolder implements Part
         @SerializedName("sourceFiles")
     private List<TexSourceFile> sourceFiles = null;
 
-    private TexProject proj = null;
+    private transient TexProject proj = null;
 
     void setProject(TexProject proj)
     {
@@ -43,9 +43,9 @@ final class TexFolder implements Part
 	if (name == null)
 	    name = "-";
 	if (subfolders == null)
-	    subfolders = new LinkedList();
+	    subfolders = new ArrayList();
 			if (sourceFiles == null)
-			    sourceFiles = new LinkedList();
+			    sourceFiles = new ArrayList();
 	    for(TexFolder f: subfolders)
 		f.setProject(proj);
 	    for(TexSourceFile f: sourceFiles)
@@ -76,6 +76,37 @@ final class TexFolder implements Part
     {
 	return name;
     }
+
+    public String getName()
+    {
+	return this.name;
+    }
+
+    public void setName(String name)
+    {
+	NullCheck.notEmpty(name, "name");
+	this.name = name;
+    }
+
+    public List<TexFolder> getSubfolders()
+    {
+	return this.subfolders != null?this.subfolders:new ArrayList();
+    }
+
+public void setSubfolders(List<TexFolder> subfolders)
+{
+    NullCheck.notNull(subfolders, "subfolders");
+    this.subfolders = subfolders;
 }
 
+    public List<TexSourceFile> getSourceFiles()
+    {
+	return this.sourceFiles != null?this.sourceFiles:new ArrayList();
+    }
 
+    public void setSourceFiles(List<TexSourceFile> sourceFiles)
+    {
+	NullCheck.notNull(sourceFiles, "sourceFiles");
+	this.sourceFiles = sourceFiles;
+    }
+}

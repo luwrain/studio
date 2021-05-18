@@ -24,7 +24,7 @@ import com.google.gson.annotations.*;
 import org.luwrain.core.*;
 import org.luwrain.studio.*;
 
-final class TexProject implements  org.luwrain.studio.Project
+public final class TexProject implements  org.luwrain.studio.Project
 {
     @SerializedName("name")
     private String projName = null;
@@ -32,9 +32,9 @@ final class TexProject implements  org.luwrain.studio.Project
     @SerializedName("folders")
     private TexFolder rootFolder = null;
 
-    private File projFile = null;
-    private File projDir = null;
-    private IDE ide = null;
+    private transient File projFile = null;
+    private transient File projDir = null;
+    private transient IDE ide = null;
 
     @Override public void close()
     {
@@ -91,5 +91,29 @@ final class TexProject implements  org.luwrain.studio.Project
     @Override public org.luwrain.studio.Part getMainSourceFile()
     {
 	return null;
+    }
+
+    public String getProjName()
+    {
+	return this.projName != null?this.projName.trim():"";
+    }
+
+    public void setProjName(String projName)
+    {
+	NullCheck.notNull(projName, "projName");
+	if (projName.trim().isEmpty())
+	    throw new IllegalArgumentException("projName can't be empty");
+	this.projName = projName.trim();
+    }
+
+    public TexFolder getRootFolder()
+    {
+	return this.rootFolder;
+    }
+
+    public void setRootFolder(TexFolder rootFolder)
+    {
+	NullCheck.notNull(rootFolder, "rootFolder");
+	this.rootFolder = rootFolder;
     }
 }

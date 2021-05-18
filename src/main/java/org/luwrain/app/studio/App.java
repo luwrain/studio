@@ -67,7 +67,7 @@ public final class App extends AppBase<Strings>
 	loadProjectByArg();
 		if (this.proj == null)
 	    	return newProjectLayout.getAreaLayout();
-	    return projectBaseLayout.getLayout();
+	    return projectBaseLayout.getAreaLayout();
     }
 
     private void loadScriptCore() throws IOException
@@ -178,7 +178,7 @@ public final class App extends AppBase<Strings>
 	return new Layouts(){
 	    @Override public void projectBase()
 	    {
-				getLayout().setBasicLayout(projectBaseLayout.getLayout());
+		setAreaLayout(projectBaseLayout);
 		getLuwrain().announceActiveArea();
 	    }
 	};
@@ -241,7 +241,7 @@ startEditing(editing);
 	if (e == null)
 	    editings.add(editing);
 	final TextEditingLayout layout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
-	getLayout().setBasicLayout(layout.getLayout());
+	setAreaLayout(layout);
 	getLuwrain().setActiveArea(layout.editArea);
     }
 

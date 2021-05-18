@@ -33,35 +33,15 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 
     ProjectBaseLayout(App app)
     {
-	NullCheck.notNull(app, "app");
+	super(app);
 	this .app = app;
-	    this.treeArea = new TreeArea(createTreeParams()){
-		    @Override public boolean onInputEvent(InputEvent event)
-		    {
-			NullCheck.notNull(event, "event");
-			if (app.onInputEvent(this, event))
-			    return true;
-			return super.onInputEvent(event);
-		    }
-		    @Override public boolean onSystemEvent(SystemEvent event)
-		    {
-			NullCheck.notNull(event, "event");
-			if (app.onSystemEvent(this, event))
-			    return true;
-			return super.onSystemEvent(event);
-		    }
-		    @Override public boolean onAreaQuery(AreaQuery query)
-		    {
-			NullCheck.notNull(query, "query");
-			if (app.onAreaQuery(this, query))
-			    return true;
-			return super.onAreaQuery(query);
-		    }
-		    @Override public Action[] getAreaActions()
-		    {
-			return null;
-		    }
-		};
+	final TreeArea.Params params = new TreeArea.Params();
+	params.context = getControlContext();
+	params.model = new CachedTreeModel(new TreeModel());
+	params.name = app.getStrings().treeAreaName();
+	params.clickHandler = this;
+	this.treeArea = new TreeArea(params);
+	setAreaLayout(treeArea, actions());
     }
 
     @Override public boolean onTreeClick(TreeArea treeArea, Object obj)
@@ -82,21 +62,6 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	    app.getLuwrain().crash(e);
 	    return true;
 	}
-    }
-
-    private TreeArea.Params createTreeParams()
-    {
-	final TreeArea.Params params = new TreeArea.Params();
-	params.context = new DefaultControlContext(app.getLuwrain());
-	params.model = new CachedTreeModel(new TreeModel());
-	params.name = app.getStrings().treeAreaName();
-	params.clickHandler = this;
-	return params;
-    }
-
-    AreaLayout getLayout()
-    {
-	return new AreaLayout(treeArea);
     }
 
     private final class TreeModel implements CachedTreeModelSource
