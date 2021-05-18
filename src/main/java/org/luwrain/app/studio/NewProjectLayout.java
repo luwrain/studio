@@ -33,31 +33,23 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 
     NewProjectLayout(App app)
     {
-	NullCheck.notNull(app, "app");
+	super(app);
 	this.app = app;
-	this.newProjectArea = new ListArea(createParams()){
-		@Override public boolean onInputEvent(InputEvent event)
+	final ListArea.Params params = new ListArea.Params();
+	params.context = getControlContext();
+	params.model = new ListUtils.FixedModel(new ProjectFactory(app.getIde()).getNewProjectTypes());
+	params.appearance = new ListUtils.DefaultAppearance(params.context){
+		@Override public void announceItem(Object item, Set<Flags> flags)
 		{
-		    NullCheck.notNull(event, "event");
-		    if (app.onInputEvent(this, event))
-			return true;
-		    return super.onInputEvent(event);
-		}
-		@Override public boolean onSystemEvent(SystemEvent event)
-		{
-		    NullCheck.notNull(event, "event");
-		    if (app.onSystemEvent(this, event))
-			return true;
-		    return super.onSystemEvent(event);
-		}
-		@Override public boolean onAreaQuery(AreaQuery query)
-		{
-		    NullCheck.notNull(query, "query");
-		    if (app.onAreaQuery(this, query))
-			return true;
-		    return super.onAreaQuery(query);
+		    NullCheck.notNull(item, "item");
+		    NullCheck.notNull(flags, "flags");
+		    app.setEventResponse(DefaultEventResponse.listItem(app.getLuwrain().getSpeakableText(item.toString(), Luwrain.SpeakableTextType.NATURAL)));
 		}
 	    };
+	params.clickHandler = this;
+	params.name = app.getStrings().newProjectAreaName();
+	this.newProjectArea = new ListArea(params);
+	setAreaLayout(newProjectArea, actions());
     }
 
     @Override public boolean onListClick(ListArea listArea,int index,Object obj)
@@ -81,28 +73,5 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	if (proj != null)
 	    app.activateProject(proj);
 	return true;
-    }
-
-    AreaLayout getLayout()
-    {
-	return new AreaLayout(newProjectArea);
-    }
-
-    private ListArea.Params createParams()
-    {
-	final ListArea.Params params = new ListArea.Params();
-	params.context = new DefaultControlContext(app.getLuwrain());
-	params.model = new ListUtils.FixedModel(new ProjectFactory(app.getIde()).getNewProjectTypes());
-	params.appearance = new ListUtils.DefaultAppearance(params.context){
-		@Override public void announceItem(Object item, Set<Flags> flags)
-		{
-		    NullCheck.notNull(item, "item");
-		    NullCheck.notNull(flags, "flags");
-		    app.getLuwrain().setEventResponse(DefaultEventResponse.listItem(app.getLuwrain().getSpeakableText(item.toString(), Luwrain.SpeakableTextType.NATURAL)));
-		}
-	    };
-	params.clickHandler = this;
-	params.name = app.getStrings().newProjectAreaName();
-	return params;
     }
 }

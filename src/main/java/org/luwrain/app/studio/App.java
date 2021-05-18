@@ -66,7 +66,7 @@ public final class App extends AppBase<Strings>
 	setAppName(getStrings().appName());
 	loadProjectByArg();
 		if (this.proj == null)
-	    	return newProjectLayout.getLayout();
+	    	return newProjectLayout.getAreaLayout();
 	    return projectBaseLayout.getLayout();
     }
 
