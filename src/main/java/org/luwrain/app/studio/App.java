@@ -33,6 +33,7 @@ public final class App extends AppBase<Strings>
     static public final String LOG_COMPONENT = "studio";
 
     private final String arg;
+    final ProjectFactory projFactory;
     private Conversations conv = null;
     private ProjectBaseLayout projectBaseLayout = null;
     private NewProjectLayout newProjectLayout = null;
@@ -53,6 +54,7 @@ public final class App extends AppBase<Strings>
     public App(String arg)
     {
 	super(Strings.NAME, Strings.class, "luwrain.studio");
+	this.projFactory = new ProjectFactory(getIde());
 	this.arg = arg;
     }
 
@@ -64,11 +66,49 @@ public final class App extends AppBase<Strings>
 			this.newProjectLayout = new NewProjectLayout(this);
 	this.treeRoot = getStrings().treeRoot();
 	setAppName(getStrings().appName());
-	loadProjectByArg();
-		if (this.proj == null)
+	if (loadProjectByArg())
+	    	    return projectBaseLayout.getAreaLayout();
 	    	return newProjectLayout.getAreaLayout();
-	    return projectBaseLayout.getAreaLayout();
     }
+
+        private boolean loadProjectByArg()
+    {
+	if (arg == null || arg.isEmpty())
+	    return false;
+	final File file = new File(arg);
+	if (!file.exists() || file.isDirectory())
+	    return false;
+	final TaskId taskId = newTaskId();
+	return runTask(taskId, ()->{
+		final Project proj;
+		try {
+		    proj = new ProjectFactory(getIde()).load(file);
+		}
+		catch(IOException e)
+		{
+		    getLuwrain().crash(e);
+		    return;
+		}
+		if (proj == null)
+		{
+		    //FIXME:message
+		    return;
+		}
+		finishedTask(taskId, ()->{
+			activateProject(proj);
+			/*
+	final Part mainFile = proj.getMainSourceFile();
+	if (mainFile == null)
+	    return;
+	  final Editing editing = mainFile.startEditing();
+	  if (editing == null)
+	  return;
+startEditing(editing);
+*/
+	    });
+	    });
+    }
+
 
     private void loadScriptCore() throws IOException
     {
@@ -164,6 +204,15 @@ public final class App extends AppBase<Strings>
 	    {
 		return getLuwrain();
 	    }
+	    @Override public void showWizard(LayoutBase wizardLayout)
+	    {
+		NullCheck.notNull(wizardLayout, "wizardLayout");
+		setAreaLayout(wizardLayout);
+	    }
+	    @Override public App getAppBase()
+	    {
+		return App.this;
+	    }
 	};
     }
 
@@ -193,43 +242,6 @@ public final class App extends AppBase<Strings>
 	layouts().projectBase();
     }
 
-    private void loadProjectByArg()
-    {
-	if (arg == null || arg.isEmpty())
-	    return;
-	final File file = new File(arg);
-	if (!file.exists() || file.isDirectory())
-	    return;
-	final TaskId taskId = newTaskId();
-	runTask(taskId, ()->{
-		final Project proj;
-		try {
-		    proj = new ProjectFactory(getIde()).load(file);
-		}
-		catch(IOException e)
-		{
-		    getLuwrain().crash(e);
-		    return;
-		}
-		if (proj == null)
-		{
-		    //FIXME:message
-		    return;
-		}
-		finishedTask(taskId, ()->{
-			activateProject(proj);
-			/*
-	final Part mainFile = proj.getMainSourceFile();
-	if (mainFile == null)
-	    return;
-	  final Editing editing = mainFile.startEditing();
-	  if (editing == null)
-	  return;
-startEditing(editing);
-*/
-	    });
-	    });
-    }
 
         void startEditing(Editing editing) throws IOException
     {

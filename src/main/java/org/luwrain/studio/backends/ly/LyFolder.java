@@ -82,4 +82,10 @@ final class LyFolder implements org.luwrain.studio.Part
     {
 	return o != null && (o instanceof LyFolder);
     }
+
+                @Override public org.luwrain.studio.Part.Action[] getActions()
+    {
+	return new Action[0];
+    }
+
 }

@@ -44,4 +44,10 @@ final class SourceFile implements org.luwrain.studio.Part
     {
 	return new org.luwrain.studio.Part[0];
     }
+
+                @Override public org.luwrain.studio.Part.Action[] getActions()
+    {
+	return new Action[0];
+    }
+
 }

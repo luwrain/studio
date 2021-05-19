@@ -19,6 +19,7 @@ package org.luwrain.studio.backends.tex;
 import java.io.*;
 import java.util.*;
 
+import com.google.gson.*;
 import com.google.gson.annotations.*;
 
 import org.luwrain.core.*;
@@ -26,8 +27,13 @@ import org.luwrain.studio.*;
 
 public final class TexProject implements  org.luwrain.studio.Project
 {
+    static public final String KEY = "---LUWRAIN-PROJECT-TEX---";
+
     @SerializedName("name")
     private String projName = null;
+
+        @SerializedName("projKey")
+    private String key = KEY;
 
     @SerializedName("folders")
     private TexFolder rootFolder = null;
@@ -116,4 +122,16 @@ public final class TexProject implements  org.luwrain.studio.Project
 	NullCheck.notNull(rootFolder, "rootFolder");
 	this.rootFolder = rootFolder;
     }
+
+        @Override public Project load(File projFile) throws IOException
+    {
+	final Gson gson = new Gson();
+	try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(projFile), "UTF-8"))) {
+final TexProject proj = gson.fromJson(reader, TexProject.class);
+proj.setProjectFile(projFile);
+proj.finalizeLoading();
+return proj;
+	}
+    }
+
 }

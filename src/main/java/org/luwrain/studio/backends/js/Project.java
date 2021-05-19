@@ -179,5 +179,17 @@ private String mainFile = null;
 			{
 			    return "fixme";
 			}
+	        @Override public org.luwrain.studio.Part.Action[] getActions()
+    {
+	return new Action[0];
+    }
+
 		    }
+
+        @Override public Project load(File file) throws IOException
+    {
+	return null;
+    }
+
+
 }

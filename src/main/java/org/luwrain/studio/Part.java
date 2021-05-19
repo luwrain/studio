@@ -20,11 +20,37 @@ package org.luwrain.studio;
 
 import java.io.*;
 
-//import org.luwrain.controls.*;
+import org.luwrain.core.*;
 
 public interface Part
 {
+public interface ActionProc
+{
+    boolean onAction(IDE ide);
+}
+
+    public interface Action extends ActionProc
+    {
+	String getTitle();
+    }
+
     String getTitle();
+    Action[] getActions();
     Part[] getChildParts();
     Editing startEditing() throws IOException;
+
+    static public Action action(String title, ActionProc proc)
+    {
+	NullCheck.notEmpty(title, "title");
+	NullCheck.notNull(proc, "proc");
+	return new Action(){
+	    @Override public String getTitle() { return title; }
+	    @Override public boolean onAction(IDE ide) { return proc.onAction(ide); }
+	};
+    }
+
+    static public Action[] actions(Action ... actions)
+    {
+	return actions;
+    }
 }

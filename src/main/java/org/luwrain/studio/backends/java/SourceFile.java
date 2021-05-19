@@ -99,4 +99,10 @@ final class SourceFile implements Part
 	final SourceFile f = (SourceFile)o;
 	return file.equals(f.file);
     }
+
+        @Override public Action[] getActions()
+    {
+	return new Action[0];
+    }
+
 }

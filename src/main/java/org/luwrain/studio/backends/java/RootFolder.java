@@ -84,7 +84,12 @@ final class RootFolder implements org.luwrain.studio.Part
     {
 	    return o != null && (o instanceof ClassesRoot);
     }
-	}
+            @Override public org.luwrain.studio.Part.Action[] getActions()
+    {
+	return new Action[0];
+    }
+
+    }
 
     	private final class FilesRoot implements org.luwrain.studio.Part
 {
@@ -108,5 +113,17 @@ final class RootFolder implements org.luwrain.studio.Part
     {
 	    return o != null && (o instanceof FilesRoot);
     }
+            @Override public org.luwrain.studio.Part.Action[] getActions()
+    {
+	return new Action[0];
+    }
+
 	}
+
+        @Override public org.luwrain.studio.Part.Action[] getActions()
+    {
+	return new Action[0];
+    }
+
+
 }

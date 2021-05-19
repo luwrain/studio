@@ -67,4 +67,10 @@ final class PySourceFile implements Part
 	final PySourceFile f = (PySourceFile)o;
 	return path.equals(f.path);
     }
+
+                @Override public org.luwrain.studio.Part.Action[] getActions()
+    {
+	return new Action[0];
+    }
+
 }

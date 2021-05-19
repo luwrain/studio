@@ -82,4 +82,10 @@ final class PyFolder implements org.luwrain.studio.Part
     {
 	return o != null && (o instanceof PyFolder);
     }
+
+                @Override public org.luwrain.studio.Part.Action[] getActions()
+    {
+	return new Action[0];
+    }
+
 }

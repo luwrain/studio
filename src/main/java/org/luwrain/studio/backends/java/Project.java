@@ -178,4 +178,9 @@ public final class Project implements  org.luwrain.studio.Project
 	return null;
     }
 
+    @Override public Project load(File file) throws IOException
+    {
+	return null;
+    }
+
 }

@@ -57,7 +57,7 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	if (obj == null || !(obj instanceof ProjectType))
 	    return false;
 	final ProjectType projType = (ProjectType)obj;
-	final File destDir = app.conv().newProjectDir();
+	final File destDir = new File("/tmp/proba");//app.conv().newProjectDir();
 	if (destDir == null)
 	    return true;
 	final ProjectFactory factory = new ProjectFactory(app.getIde());

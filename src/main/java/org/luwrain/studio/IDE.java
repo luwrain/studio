@@ -18,10 +18,13 @@ package org.luwrain.studio;
 
 import org.luwrain.core.*;
 import org.luwrain.core.script2.*;
+import org.luwrain.app.base.*;
 
 public interface IDE
 {
     void onFoldersUpdate();
     Luwrain getLuwrainObj();
     ScriptCore getScriptCore();
+    void showWizard(LayoutBase wizardLayout);
+    AppBase<org.luwrain.app.studio.Strings> getAppBase();
 }

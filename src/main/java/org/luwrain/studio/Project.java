@@ -31,4 +31,5 @@ public interface Project
     RunControl run(Luwrain luwrain, Output output) throws IOException;
     void close(Luwrain luwrain);
     Part getMainSourceFile();
+    Project load(File file) throws IOException;
 }

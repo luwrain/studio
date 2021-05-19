@@ -56,4 +56,9 @@ public class ClassPart implements Part
     {
 	return name;
     }
+
+    @Override public Action[] getActions()
+    {
+	return new Action[0];
+    }
 }

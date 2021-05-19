@@ -80,4 +80,10 @@ final class Folder implements org.luwrain.studio.Part
     {
 	return o != null && (o instanceof Folder);
     }
+
+        @Override public Action[] getActions()
+    {
+	return new Action[0];
+    }
+
 }

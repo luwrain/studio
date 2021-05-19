@@ -109,4 +109,12 @@ public void setSubfolders(List<TexFolder> subfolders)
 	NullCheck.notNull(sourceFiles, "sourceFiles");
 	this.sourceFiles = sourceFiles;
     }
+
+                @Override public org.luwrain.studio.Part.Action[] getActions()
+    {
+	return Part.actions(
+		       Part.action("Создать новый раздел", (ide)->{ return false; })
+		       );
+    }
+
 }

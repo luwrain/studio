@@ -50,6 +50,7 @@ public final class NewProjectCommands
 		    folder.setName("Root folder");
 		    folder.setSubfolders(new ArrayList());
 		    folder.setSourceFiles(new ArrayList());
+		    proj.setRootFolder(folder);
 		    try {
 			try (final BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {
 			    final Gson gson = new Gson();

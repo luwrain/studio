@@ -120,5 +120,17 @@ final class Project extends ProjectBase implements  org.luwrain.studio.Project
 	    return o != null && (o instanceof RootFolder);
 	}
     }
+	            @Override public org.luwrain.studio.Part.Action[] getActions()
+    {
+	return new Action[0];
     }
+
+    }
+
+        @Override public Project load(File file) throws IOException
+    {
+	return null;
+    }
+
+    
 }

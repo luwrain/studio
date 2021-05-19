@@ -24,20 +24,11 @@ import org.luwrain.script2.*;
 import org.luwrain.script2.hooks.*;
 import org.luwrain.util.*;
 
-import org.luwrain.studio.backends.java.JavaProjectLoader;
-import org.luwrain.studio.backends.ly.LyProjectLoader;
-import org.luwrain.studio.backends.js.JsProjectLoader;
-import org.luwrain.studio.backends.tex.TexProjectLoader;
-import org.luwrain.studio.backends.py.*;
+import org.luwrain.studio.backends.tex.TexProject;
+import org.luwrain.studio.backends.tex.TexPresentationWizard;
 
 public final class ProjectFactory
 {
-        static public final String
-	    KEY_JAVA = "luwrain-project-java",
-	    	    KEY_LILYPOND = "luwrain-project-lilypond",
-	    KEY_TEX_PRESENTATION = "luwrain-project-tex-presentation",
-	    KEY_PYTHON_CONSOLE = "luwrain-project-py-console";
-
     static public final String
 	TYPES_LIST_HOOK = "luwrain.studio.project.types",
 	CREATE_HOOK = "luwrain.studio.project.create";
@@ -55,103 +46,45 @@ public final class ProjectFactory
     public Project load(File projFile) throws IOException
     {
 	NullCheck.notNull(projFile, "projFile");
-	switch(getProjectType(projFile))
+	final Project loader = readProjectKey(projFile);
+	if (loader == null)
+	    throw new IOException("No known keys in the file");
+	final Project proj = loader.load(projFile);
+	if (proj == null)
+	    throw new IOException(projFile.getPath() + " doesn't contain proper  project structure");
+	return proj;
+    }
+
+        private Project readProjectKey(File projFile) throws IOException
+    {
+	NullCheck.notNull(projFile, "projFile");
+	final String text = FileUtils.readTextFileSingleString(projFile, "UTF-8");
+	if (text.contains(TexProject.KEY))
+	    return new TexProject();
+		return null;
+    }
+
+    public Project create(String projType, File destDir) throws IOException
+    {
+	NullCheck.notEmpty(projType, "projType");
+	NullCheck.notNull(destDir, "destDir");
+switch(projType)
 	{
-	    	case "java": {
-		final JavaProjectLoader loader = new JavaProjectLoader();
-		return loader.load(ide, projFile);
-	    }
-		    	    	case "ly": {
-		final LyProjectLoader loader = new LyProjectLoader();
-		return loader.load(ide, projFile);
-	    }
-	case "tex": {
-		final TexProjectLoader texLoader = new TexProjectLoader();
-		return texLoader.load(projFile);
-	    }
-	case "py": {
-		final PyProjectLoader pyLoader = new PyProjectLoader();
-		return pyLoader.load(projFile);
-	    }
-	case "js": {
-		final JsProjectLoader jsProjectLoader = new JsProjectLoader();
-		return jsProjectLoader.load(projFile);
-	    }
+	case "latex-presentation": {
+	    final TexPresentationWizard w = new TexPresentationWizard(ide.getAppBase());
+	    ide.showWizard(w);
+	    luwrain.announceActiveArea();
+	    return null;
+	}
 	default:
 	    return null;
 	}
     }
 
-    public Project create(String projType, File destDir) throws IOException
-    {
-	NullCheck.notNull(luwrain, "luwrain");
-	NullCheck.notEmpty(projType, "projType");
-	NullCheck.notNull(destDir, "destDir");
-	final Object res;
-	try {
-	    res = new ProviderHook(ide.getScriptCore()).run(CREATE_HOOK, new Object[]{projType, destDir.getAbsolutePath()});
-	}
-	catch(RuntimeException e)
-	{
-	    throw new IOException(CREATE_HOOK + " failed", e);
-	}
-	if (res == null)
-	    throw new IOException(CREATE_HOOK + " has not returned any value");
-	final String projFileName = res.toString();
-	if (projFileName == null || projFileName.isEmpty())
-	    throw new IOException(CREATE_HOOK + " has not returned any value");
-	final File projFile = new File(projFileName);
-	if (!projFile.exists() || !projFile.isFile())
-	    throw new IOException(CREATE_HOOK + " has returned \'" + projFileName + "\' but it is not a file");
-	return load(projFile);
-    }
-
     public ProjectType[] getNewProjectTypes()
     {
-	final Object[] objs;
-	try {
-	    objs = new CollectorHook(ide.getScriptCore()).runForArrays(TYPES_LIST_HOOK, new Object[0]);
-	}
-	catch(RuntimeException e)
-	{
-	    luwrain.crash(e);
-	    return new ProjectType[0];
-	}
-	final List<ProjectType> res = new LinkedList();
-	for(Object o: objs)
-	    if (o != null)
-	    {
-		final Object idObj = ScriptUtils.getMember(o, "id");
-		final Object orderIndexObj = ScriptUtils.getMember(o, "orderIndex");
-		final Object titleObj = ScriptUtils.getMember(o, "title");
-		if (idObj == null || titleObj == null || orderIndexObj == null)
-		    continue;
-		final String id = ScriptUtils.asString(idObj);
-		final Integer orderIndex = ScriptUtils.asInt(orderIndexObj);
-		final String title = ScriptUtils.asString(titleObj);
-		if (id == null || id.isEmpty() ||
-		    orderIndex == null || orderIndex.intValue() < 0 ||
-		    title == null || title.isEmpty())
-		    continue;
-		res.add(new ProjectType(id, orderIndex.intValue(), title));
-	    }
-	final ProjectType[] toSort = res.toArray(new ProjectType[res.size()]);
-	Arrays.sort(toSort);
-	return toSort;
-    }
-
-    private String getProjectType(File projFile) throws IOException
-    {
-	NullCheck.notNull(projFile, "projFile");
-	final String text = FileUtils.readTextFileSingleString(projFile, "UTF-8");
-	if (text.contains(KEY_JAVA))
-	    return "java";
-	if (text.contains(KEY_LILYPOND))
-	    return "ly";
-	if (text.contains(KEY_TEX_PRESENTATION))
-	    return "tex";
-	if (text.contains(KEY_PYTHON_CONSOLE))
-	    return "py";
-	return "";
+	return new ProjectType[]{
+	    new ProjectType("latex-presentation", 0, "Презентация TeX")
+	};
     }
 }
