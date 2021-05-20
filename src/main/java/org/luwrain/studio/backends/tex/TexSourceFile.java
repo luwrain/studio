@@ -34,6 +34,17 @@ final class TexSourceFile implements Part
 
     private TexProject proj = null;
 
+    TexSourceFile()
+    {
+	this(null, null);
+    }
+
+    TexSourceFile(String name, String path)
+    {
+	this.name = name;
+	this.path = path;
+    }
+
         void setProject(TexProject proj)
     {
 	NullCheck.notNull(proj, "proj");
