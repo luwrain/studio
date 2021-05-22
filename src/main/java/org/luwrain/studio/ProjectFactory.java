@@ -71,7 +71,7 @@ public final class ProjectFactory
 switch(projType)
 	{
 	case "latex-presentation": {
-	    final TexPresentationWizard w = new TexPresentationWizard(ide.getAppBase(), destDir);
+	    final TexPresentationWizard w = new TexPresentationWizard(ide, destDir);
 	    ide.showWizard(w);
 	    luwrain.announceActiveArea();
 	    return null;

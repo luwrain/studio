@@ -71,11 +71,16 @@ public final class App extends AppBase<Strings>
 	    	return newProjectLayout.getAreaLayout();
     }
 
-        private boolean loadProjectByArg()
+    private boolean loadProjectByArg()
     {
 	if (arg == null || arg.isEmpty())
 	    return false;
-	final File file = new File(arg);
+	return loadProject(new File(arg));
+    }
+
+    private boolean loadProject(File file)
+    {
+	NullCheck.notNull(file, "file");
 	if (!file.exists() || file.isDirectory())
 	    return false;
 	final TaskId taskId = newTaskId();
@@ -84,7 +89,7 @@ public final class App extends AppBase<Strings>
 		try {
 		    proj = new ProjectFactory(getIde()).load(file);
 		}
-		catch(IOException e)
+		catch(Throwable e)
 		{
 		    getLuwrain().crash(e);
 		    return;
@@ -200,6 +205,10 @@ startEditing(editing);
 	    @Override public void onFoldersUpdate()
 		{
 		}
+	    @Override public boolean loadProject(File file)
+	    {
+		return App.this.loadProject(file);
+	    }
 	    @Override public Luwrain getLuwrainObj()
 	    {
 		return getLuwrain();
@@ -254,7 +263,7 @@ startEditing(editing);
 	    editings.add(editing);
 	final TextEditingLayout layout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
 	setAreaLayout(layout);
-	getLuwrain().setActiveArea(layout.editArea);
+	layout.setActiveArea(layout.editArea);
     }
 
         PositionInfo getCompilationOutputPositionInfo(int index)

@@ -16,15 +16,19 @@
 
 package org.luwrain.studio;
 
+import java.io.*;
+
+
 import org.luwrain.core.*;
 import org.luwrain.core.script2.*;
 import org.luwrain.app.base.*;
 
 public interface IDE
 {
+        AppBase<org.luwrain.app.studio.Strings> getAppBase();
+        Luwrain getLuwrainObj();
     void onFoldersUpdate();
-    Luwrain getLuwrainObj();
     ScriptCore getScriptCore();
-    void showWizard(LayoutBase wizardLayout);
-    AppBase<org.luwrain.app.studio.Strings> getAppBase();
+    boolean loadProject(File file);
+        void showWizard(LayoutBase wizardLayout);
 }

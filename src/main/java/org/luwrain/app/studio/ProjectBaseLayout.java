@@ -41,42 +41,37 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	params.name = app.getStrings().treeAreaName();
 	params.clickHandler = this;
 	this.treeArea = new TreeArea(params){
-		private Part.Action[] actionsCache = null;
+		private final Map<String, Part.Action> actionsCache = new HashMap();
 		@Override public boolean onSystemEvent(SystemEvent event)
 		{
 		    NullCheck.notNull(event, "event");
+		    if (event.getType() == SystemEvent.Type.REGULAR && event.getCode() == SystemEvent.Code.ACTION)
+		    {
+			final ActionEvent actionEvent = (ActionEvent)event;
+			actionEvent.getActionName();
+		    }
 		    return super.onSystemEvent(event);
 		}
 		@Override public Action[] getAreaActions()
 		{
-		    this.actionsCache = getPartActions();
-		    if (actionsCache != null)
-			return getActions(this.actionsCache);
-		    return new Action[0];
-		    		}
+		    final Object obj = treeArea.selected();
+		    if (obj == null || !(obj instanceof Part))
+			return new Action[0];
+		    final Part part = (Part)obj;
+		    final Part.Action[] actions = part.getActions();
+		    actionsCache.clear();
+		    final List<Action> res = new ArrayList();
+		    int k = 1;
+		    for(Part.Action a: actions)
+		    {
+			final Action action = new Action("action" + k++, a.getTitle());
+			this.actionsCache.put(action.name(), a);
+			res.add(action);
+		    }
+		    return res.toArray(new Action[res.size()]);
+		}
 	    };
 	setAreaLayout(treeArea, null);
-    }
-
-    public Part.Action[] getPartActions()
-    {
-	final Object obj = treeArea.selected();
-	if (obj == null || !(obj instanceof Part))
-	    return null;
-	    final Part part = (Part)obj;
-return part.getActions();
-    }
-
-    private Action[] getActions(Part.Action[] partActions)
-    {
-	NullCheck.notNullItems(partActions, "partActions");
-	    if (partActions == null)
-		return null;
-	    final List<Action> res = new ArrayList();
-	    int k = 1;
-	    for(Part.Action a: partActions)
-		res.add(new Action("action" + k++, a.getTitle()));
-	    return res.toArray(new Action[res.size()]);
     }
 
     @Override public boolean onTreeClick(TreeArea treeArea, Object obj)
@@ -94,7 +89,7 @@ return part.getActions();
 	}
 	catch(IOException e)
 	{
-	    app.getLuwrain().crash(e);
+	    app.crash(e);
 	    return true;
 	}
     }

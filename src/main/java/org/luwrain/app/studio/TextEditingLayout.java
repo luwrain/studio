@@ -55,16 +55,21 @@ public final class TextEditingLayout extends LayoutBase
 		    return super.onSystemEvent(event);
 		}
 	    };
+	final Actions editActions = actions();
+	setAreaLayout(AreaLayout.LEFT_RIGHT, treeArea, null, editArea, editActions);
     }
 
     private boolean onSave()
     {
 	try {
-	    return this.textEditing.save();
+	    if (!this.textEditing.save())
+		return false;
+	    app.message("Сохранено", Luwrain.MessageType.OK);
+	    return true;
 	}
 	catch(IOException e)
 	{
-	    app.getLuwrain().crash(e);
+	    app.crash(e);
 	    return true;
 	}
     }

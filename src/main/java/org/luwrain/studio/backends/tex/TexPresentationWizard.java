@@ -33,6 +33,7 @@ import org.luwrain.app.studio.Strings;
 
 public final class TexPresentationWizard extends LayoutBase
 {
+    private final IDE ide;
     final AppBase<Strings> app;
     final File destDir;
     final WizardArea wizardArea;
@@ -40,11 +41,12 @@ public final class TexPresentationWizard extends LayoutBase
     private String title = "", author = "", date = "";
     private List<String> frames = new ArrayList();
 
-    public TexPresentationWizard(AppBase<Strings> app, File destDir)
+    public TexPresentationWizard(IDE ide, File destDir)
     {
-	super(app);
+	super(ide.getAppBase());
 	NullCheck.notNull(destDir, "destDir");
-	this.app = app;
+	this.ide = ide;
+	this.app = ide.getAppBase();
 	this.destDir = destDir;
 	this.wizardArea = new WizardArea(getControlContext());
 	final Frame greeting = wizardArea.newFrame()
@@ -130,5 +132,6 @@ public final class TexPresentationWizard extends LayoutBase
 	final File mainFile = new File(destDir, "main.tex");
 	FileUtils.writeTextFileSingleString(mainFile, text, "UTF-8");
 	FileUtils.writeTextFileSingleString(projFile, gson.toJson(proj), "UTF-8");
+	ide.loadProject(projFile);
     }
 }
