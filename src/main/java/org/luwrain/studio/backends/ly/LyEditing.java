@@ -27,7 +27,6 @@ import org.luwrain.app.base.*;
 
 final class LyEditing extends TextEditingBase
 {
-
     LyEditing(File file) throws IOException
     {
 	super(file);
@@ -46,9 +45,5 @@ final class LyEditing extends TextEditingBase
 	};
 	params.name = file.getName();
 	return params;
-    }
-
-    @Override public void closeEditing()
-    {
     }
 }

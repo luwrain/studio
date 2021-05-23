@@ -33,9 +33,9 @@ final class LyFile implements Part
     @SerializedName("path")
     private String path = null;
 
-    private Project proj = null;
+    private LyProject proj = null;
 
-        void setProject(Project proj)
+        void setProject(LyProject proj)
     {
 	NullCheck.notNull(proj, "proj");
 	this.proj = proj;

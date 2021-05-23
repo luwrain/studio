@@ -27,6 +27,9 @@ import org.luwrain.util.*;
 import org.luwrain.studio.backends.tex.TexProject;
 import org.luwrain.studio.backends.tex.TexPresentationWizard;
 
+import org.luwrain.studio.backends.ly.LyProject;
+import org.luwrain.studio.backends.ly.LyPianoWizard;
+
 public final class ProjectFactory
 {
     static public final String
@@ -61,6 +64,8 @@ public final class ProjectFactory
 	final String text = FileUtils.readTextFileSingleString(projFile, "UTF-8");
 	if (text.contains(TexProject.KEY))
 	    return new TexProject();
+		if (text.contains(LyProject.KEY))
+	    return new LyProject();
 		return null;
     }
 
@@ -72,6 +77,13 @@ switch(projType)
 	{
 	case "latex-presentation": {
 	    final TexPresentationWizard w = new TexPresentationWizard(ide, destDir);
+	    ide.showWizard(w);
+	    luwrain.announceActiveArea();
+	    return null;
+	}
+
+	    	case "lilypond-piano": {
+	    final LyPianoWizard w = new LyPianoWizard(ide, destDir);
 	    ide.showWizard(w);
 	    luwrain.announceActiveArea();
 	    return null;

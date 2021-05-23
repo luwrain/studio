@@ -37,7 +37,7 @@ final class LyFolder implements org.luwrain.studio.Part
 
     private Project proj = null;
 
-    void setProject(Project proj)
+    void setProject(LyProject proj)
     {
 	NullCheck.notNull(proj, "proj");
 	this.proj = proj;

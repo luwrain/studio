@@ -32,7 +32,7 @@ public final class LyProjectLoader
 	NullCheck.notNull(projFile, "projFile");
 	final Gson gson = new Gson();
 	final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(projFile)));
-	final org.luwrain.studio.backends.ly.Project proj = gson.fromJson(reader, org.luwrain.studio.backends.ly.Project.class);
+	final org.luwrain.studio.backends.ly.LyProject proj = gson.fromJson(reader, org.luwrain.studio.backends.ly.LyProject.class);
 	proj.init(ide, projFile);
 	return proj;
     }

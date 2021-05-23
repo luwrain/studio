@@ -63,15 +63,15 @@ public final class App extends AppBase<Strings>
 
     @Override protected AreaLayout onAppInit() throws IOException
     {
-		this.conv = new Conversations(this);
-		loadScriptCore();
-		this.projectBaseLayout = new ProjectBaseLayout(this);
-			this.newProjectLayout = new NewProjectLayout(this);
+	this.conv = new Conversations(this);
+	loadScriptCore();
+	this.projectBaseLayout = new ProjectBaseLayout(this);
+	this.newProjectLayout = new NewProjectLayout(this);
 	this.treeRoot = getStrings().treeRoot();
 	setAppName(getStrings().appName());
 	if (loadProjectByArg())
-	    	    return projectBaseLayout.getAreaLayout();
-	    	return newProjectLayout.getAreaLayout();
+	    return projectBaseLayout.getAreaLayout();
+	return newProjectLayout.getAreaLayout();
     }
 
     private boolean loadProjectByArg()
@@ -105,18 +105,17 @@ public final class App extends AppBase<Strings>
 		finishedTask(taskId, ()->{
 			activateProject(proj);
 			/*
-	final Part mainFile = proj.getMainSourceFile();
-	if (mainFile == null)
-	    return;
+			  final Part mainFile = proj.getMainSourceFile();
+			  if (mainFile == null)
+			  return;
 	  final Editing editing = mainFile.startEditing();
 	  if (editing == null)
 	  return;
-startEditing(editing);
-*/
-	    });
+	  startEditing(editing);
+			*/
+		    });
 	    });
     }
-
 
     private void loadScriptCore() throws IOException
     {
@@ -131,18 +130,18 @@ startEditing(editing);
 		Log.debug(LOG_COMPONENT, "loading " + f.getAbsolutePath());
 		scriptCore.load(f);
 	    }
-	 }
+    }
 
     private IDE getIde()
     {
 	return new IDE(){
-	    @Override public ScriptCore getScriptCore()
-	    {
-		return scriptCore;
-	    }
+	    @Override public ScriptCore getScriptCore() { return scriptCore; }
+	    @Override public App getAppBase() { return App.this; }
+	    @Override public boolean loadProject(File file) { return App.this.loadProject(file); }
+	    @Override public Luwrain getLuwrainObj() { return getLuwrain(); }
 	    @Override public void onFoldersUpdate()
-		{
-		}
+	    {
+	    }
 	    @Override public void onEditingUpdate()
 	    {
 		final TextEditingLayout layout = App.this.textEditingLayout;
@@ -151,30 +150,12 @@ startEditing(editing);
 		getLuwrain().onAreaNewContent(layout.editArea);
 		getLuwrain().onAreaNewHotPoint(layout.editArea);
 	    }
-	    @Override public boolean loadProject(File file)
-	    {
-		return App.this.loadProject(file);
-	    }
-	    @Override public Luwrain getLuwrainObj()
-	    {
-		return getLuwrain();
-	    }
 	    @Override public void showWizard(LayoutBase wizardLayout)
 	    {
 		NullCheck.notNull(wizardLayout, "wizardLayout");
 		setAreaLayout(wizardLayout);
 	    }
-	    @Override public App getAppBase()
-	    {
-		return App.this;
-	    }
 	};
-    }
-
-    void layout(AreaLayout layout)
-    {
-	NullCheck.notNull(layout, "layout");
-	getLayout().setBasicLayout(layout);
     }
 
     Layouts layouts()
@@ -197,8 +178,7 @@ startEditing(editing);
 	layouts().projectBase();
     }
 
-
-        void startEditing(Editing editing) throws IOException
+    void startEditing(Editing editing) throws IOException
     {
 	NullCheck.notNull(editing, "editing");
 	Editing e = null;
@@ -207,12 +187,12 @@ startEditing(editing);
 		e = ee;
 	if (e == null)
 	    editings.add(editing);
-this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
+	this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
 	setAreaLayout(this.textEditingLayout);
 	this.textEditingLayout.setActiveArea(this.textEditingLayout.editArea);
     }
 
-        PositionInfo getCompilationOutputPositionInfo(int index)
+    PositionInfo getCompilationOutputPositionInfo(int index)
     {
 	if (compilationOutput == null || index < 0 || index >= compilationOutput.length)
 	    return null;
@@ -223,21 +203,6 @@ this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEdi
 	if (wrapper.ex.getLineNumber() <= 0)
 	    return null;
 	return new PositionInfo(wrapper.ex.getFileName(), wrapper.ex.getLineNumber(), wrapper.ex.getColumnNumber());
-    }
-
-    Project getProject()
-    {
-	return this.proj;
-    }
-
-    Lines getOutputModel()
-    {
-	return new OutputModel();
-    }
-
-    Conversations conv()
-    {
-	return this.conv;
     }
 
     @Override public boolean onEscape(InputEvent event)
@@ -251,18 +216,17 @@ this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEdi
     {
 	NullCheck.notNull(area, "area");
 	NullCheck.notNull(query, "query");
-			    if (query.getQueryCode() == AreaQuery.CURRENT_DIR && query instanceof CurrentDirQuery)
-			return onDirectoryQuery((CurrentDirQuery)query);
-			    return super.onAreaQuery(area, query);
+	if (query.getQueryCode() == AreaQuery.CURRENT_DIR && query instanceof CurrentDirQuery)
+	    return onDirectoryQuery((CurrentDirQuery)query);
+	return super.onAreaQuery(area, query);
     }
 
     private boolean onDirectoryQuery(CurrentDirQuery query)
     {
 	NullCheck.notNull(query, "query");
-
-		if (proj == null)
+	if (proj == null)
 	    return false;
-		final File f = new File("/tmp"); //app.file.getParentFile();
+	final File f = new File("/tmp"); //app.file.getParentFile();
 	if (f == null)
 	    return false;
 	query.answer(f.getAbsolutePath());
@@ -277,7 +241,7 @@ this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEdi
 	super.closeApp();
     }
 
-        private final class OutputModel implements Lines
+    private final class OutputModel implements Lines
     {
 	@Override public int getLineCount()
 	{
@@ -305,7 +269,22 @@ this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEdi
 	}
     }
 
-            private final class OutputControl implements org.luwrain.studio.Output
+        Project getProject()
+    {
+	return this.proj;
+    }
+
+    Lines getOutputModel()
+    {
+	return new OutputModel();
+    }
+
+    Conversations conv()
+    {
+	return this.conv;
+    }
+
+    private final class OutputControl implements org.luwrain.studio.Output
     {
 	private final Runnable listener;
 	OutputControl(Runnable listener)

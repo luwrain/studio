@@ -25,8 +25,10 @@ import java.util.concurrent.*;
 import org.luwrain.core.*;
 import org.luwrain.studio.util.*;
 
-final class Project extends ProjectBase implements  org.luwrain.studio.Project
+public final class LyProject extends ProjectBase implements  org.luwrain.studio.Project
 {
+    static public final String KEY = "---LUWRAIN-PROJECT-LY---";
+
     @SerializedName("name")
     private String projName = null;
 
@@ -87,7 +89,7 @@ final class Project extends ProjectBase implements  org.luwrain.studio.Project
 
     }
 
-        @Override public Project load(File file) throws IOException
+        @Override public org.luwrain.studio.Project load(File file) throws IOException
     {
 	return null;
     }
