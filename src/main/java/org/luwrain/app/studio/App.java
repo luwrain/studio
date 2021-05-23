@@ -34,6 +34,7 @@ public final class App extends AppBase<Strings>
     static public final String LOG_COMPONENT = "studio";
 
     private final String arg;
+    final IDE ide = getIde();
     final ProjectFactory projFactory;
     private Conversations conv = null;
     private ProjectBaseLayout projectBaseLayout = null;
@@ -56,7 +57,7 @@ public final class App extends AppBase<Strings>
     public App(String arg)
     {
 	super(Strings.NAME, Strings.class, "luwrain.studio");
-	this.projFactory = new ProjectFactory(getIde());
+	this.projFactory = new ProjectFactory(ide);
 	this.arg = arg;
     }
 
@@ -89,7 +90,7 @@ public final class App extends AppBase<Strings>
 	return runTask(taskId, ()->{
 		final Project proj;
 		try {
-		    proj = new ProjectFactory(getIde()).load(file);
+		    proj = new ProjectFactory(ide).load(file);
 		}
 		catch(Throwable e)
 		{
@@ -132,72 +133,7 @@ startEditing(editing);
 	    }
 	 }
 
-    /*
-    boolean runProject(Runnable outputRedrawing) throws IOException
-    {
-	NullCheck.notNull(outputRedrawing, "outputRedrawing");
-	if (project == null || isProjectRunning())
-	    return false;
-	outputText.clear();
-	compilationOutput = new Object[0];
-	outputRedrawing.run();
-	final OutputControl output = new OutputControl(()->luwrain.runUiSafely(outputRedrawing));
-	final RunControl runControl = project.run(luwrain, output);
-	if (runControl == null)
-	{
-	    luwrain.message("Проект к запуску не готов.", Luwrain.MessageType.ERROR);
-	    return true;
-	}
-	if (runControl.isContinuous())
-	    return runBackground(runControl, outputRedrawing);
-	return runForeground(runControl);
-    }
-    */
-
-    private boolean runBackground(RunControl runControl, Runnable outputRedrawing)
-    {
-	/*
-	NullCheck.notNull(runControl, "runControl");
-	NullCheck.notNull(outputRedrawing, "outputRedrawing");
-	this.runTask = new FutureTask(()->{
-		try {
-		    runControl.getCallableObj().call();
-		    luwrain.playSound(Sounds.DONE);
-		}
-		catch(javax.script.ScriptException e)
-		{
-		    compilationOutput = new Object[]{new ScriptExceptionWrapper(e), ""};
-		    luwrain.runUiSafely(outputRedrawing);
-		    luwrain.playSound(Sounds.ERROR);
-		}
-		catch(Exception e)
-		{
-		    luwrain.crash(e);
-		}
-	    }, null);
-	luwrain.executeBkg(runTask);
-	*/
-	return true;
-    }
-
-    private boolean runForeground(RunControl runControl)
-    {
-	/*
-	NullCheck.notNull(runControl, "runControl");
-	try {
-	    runControl.getCallableObj().call();
-	    luwrain.playSound(Sounds.DONE);
-	}
-	catch(Exception e)
-	{
-	    luwrain.crash(e);
-	}
-	return true;
-	*/
-	return false;
-    }
-
-    IDE getIde()
+    private IDE getIde()
     {
 	return new IDE(){
 	    @Override public ScriptCore getScriptCore()

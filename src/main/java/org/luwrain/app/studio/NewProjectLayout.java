@@ -37,7 +37,7 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	this.app = app;
 	final ListArea.Params params = new ListArea.Params();
 	params.context = getControlContext();
-	params.model = new ListUtils.FixedModel(new ProjectFactory(app.getIde()).getNewProjectTypes());
+	params.model = new ListUtils.FixedModel(new ProjectFactory(app.ide).getNewProjectTypes());
 	params.appearance = new ListUtils.DefaultAppearance(params.context){
 		@Override public void announceItem(Object item, Set<Flags> flags)
 		{
@@ -60,7 +60,7 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	final File destDir = new File("/tmp/proba");//app.conv().newProjectDir();
 	if (destDir == null)
 	    return true;
-	final ProjectFactory factory = new ProjectFactory(app.getIde());
+	final ProjectFactory factory = new ProjectFactory(app.ide);
 	final Project proj;
 	try {
 	    proj = factory.create(projType.getId(), destDir);

@@ -71,7 +71,7 @@ public final class TextEditingLayout extends LayoutBase
 			final Part.Action partAction = this.actionsCache.get(actionName);
 			if (partAction == null)
 			    return false;
-			return partAction.onAction(app.getIde());
+			return partAction.onAction(app.ide);
 			}
 			case SAVE:
 			    return onSave();
