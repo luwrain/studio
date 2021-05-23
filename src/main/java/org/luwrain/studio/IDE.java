@@ -27,8 +27,9 @@ public interface IDE
 {
         AppBase<org.luwrain.app.studio.Strings> getAppBase();
         Luwrain getLuwrainObj();
-    void onFoldersUpdate();
     ScriptCore getScriptCore();
     boolean loadProject(File file);
         void showWizard(LayoutBase wizardLayout);
+        void onFoldersUpdate();
+    void onEditingUpdate();
 }

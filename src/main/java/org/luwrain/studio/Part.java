@@ -21,6 +21,7 @@ package org.luwrain.studio;
 import java.io.*;
 
 import org.luwrain.core.*;
+import org.luwrain.core.events.*;
 
 public interface Part
 {
@@ -32,6 +33,7 @@ public interface ActionProc
     public interface Action extends ActionProc
     {
 	String getTitle();
+	InputEvent getHotKey();
     }
 
     String getTitle();
@@ -45,9 +47,23 @@ public interface ActionProc
 	NullCheck.notNull(proc, "proc");
 	return new Action(){
 	    @Override public String getTitle() { return title; }
+	    @Override public InputEvent getHotKey() { return null; }
 	    @Override public boolean onAction(IDE ide) { return proc.onAction(ide); }
 	};
     }
+
+    static public Action action(String title, InputEvent hotKey, ActionProc proc)
+    {
+	NullCheck.notEmpty(title, "title");
+	NullCheck.notNull(hotKey, "hotKey");
+	NullCheck.notNull(proc, "proc");
+	return new Action(){
+	    @Override public String getTitle() { return title; }
+	    @Override public InputEvent getHotKey() { return hotKey; }
+	    @Override public boolean onAction(IDE ide) { return proc.onAction(ide); }
+	};
+    }
+
 
     static public Action[] actions(Action ... actions)
     {

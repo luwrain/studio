@@ -58,12 +58,12 @@ final class Editing implements TextEditing
 	return false;
     }
 
-        @Override public LayoutBase.Actions getActions()
+        @Override public Part.Action[] getActions()
     {
-	return new LayoutBase.Actions();
+	return new Part.Action[0];
     }
 
-    @Override public void onNewHotPoint()
+    @Override public void onNewHotPoint(int hotPointX, int hotPointY)
     {
     }
 

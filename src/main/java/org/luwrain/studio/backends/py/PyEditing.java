@@ -22,21 +22,15 @@ import java.util.*;
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
+import org.luwrain.studio.backends.*;
 import org.luwrain.util.*;
 import org.luwrain.app.base.*;
 
-final class PyEditing implements TextEditing
+final class PyEditing extends TextEditingBase
 {
-    private final File file;
-    private final MutableLinesImpl content;
-
     PyEditing(File file) throws IOException
     {
-	NullCheck.notNull(file, "files");
-	this.file = file;
-	final String text = FileUtils.readTextFileSingleString(file, "UTF-8");
-	final String[] lines = FileUtils.universalLineSplitting(text);
-	this.content = new MutableLinesImpl(lines);
+	super(file);
     }
 
     @Override public EditArea.Params getEditParams(ControlContext context)
@@ -58,12 +52,7 @@ final class PyEditing implements TextEditing
 	return false;
     }
 
-            @Override public LayoutBase.Actions getActions()
-    {
-	return new LayoutBase.Actions();
-    }
-
-    @Override public void onNewHotPoint()
+    @Override public void onNewHotPoint(int hotPointX, int hotPointY)
     {
     }
 

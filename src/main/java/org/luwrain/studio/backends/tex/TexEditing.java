@@ -20,10 +20,11 @@ import java.io.*;
 import java.util.*;
 
 import org.luwrain.core.*;
+import org.luwrain.core.events.*;
+import org.luwrain.core.events.InputEvent.Modifiers;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.studio.backends.*;
-//import org.luwrain.util.*;
 import org.luwrain.app.base.*;
 
 final class TexEditing extends TextEditingBase
@@ -33,6 +34,23 @@ final class TexEditing extends TextEditingBase
 	super(file);
 	    }
 
+                @Override public Part.Action[] getActions()
+    {
+	return Part.actions(
+			    Part.action("Добавить ненумерованный список", new InputEvent('n', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItemize)
+			    );
+    }
+
+        private boolean addItemize(IDE ide)
+    {
+	NullCheck.notNull(ide, "ide");
+	return insertText(new String[]{
+		"\\begin{itemize}",
+		"\\item{}",
+		"\\end{itemize}"
+	    });
+    }
+
     @Override public EditArea.Params getEditParams(ControlContext context)
     {
 	NullCheck.notNull(context, "context");
@@ -41,19 +59,10 @@ final class TexEditing extends TextEditingBase
 	params.content = content;
 	params.appearance = new TexAppearance(context);
 	params.editFactory = (editParams)->{
-this.edit = new MultilineEdit(editParams);
-return this.edit;
+	    setEdit(new MultilineEdit(editParams), (MultilineEditCorrector)editParams.model);
+		    return getEdit();
 	};
 	params.name = file.getName();
 	return params;
-    }
-
-            @Override public LayoutBase.Actions getActions()
-    {
-	return new LayoutBase.Actions();
-    }
-
-    @Override public void closeEditing()
-    {
     }
 }

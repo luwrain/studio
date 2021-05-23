@@ -36,6 +36,7 @@ public final class App extends AppBase<Strings>
     final ProjectFactory projFactory;
     private Conversations conv = null;
     private ProjectBaseLayout projectBaseLayout = null;
+    private TextEditingLayout textEditingLayout = null;
     private NewProjectLayout newProjectLayout = null;
 
     private ScriptCore scriptCore = null;
@@ -205,6 +206,14 @@ startEditing(editing);
 	    @Override public void onFoldersUpdate()
 		{
 		}
+	    @Override public void onEditingUpdate()
+	    {
+		final TextEditingLayout layout = App.this.textEditingLayout;
+		if (layout == null)
+		    return ;
+		getLuwrain().onAreaNewContent(layout.editArea);
+		getLuwrain().onAreaNewHotPoint(layout.editArea);
+	    }
 	    @Override public boolean loadProject(File file)
 	    {
 		return App.this.loadProject(file);
@@ -261,9 +270,9 @@ startEditing(editing);
 		e = ee;
 	if (e == null)
 	    editings.add(editing);
-	final TextEditingLayout layout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
-	setAreaLayout(layout);
-	layout.setActiveArea(layout.editArea);
+this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
+	setAreaLayout(this.textEditingLayout);
+	this.textEditingLayout.setActiveArea(this.textEditingLayout.editArea);
     }
 
         PositionInfo getCompilationOutputPositionInfo(int index)

@@ -25,5 +25,5 @@ import org.luwrain.controls.*;
 public interface TextEditing extends Editing
 {
     EditArea.Params getEditParams(ControlContext context);
-    void onNewHotPoint();
+    void onNewHotPoint(int hotPointX, int hotPointY);
 }

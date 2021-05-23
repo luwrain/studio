@@ -24,8 +24,7 @@ import org.luwrain.app.base.*;
 
 public interface Editing
 {
-        void closeEditing();
-    LayoutBase.Actions getActions();
+    void closeEditing();
+    Part.Action[] getActions();
     boolean save() throws IOException;
-
 }
