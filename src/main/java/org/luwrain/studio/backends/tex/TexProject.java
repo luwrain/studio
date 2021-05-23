@@ -68,30 +68,9 @@ public final class TexProject implements  org.luwrain.studio.Project
 	rootFolder.setProject(this);
     }
 
-    @Override public org.luwrain.studio.RunControl run(Luwrain luwrain, org.luwrain.studio.Output output) throws IOException
-    {
-	NullCheck.notNull(luwrain, "luwrain");
-	return null;
-}
-
-    @Override public void close(Luwrain luwrain)
-    {
-	NullCheck.notNull(luwrain, "luwrain");
-    }
-
             @Override public org.luwrain.studio.Part getPartsRoot()
     {
 	return rootFolder;
-    }
-
-    @Override public org.luwrain.studio.Flavor[] getBuildFlavors()
-    {
-	return new org.luwrain.studio.Flavor[0];
-    }
-
-    @Override public boolean build(org.luwrain.studio.Flavor flavor, org.luwrain.studio.Output output)
-    {
-	return false;
     }
 
     @Override public org.luwrain.studio.Part getMainSourceFile()

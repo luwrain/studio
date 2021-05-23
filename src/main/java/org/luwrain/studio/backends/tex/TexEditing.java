@@ -32,23 +32,40 @@ final class TexEditing extends TextEditingBase
     TexEditing(File file) throws IOException
     {
 	super(file);
-	    }
+    }
 
-                @Override public Part.Action[] getActions()
+    @Override public Part.Action[] getActions()
     {
 	return Part.actions(
-			    Part.action("Добавить ненумерованный список", new InputEvent('n', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItemize)
+			    Part.action("Добавить ненумерованный список", new InputEvent('u', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItemize),
+			    Part.action("Добавить ненумерованный список", new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate)
 			    );
     }
 
-        private boolean addItemize(IDE ide)
+    private boolean addItemize(IDE ide)
     {
 	NullCheck.notNull(ide, "ide");
-	return insertText(new String[]{
-		"\\begin{itemize}",
-		"\\item{}",
-		"\\end{itemize}"
-	    });
+	if (!insertText(new String[]{
+		    "\\begin{itemize}",
+		    "\\item{}",
+		    "\\end{itemize}"
+		}))
+	    return false;
+	ide.getLuwrainObj().message("Itemize", Luwrain.MessageType.OK);
+	return true;
+    }
+
+    private boolean addEnumerate(IDE ide)
+    {
+	NullCheck.notNull(ide, "ide");
+	if (!insertText(new String[]{
+		    "\\begin{enuemrate}",
+		    "\\item{}",
+		    "\\end{enumerate}"
+		}))
+	    return false;
+	ide.getLuwrainObj().message("Enumerate", Luwrain.MessageType.OK);
+	return true;
     }
 
     @Override public EditArea.Params getEditParams(ControlContext context)
@@ -60,7 +77,7 @@ final class TexEditing extends TextEditingBase
 	params.appearance = new TexAppearance(context);
 	params.editFactory = (editParams)->{
 	    setEdit(new MultilineEdit(editParams), (MultilineEditCorrector)editParams.model);
-		    return getEdit();
+	    return getEdit();
 	};
 	params.name = file.getName();
 	return params;

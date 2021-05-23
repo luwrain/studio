@@ -51,6 +51,14 @@ public final class TextEditingLayout extends LayoutBase
 	this.treeArea = projectBaseLayout.treeArea;
 	this.editArea = new EditArea(textEditing.getEditParams(editingControlContext)) {
 		private final Map<String, Part.Action> actionsCache = new HashMap();
+		@Override protected int getNextBlockLine(int startFrom)
+		{
+		    return super.getNextBlockLine(startFrom);
+		}
+				@Override protected int getPrevBlockLine(int startFrom)
+		{
+		    return super.getNextBlockLine(startFrom);
+		}
 				@Override public boolean onSystemEvent(SystemEvent event)
 		{
 		    NullCheck.notNull(event, "event");

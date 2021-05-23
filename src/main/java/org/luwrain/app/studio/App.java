@@ -22,6 +22,7 @@ import java.io.*;
 import org.luwrain.base.*;
 import org.luwrain.core.*;
 import org.luwrain.core.events.*;
+import org.luwrain.core.queries.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.app.base.*;
@@ -307,6 +308,28 @@ this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEdi
     {
 	NullCheck.notNull(event, "event");
 	closeApp();
+	return true;
+    }
+
+    @Override public boolean onAreaQuery(Area area, AreaQuery query)
+    {
+	NullCheck.notNull(area, "area");
+	NullCheck.notNull(query, "query");
+			    if (query.getQueryCode() == AreaQuery.CURRENT_DIR && query instanceof CurrentDirQuery)
+			return onDirectoryQuery((CurrentDirQuery)query);
+			    return super.onAreaQuery(area, query);
+    }
+
+    private boolean onDirectoryQuery(CurrentDirQuery query)
+    {
+	NullCheck.notNull(query, "query");
+
+		if (proj == null)
+	    return false;
+		final File f = new File("/tmp"); //app.file.getParentFile();
+	if (f == null)
+	    return false;
+	query.answer(f.getAbsolutePath());
 	return true;
     }
 
