@@ -20,11 +20,11 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.controls.MultilineEdit.ModificationResult;
 
-public class ProgrammingCorrector extends EditUtils.EmptyCorrector
+public class EditAugmentationUtils extends EditUtils.EmptyCorrector
 {
-    public ProgrammingCorrector(MultilineEditCorrector basicCorrector)
+    public EditAugmentationUtils(MultilineEditCorrector base)
     {
-	super(basicCorrector);
+	super(base);
     }
 
     public int getIndent(int lineIndex)

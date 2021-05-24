@@ -23,7 +23,7 @@ import org.luwrain.controls.*;
 import org.luwrain.controls.MultilineEdit.ModificationResult;
 import org.luwrain.studio.util.*;
 
-final class Corrector extends ProgrammingCorrector
+final class Corrector extends EditAugmentationUtils
 {
     Corrector(MultilineEditCorrector basicCorrector)
     {

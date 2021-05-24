@@ -24,7 +24,7 @@ import org.luwrain.core.events.*;
 import org.luwrain.core.events.InputEvent.Modifiers;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
-import org.luwrain.studio.backends.*;
+import org.luwrain.studio.util.*;
 import org.luwrain.app.base.*;
 
 final class TexEditing extends TextEditingBase

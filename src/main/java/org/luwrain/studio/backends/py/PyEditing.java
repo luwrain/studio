@@ -22,7 +22,7 @@ import java.util.*;
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
-import org.luwrain.studio.backends.*;
+import org.luwrain.studio.util.*;
 import org.luwrain.util.*;
 import org.luwrain.app.base.*;
 

@@ -14,7 +14,7 @@
    General Public License for more details.
 */
 
-package org.luwrain.studio.backends;
+package org.luwrain.studio.util;
 
 import java.io.*;
 import java.util.*;

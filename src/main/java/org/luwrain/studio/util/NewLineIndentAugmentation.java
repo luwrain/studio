@@ -14,7 +14,7 @@
    General Public License for more details.
 */
 
-package org.luwrain.studio.backends.ly;
+package org.luwrain.studio.util;
 
 import java.util.*;
 
@@ -23,11 +23,11 @@ import org.luwrain.controls.*;
 import org.luwrain.controls.MultilineEdit.ModificationResult;
 import org.luwrain.studio.util.*;
 
-final class Corrector extends ProgrammingCorrector
+public final class NewLineIndentAugmentation extends EditAugmentationUtils
 {
-    Corrector(MultilineEditCorrector basicCorrector)
+    public NewLineIndentAugmentation(MultilineEditCorrector base)
     {
-	super(basicCorrector);
+	super(base);
     }
 
             @Override public ModificationResult splitLine(int pos, int lineIndex)
@@ -41,10 +41,5 @@ final class Corrector extends ProgrammingCorrector
 	if (!addIndent(lineIndex + 1, indent))
 	    return new ModificationResult(false);  
 return res;
-    }
-
-        @Override public ModificationResult putChars(int pos, int lineIndex, String str)
-    {
-	return basicCorrector.putChars(pos, lineIndex, str);
     }
 }
