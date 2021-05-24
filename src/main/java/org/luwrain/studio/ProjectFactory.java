@@ -16,12 +16,9 @@
 
 package org.luwrain.studio;
 
-import java.util.*;
 import java.io.*;
 
 import org.luwrain.core.*;
-import org.luwrain.script2.*;
-import org.luwrain.script2.hooks.*;
 import org.luwrain.util.*;
 
 import org.luwrain.studio.backends.tex.TexProject;
@@ -32,10 +29,6 @@ import org.luwrain.studio.backends.ly.LyPianoWizard;
 
 public final class ProjectFactory
 {
-    static public final String
-	TYPES_LIST_HOOK = "luwrain.studio.project.types",
-	CREATE_HOOK = "luwrain.studio.project.create";
-
     private final IDE ide;
     private final Luwrain luwrain;
 
@@ -44,6 +37,14 @@ public final class ProjectFactory
 	NullCheck.notNull(ide, "ide");
 	this.ide = ide;
 	this.luwrain = ide.getLuwrainObj();
+    }
+
+    public ProjectType[] getNewProjectTypes()
+    {
+	return new ProjectType[]{
+	    new ProjectType("latex-presentation", 0, "Презентация TeX"),
+	    new ProjectType("lilypond-piano", 0, "Фортепианная пьеса Lilypond"),
+	};
     }
 
     public Project load(File projFile) throws IOException
@@ -58,45 +59,37 @@ public final class ProjectFactory
 	return proj;
     }
 
-        private Project readProjectKey(File projFile) throws IOException
+    private Project readProjectKey(File projFile) throws IOException
     {
 	NullCheck.notNull(projFile, "projFile");
 	final String text = FileUtils.readTextFileSingleString(projFile, "UTF-8");
 	if (text.contains(TexProject.KEY))
 	    return new TexProject();
-		if (text.contains(LyProject.KEY))
+	if (text.contains(LyProject.KEY))
 	    return new LyProject();
-		return null;
+	return null;
     }
 
-    public Project create(String projType, File destDir) throws IOException
+    public void create(String projType, File destDir)
     {
 	NullCheck.notEmpty(projType, "projType");
 	NullCheck.notNull(destDir, "destDir");
-switch(projType)
+	switch(projType)
 	{
 	case "latex-presentation": {
 	    final TexPresentationWizard w = new TexPresentationWizard(ide, destDir);
 	    ide.showWizard(w);
 	    luwrain.announceActiveArea();
-	    return null;
+	    return;
 	}
-
-	    	case "lilypond-piano": {
+	case "lilypond-piano": {
 	    final LyPianoWizard w = new LyPianoWizard(ide, destDir);
 	    ide.showWizard(w);
 	    luwrain.announceActiveArea();
-	    return null;
+	    return;
 	}
 	default:
-	    return null;
+	    throw new IllegalArgumentException("Unknown project type: " + projType);
 	}
-    }
-
-    public ProjectType[] getNewProjectTypes()
-    {
-	return new ProjectType[]{
-	    new ProjectType("latex-presentation", 0, "Презентация TeX")
-	};
     }
 }

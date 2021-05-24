@@ -61,17 +61,7 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	if (destDir == null)
 	    return true;
 	final ProjectFactory factory = new ProjectFactory(app.ide);
-	final Project proj;
-	try {
-	    proj = factory.create(projType.getId(), destDir);
-	}
-	catch(IOException e)
-	{
-	    app.getLuwrain().crash(e);
-	    return true;
-	}
-	if (proj != null)
-	    app.activateProject(proj);
+factory.create(projType.getId(), destDir);
 	return true;
     }
 }
