@@ -24,20 +24,12 @@ public interface Strings
     static final String NAME = "luwrain.studio";
 
     String appName();
+        String outputAreaName();
+        String treeAreaName();
+        String treeRoot();
+        String newProjectAreaName();
 
-    String actionOpenProject();
-    String actionBuild();
-    String actionRun();
-    String codeBlockBegin();
-    String codeBlockEnd();
-    String codeComments();
-    String codeIndent(String len);
-    String editAreaName();
-    String fileSavedSuccessfully();
-    String openProjectPopupName();
-    String openProjectPopupPrefix();
-    String outputAreaName();
-    String treeAreaName();
-    String treeRoot();
-    String newProjectAreaName();
+        String openProjectPopupPrefix();
+
+    String texPresentationWizardGreeting();
 }

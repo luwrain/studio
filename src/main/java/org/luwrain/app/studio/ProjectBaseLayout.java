@@ -64,7 +64,10 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 		    int k = 1;
 		    for(Part.Action a: actions)
 		    {
-			final Action action = new Action("action" + k++, a.getTitle());
+			final Action action;
+						if (a.getHotKey() != null)
+			    action = new Action("action" + k++, a.getTitle(), a.getHotKey()); else
+			   action = new Action("action" + k++, a.getTitle());
 			this.actionsCache.put(action.name(), a);
 			res.add(action);
 		    }

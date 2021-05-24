@@ -50,7 +50,7 @@ public final class TexPresentationWizard extends LayoutBase
 	this.destDir = destDir;
 	this.wizardArea = new WizardArea(getControlContext());
 	final Frame greeting = wizardArea.newFrame()
-	.addText("Новая презентация")
+	.addText(ide.getAppBase().getStrings().texPresentationWizardGreeting())
 	.addInput("Название:", "")
 	.addInput("Автор:", "")
 	.addInput("Дата:", "")
