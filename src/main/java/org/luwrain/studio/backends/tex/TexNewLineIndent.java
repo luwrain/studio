@@ -20,12 +20,18 @@ import java.io.*;
 import java.util.*;
 
 import org.luwrain.core.*;
+import org.luwrain.controls.*;
+import org.luwrain.studio.util.*;
 
-final class Utils
+final class TexNewLineIndent extends NewLineIndent
 {
-    static String escapeTex(String str)
+    TexNewLineIndent(MultilineEditCorrector base)
     {
-	//FIXME:
-	return str;
+	super(base);
+    }
+
+    @Override protected int getProperIndent(int lineIndex)
+    {
+	return 5;
     }
 }

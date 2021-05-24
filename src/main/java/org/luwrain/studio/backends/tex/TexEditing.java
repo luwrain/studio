@@ -76,7 +76,9 @@ final class TexEditing extends TextEditingBase
 	params.content = content;
 	params.appearance = new TexAppearance(context);
 	params.editFactory = (editParams)->{
-	    setEdit(new MultilineEdit(editParams), (MultilineEditCorrector)editParams.model);
+	    final MultilineEditCorrector bottomAugmentation = (MultilineEditCorrector)editParams.model;
+editParams.model = new TexNewLineIndent(bottomAugmentation);
+	    setEdit(new MultilineEdit(editParams), bottomAugmentation);
 	    return getEdit();
 	};
 	params.name = file.getName();

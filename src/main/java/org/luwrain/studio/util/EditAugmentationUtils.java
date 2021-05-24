@@ -54,7 +54,7 @@ public class EditAugmentationUtils extends EditUtils.EmptyCorrector
     {
 	if (len == 0)
 	    return true;
-	final int tabLen = 4;
+	final int tabLen = 8;
 	final StringBuilder b = new StringBuilder();
 	final int tabCount = len / tabLen;
 	for(int i = 0;i < tabCount;i++)

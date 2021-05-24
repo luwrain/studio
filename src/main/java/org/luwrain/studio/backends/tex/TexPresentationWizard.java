@@ -104,7 +104,7 @@ public final class TexPresentationWizard extends LayoutBase
 	final StringBuilder body = new StringBuilder();
 	for(String f: frames)
 	    body.append("\\\\begin{frame}").append(System.lineSeparator())
-	    .append("  \\\\frametitle{").append(Utils.escapeTex(f)).append("}").append(System.lineSeparator()).append(System.lineSeparator())
+	    .append("  \\\\frametitle{").append(TexUtils.escapeTex(f)).append("}").append(System.lineSeparator()).append(System.lineSeparator())
 	    .append("\\\\end{frame}").append(System.lineSeparator()).append(System.lineSeparator());
 	final StringBuilder b = new StringBuilder();
 	try (final BufferedReader r = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("presentation-ru.tex"), "UTF-8"))) {
@@ -116,9 +116,9 @@ public final class TexPresentationWizard extends LayoutBase
 	    }
 	}
 	final String text = new String(b)
-	.replaceAll("LWR_STUDIO_TITLE", Utils.escapeTex(this.title))
-	.replaceAll("LWR_STUDIO_AUTHOR", Utils.escapeTex(this.author))
-	.replaceAll("LWR_STUDIO_DATE", Utils.escapeTex(this.date))
+	.replaceAll("LWR_STUDIO_TITLE", TexUtils.escapeTex(this.title))
+	.replaceAll("LWR_STUDIO_AUTHOR", TexUtils.escapeTex(this.author))
+	.replaceAll("LWR_STUDIO_DATE", TexUtils.escapeTex(this.date))
 	.replaceAll("LWR_STUDIO_BODY", new String(body).trim());
 	final TexProject proj = new TexProject();
 	proj.setProjName(this.title);

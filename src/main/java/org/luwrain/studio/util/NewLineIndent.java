@@ -23,9 +23,9 @@ import org.luwrain.controls.*;
 import org.luwrain.controls.MultilineEdit.ModificationResult;
 import org.luwrain.studio.util.*;
 
-public final class NewLineIndentAugmentation extends EditAugmentationUtils
+public class NewLineIndent extends EditAugmentationUtils
 {
-    public NewLineIndentAugmentation(MultilineEditCorrector base)
+    public NewLineIndent(MultilineEditCorrector base)
     {
 	super(base);
     }
@@ -35,11 +35,19 @@ public final class NewLineIndentAugmentation extends EditAugmentationUtils
 	final ModificationResult res = basicCorrector.splitLine(pos, lineIndex);
 	if (!res.isPerformed())
 	    return res;
-	final int indent = getIndent(lineIndex);
+	final int indent = getProperIndent(lineIndex + 1);
 	if (!deleteIndent(lineIndex + 1))
 	    return new ModificationResult(false);
 	if (!addIndent(lineIndex + 1, indent))
 	    return new ModificationResult(false);  
 return res;
+    }
+
+    protected int getProperIndent(int lineIndex)
+    {
+	// By default using the indent of the previous line
+	if (lineIndex <= 0 || lineIndex >= getLineCount())
+	    return 0;
+	return getIndent(lineIndex - 1);
     }
 }
