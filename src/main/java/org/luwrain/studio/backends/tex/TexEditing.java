@@ -37,9 +37,24 @@ final class TexEditing extends TextEditingBase
     @Override public Part.Action[] getActions()
     {
 	return Part.actions(
+			    Part.action("Добавить слайд", new InputEvent('f', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addFrame),
 			    Part.action("Добавить ненумерованный список", new InputEvent('u', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItemize),
-			    Part.action("Добавить ненумерованный список", new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate)
+			    Part.action("Добавить ненумерованный список", new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate),
+			    Part.action("Добавить элемент списка", new InputEvent('i', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItem)
 			    );
+    }
+
+    private boolean addFrame(IDE ide)
+    {
+	NullCheck.notNull(ide, "ide");
+	if (!insertText(new String[]{
+		    "\\begin{frame}",
+		    "  \\frametitle{}",
+		    "\\end{frame}"
+		}))
+	    return false;
+	ide.getLuwrainObj().message("frame", Luwrain.MessageType.OK);
+	return true;
     }
 
     private boolean addItemize(IDE ide)
@@ -59,12 +74,21 @@ final class TexEditing extends TextEditingBase
     {
 	NullCheck.notNull(ide, "ide");
 	if (!insertText(new String[]{
-		    "\\begin{enuemrate}",
+		    "\\begin{enumerate}",
 		    "\\item{}",
 		    "\\end{enumerate}"
 		}))
 	    return false;
 	ide.getLuwrainObj().message("Enumerate", Luwrain.MessageType.OK);
+	return true;
+    }
+
+    private boolean addItem(IDE ide)
+    {
+	NullCheck.notNull(ide, "ide");
+	if (!insertText("\\item{}"))
+	    return false;
+	ide.getLuwrainObj().message("item", Luwrain.MessageType.OK);
 	return true;
     }
 

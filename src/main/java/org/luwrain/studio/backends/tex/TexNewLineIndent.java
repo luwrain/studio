@@ -32,6 +32,6 @@ final class TexNewLineIndent extends NewLineIndent
 
     @Override protected int getProperIndent(int lineIndex)
     {
-	return 5;
+	return 0;
     }
 }
