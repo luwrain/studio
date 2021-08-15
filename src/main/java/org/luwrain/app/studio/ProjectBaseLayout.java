@@ -19,7 +19,6 @@ package org.luwrain.app.studio;
 import java.util.*;
 import java.io.*;
 
-import org.luwrain.base.*;
 import org.luwrain.core.*;
 import org.luwrain.core.events.*;
 import org.luwrain.controls.*;

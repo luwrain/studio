@@ -19,7 +19,6 @@ package org.luwrain.app.studio;
 import java.util.*;
 import java.io.*;
 
-import org.luwrain.base.*;
 import org.luwrain.core.*;
 import org.luwrain.core.events.*;
 import org.luwrain.core.queries.*;
@@ -205,9 +204,8 @@ public final class App extends AppBase<Strings>
 	return new PositionInfo(wrapper.ex.getFileName(), wrapper.ex.getLineNumber(), wrapper.ex.getColumnNumber());
     }
 
-    @Override public boolean onEscape(InputEvent event)
+    @Override public boolean onEscape()
     {
-	NullCheck.notNull(event, "event");
 	closeApp();
 	return true;
     }
