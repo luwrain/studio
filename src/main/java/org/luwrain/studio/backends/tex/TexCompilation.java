@@ -20,7 +20,7 @@ import java.io.*;
 import java.util.*;
 
 import org.luwrain.core.*;
-import org.luwrain.core.script2.*;
+import org.luwrain.script.core.*;
 import org.luwrain.studio.*;
 
 final class TexCompilation

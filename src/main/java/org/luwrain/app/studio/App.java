@@ -25,7 +25,7 @@ import org.luwrain.core.queries.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.app.base.*;
-import org.luwrain.core.script2.*;
+import org.luwrain.script.core.*;
 import org.luwrain.script2.*;
 
 public final class App extends AppBase<Strings>
