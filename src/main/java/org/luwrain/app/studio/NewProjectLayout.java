@@ -25,7 +25,7 @@ import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.app.base.*;
 
-final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
+final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler<ProjectType>
 {
     private final App app;
     private final ListArea newProjectArea;
@@ -34,11 +34,11 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
     {
 	super(app);
 	this.app = app;
-	final ListArea.Params params = new ListArea.Params();
+	final ListArea.Params<ProjectType> params = new ListArea.Params<>();
 	params.context = getControlContext();
-	params.model = new ListUtils.FixedModel(new ProjectFactory(app.ide).getNewProjectTypes());
-	params.appearance = new ListUtils.DefaultAppearance(params.context){
-		@Override public void announceItem(Object item, Set<Flags> flags)
+	params.model = new ListUtils.FixedModel<>(new ProjectFactory(app.ide).getNewProjectTypes());
+	params.appearance = new ListUtils.DefaultAppearance<ProjectType>(params.context){
+		@Override public void announceItem(ProjectType item, Set<Flags> flags)
 		{
 		    NullCheck.notNull(item, "item");
 		    NullCheck.notNull(flags, "flags");
@@ -51,11 +51,9 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	setAreaLayout(newProjectArea, actions());
     }
 
-    @Override public boolean onListClick(ListArea listArea,int index,Object obj)
+    @Override public boolean onListClick(ListArea listArea, int index, ProjectType projType)
     {
-	if (obj == null || !(obj instanceof ProjectType))
-	    return false;
-	final ProjectType projType = (ProjectType)obj;
+	NullCheck.notNull(projType, "projType");
 	final File destDir = new File("/tmp/proba");//app.conv().newProjectDir();
 	if (destDir == null)
 	    return true;
