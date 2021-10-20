@@ -49,7 +49,7 @@ public final class TextEditingLayout extends LayoutBase
 		}};
 	this.treeArea = projectBaseLayout.treeArea;
 	this.editArea = new EditArea(textEditing.getEditParams(editingControlContext)) {
-		private final Map<String, Part.Action> actionsCache = new HashMap();
+		private final Map<String, Part.Action> actionsCache = new HashMap<>();
 		@Override protected int getNextBlockLine(int startFrom)
 		{
 		    return super.getNextBlockLine(startFrom);
@@ -81,7 +81,7 @@ public final class TextEditingLayout extends LayoutBase
 		{
 		    final Part.Action[] actions = textEditing.getActions();
 		    actionsCache.clear();
-		    final List<Action> res = new ArrayList();
+		    final List<Action> res = new ArrayList<>();
 		    int k = 1;
 		    for(Part.Action a: actions)
 		    {

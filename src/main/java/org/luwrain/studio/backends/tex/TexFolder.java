@@ -43,9 +43,9 @@ public final class TexFolder implements Part
 	if (name == null)
 	    name = "-";
 	if (subfolders == null)
-	    subfolders = new ArrayList();
+	    subfolders = new ArrayList<>();
 			if (sourceFiles == null)
-			    sourceFiles = new ArrayList();
+			    sourceFiles = new ArrayList<>();
 	    for(TexFolder f: subfolders)
 		f.setProject(proj);
 	    for(TexSourceFile f: sourceFiles)
@@ -54,7 +54,7 @@ public final class TexFolder implements Part
 
     @Override public Part [] getChildParts()
     {
-	final List<Part> res = new LinkedList();
+	final List<Part> res = new ArrayList<>();
 	for(Part p: subfolders)
 	    res.add(p);
 	for(Part p: sourceFiles)
@@ -90,7 +90,7 @@ public final class TexFolder implements Part
 
     public List<TexFolder> getSubfolders()
     {
-	return this.subfolders != null?this.subfolders:new ArrayList();
+	return this.subfolders != null?this.subfolders:new ArrayList<>();
     }
 
 public void setSubfolders(List<TexFolder> subfolders)
@@ -101,7 +101,7 @@ public void setSubfolders(List<TexFolder> subfolders)
 
     public List<TexSourceFile> getSourceFiles()
     {
-	return this.sourceFiles != null?this.sourceFiles:new ArrayList();
+	return this.sourceFiles != null?this.sourceFiles:new ArrayList<>();
     }
 
     public void setSourceFiles(List<TexSourceFile> sourceFiles)

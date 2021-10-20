@@ -44,9 +44,9 @@ final class Folder implements org.luwrain.studio.Part
 	if (name == null)
 	    name = "-";
 	if (subfolders == null)
-	    subfolders = new LinkedList();
+	    subfolders = new ArrayList<>();
 	if (sourceFiles == null)
-	    sourceFiles = new LinkedList();
+	    sourceFiles = new ArrayList<>();
 	for(Folder f: subfolders)
 	    f.setProject(proj);
     }
@@ -58,7 +58,7 @@ final class Folder implements org.luwrain.studio.Part
 
     @Override public org.luwrain.studio.Part[] getChildParts()
     {
-	final List<Part> res = new LinkedList();
+	final List<Part> res = new ArrayList<>();
 	for(Folder f: subfolders)
 	    res.add(f);
 	for(SourceFile f: sourceFiles)

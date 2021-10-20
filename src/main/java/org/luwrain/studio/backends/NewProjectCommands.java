@@ -48,8 +48,8 @@ public final class NewProjectCommands
 		    proj.setProjName("New TeX project");
 		    final TexFolder folder = new TexFolder();
 		    folder.setName("Root folder");
-		    folder.setSubfolders(new ArrayList());
-		    folder.setSourceFiles(new ArrayList());
+		    folder.setSubfolders(new ArrayList<>());
+		    folder.setSourceFiles(new ArrayList<>());
 		    proj.setRootFolder(folder);
 		    try {
 			try (final BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(file), "UTF-8"))) {

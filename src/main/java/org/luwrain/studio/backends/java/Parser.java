@@ -27,7 +27,7 @@ import org.luwrain.antlr.java.*;
 
 public final class Parser
 {
-    private List<ClassPart> classes = new LinkedList();
+    private List<ClassPart> classes = new ArrayList<>();
     private String namingContext = "";
 
     void parse(String[] lines)

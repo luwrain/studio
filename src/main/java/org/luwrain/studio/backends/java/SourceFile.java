@@ -38,7 +38,7 @@ final class SourceFile implements Part
 	NullCheck.notNull(file, "file");
 	this.proj = proj;
 	this.file = file;
-	proj.getExecutor().execute(new FutureTask(()->update(), null));
+	proj.getExecutor().execute(new FutureTask<>(()->update(), null));
     }
 
     void update()

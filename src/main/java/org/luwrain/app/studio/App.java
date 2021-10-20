@@ -44,7 +44,7 @@ public final class App extends AppBase<Strings>
     private Object treeRoot = null;
     private Project proj = null;
     Editing editing = null;
-    private final List<Editing> editings = new ArrayList();
+    private final List<Editing> editings = new ArrayList<>();
     private Object[] compilationOutput = new Object[0];
     private final MutableLinesImpl outputText = new MutableLinesImpl();
 

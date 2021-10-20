@@ -42,7 +42,7 @@ public final class Project implements  org.luwrain.studio.Project
     private org.luwrain.studio.IDE ide;
     private boolean closed = false;
     private RootFolder rootFolder = null;
-    private final List<SourceFile> sourceFiles = new LinkedList();
+    private final List<SourceFile> sourceFiles = new ArrayList<>();
     private ExecutorService executor = Executors.newFixedThreadPool(4);
 
     @Override public void close()

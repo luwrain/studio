@@ -32,7 +32,7 @@ final class CompilationCommandFactory
 	NullCheck.notNull(compilation, "compilation");
 	NullCheck.notEmpty(commandName, "commandName");
 	return (ProxyExecutable)(args)->{
-	    final List<String> argsArray = new ArrayList();
+	    final List<String> argsArray = new ArrayList<>();
 	    for(Value v: args)
 	    {
 		if (v == null)
@@ -49,7 +49,7 @@ final class CompilationCommandFactory
 	NullCheck.notNull(compilation, "compilation");
 	NullCheck.notEmpty(commandName, "commandName");
 	NullCheck.notNullItems(args, "args");
-	final List<String> cmd = new ArrayList();
+	final List<String> cmd = new ArrayList<>();
 	cmd.add(commandName);
 	cmd.addAll(Arrays.asList(args));
 	try {

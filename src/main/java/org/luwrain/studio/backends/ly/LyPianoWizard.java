@@ -39,7 +39,7 @@ public final class LyPianoWizard extends LayoutBase
     final WizardArea wizardArea;
 
     private String title = "", author = "";
-    private List<String> frames = new ArrayList();
+    private List<String> frames = new ArrayList<>();
 
     public LyPianoWizard(IDE ide, File destDir)
     {

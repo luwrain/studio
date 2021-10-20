@@ -44,9 +44,9 @@ final class LyFolder implements org.luwrain.studio.Part
 	if (name == null)
 	    name = "-";
 	if (subfolders == null)
-	    subfolders = new LinkedList();
+	    subfolders = new ArrayList<>();
 	if (sourceFiles == null)
-	    sourceFiles = new LinkedList();
+	    sourceFiles = new ArrayList<>();
 	for(LyFolder f: subfolders)
 	    f.setProject(proj);
 	for(LyFile f: sourceFiles)
@@ -60,7 +60,7 @@ final class LyFolder implements org.luwrain.studio.Part
 
     @Override public org.luwrain.studio.Part[] getChildParts()
     {
-	final List<Part> res = new LinkedList();
+	final List<Part> res = new ArrayList<>();
 	for(LyFolder f: subfolders)
 	    res.add(f);
 	for(LyFile f: sourceFiles)

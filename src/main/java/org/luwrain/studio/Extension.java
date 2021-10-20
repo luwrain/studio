@@ -25,7 +25,7 @@ public final class Extension extends EmptyExtension
 {
     @Override public Command[] getCommands(Luwrain luwrain)
     {
-	final List<Command> res = new ArrayList();
+	final List<Command> res = new ArrayList<>();
 
 	res.add(new SimpleShortcutCommand("studio"));
 	res.addAll(Arrays.asList(new NewProjectCommands().get()));

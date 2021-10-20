@@ -40,7 +40,7 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	params.name = app.getStrings().treeAreaName();
 	params.clickHandler = this;
 	this.treeArea = new TreeArea(params){
-		private final Map<String, Part.Action> actionsCache = new HashMap();
+		private final Map<String, Part.Action> actionsCache = new HashMap<>();
 		@Override public boolean onSystemEvent(SystemEvent event)
 		{
 		    NullCheck.notNull(event, "event");
@@ -59,7 +59,7 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 		    final Part part = (Part)obj;
 		    final Part.Action[] actions = part.getActions();
 		    actionsCache.clear();
-		    final List<Action> res = new ArrayList();
+		    final List<Action> res = new ArrayList<>();
 		    int k = 1;
 		    for(Part.Action a: actions)
 		    {

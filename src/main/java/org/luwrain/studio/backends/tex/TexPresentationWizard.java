@@ -39,7 +39,7 @@ public final class TexPresentationWizard extends LayoutBase
     final WizardArea wizardArea;
 
     private String title = "", author = "", date = "";
-    private List<String> frames = new ArrayList();
+    private List<String> frames = new ArrayList<>();
 
     public TexPresentationWizard(IDE ide, File destDir)
     {
@@ -124,7 +124,7 @@ public final class TexPresentationWizard extends LayoutBase
 	proj.setProjName(this.title);
 	final TexFolder folder = new TexFolder();
 	folder.setName("Презентация Tex");
-	folder.setSubfolders(new ArrayList());
+	folder.setSubfolders(new ArrayList<TexFolder>());
 	folder.setSourceFiles(Arrays.asList(new TexSourceFile("main.tex", "main.tex")));
 	proj.setRootFolder(folder);
 	final Gson gson = new Gson();

@@ -47,7 +47,7 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	    };
 	params.clickHandler = this;
 	params.name = app.getStrings().newProjectAreaName();
-	this.newProjectArea = new ListArea(params);
+	this.newProjectArea = new ListArea<>(params);
 	setAreaLayout(newProjectArea, actions());
     }
 

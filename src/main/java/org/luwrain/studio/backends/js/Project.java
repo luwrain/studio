@@ -62,7 +62,7 @@ private String mainFile = null;
     void finalizeLoading()
     {
 	if (files == null)
-	    files = new LinkedList();
+	    files = new ArrayList<>();
 	if (mainFile == null || mainFile.isEmpty())
 	    mainFile = files.get(0);
 	if (projName == null || projName.trim().isEmpty())
