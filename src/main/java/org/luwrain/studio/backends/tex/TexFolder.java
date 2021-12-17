@@ -17,6 +17,7 @@
 package org.luwrain.studio.backends.tex;
 
 import java.util.*;
+import java.io.*;
 import com.google.gson.annotations.SerializedName;
 import com.google.gson.annotations.*;
 
@@ -53,7 +54,7 @@ public final class TexFolder implements Part
 	    for(TexFolder f: subfolders)
 		f.init(proj);
 	    for(TexSourceFile f: sourceFiles)
-		f.setProject(proj);
+		f.init(proj);
     }
 
     @Override public Part [] getChildParts()
@@ -119,14 +120,14 @@ public void setSubfolders(List<TexFolder> subfolders)
                 @Override public org.luwrain.studio.Part.Action[] getActions()
     {
 	return actions(
-		       action("Создать новый раздел", new InputEvent(InputEvent.Special.INSERT), (ide)->newSubfolder(ide))
+		       action("Новый раздел", new InputEvent(InputEvent.Special.INSERT, EnumSet.of(InputEvent.Modifiers.CONTROL)), this::newSubfolder),
+		       action("Добавить файл", new InputEvent(InputEvent.Special.INSERT), this::newSourceFile)
 		       );
     }
 
     private boolean newSubfolder(IDE ide)
     {
 	NullCheck.notNull(ide, "ide");
-	Log.debug("proba", "creating");
 	final String name = Popups.textNotEmpty(ide.getLuwrainObj(), proj.getStrings().newFolderPopupName(), proj.getStrings().newFolderPopupPrefix(), "");
 	if (name == null || name.trim().isEmpty())
 	    return true;
@@ -138,4 +139,25 @@ public void setSubfolders(List<TexFolder> subfolders)
 	return true;
     }
 
+    private boolean newSourceFile(IDE ide)
+    {
+	NullCheck.notNull(ide, "ide");
+	/*
+	final String name = Popups.textNotEmpty(ide.getLuwrainObj(), proj.getStrings().newSourceFilePopupName(), proj.getStrings().newSourceFilePopupPrefix(), "");
+	if (name == null || name.trim().isEmpty())
+	    return true;
+	*/
+	final File file = Popups.existingFile(ide.getLuwrainObj(), "Новый файл");
+	if (file == null)
+	    return true;
+	/*
+	final TexSourceFile newFile = new TexSourceFile();
+	newFile.setName(name.trim());
+	newFile.init(proj);
+	this.sourceFiles.add(newFolder);
+	ide.onFoldersUpdate();
+	*/
+	return true;
+    }
 }
+

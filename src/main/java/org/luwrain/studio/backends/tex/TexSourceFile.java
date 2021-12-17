@@ -45,7 +45,7 @@ final class TexSourceFile implements Part
 	this.path = path;
     }
 
-        void setProject(TexProject proj)
+        void init(TexProject proj)
     {
 	NullCheck.notNull(proj, "proj");
 	this.proj = proj;
