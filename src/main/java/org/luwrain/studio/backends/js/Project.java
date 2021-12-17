@@ -103,7 +103,7 @@ private String mainFile = null;
 
 		    }
 
-        @Override public Project load(File file) throws IOException
+    @Override public Project load(File file, org.luwrain.studio.IDE ide) throws IOException
     {
 	return null;
     }

@@ -21,7 +21,11 @@ import com.google.gson.annotations.SerializedName;
 import com.google.gson.annotations.*;
 
 import org.luwrain.core.*;
+import org.luwrain.core.events.*;
 import org.luwrain.studio.*;
+import org.luwrain.popups.*;
+
+import static org.luwrain.studio.Part.*;
 
 public final class TexFolder implements Part
 {
@@ -36,7 +40,7 @@ public final class TexFolder implements Part
 
     private transient TexProject proj = null;
 
-    void setProject(TexProject proj)
+    void init(TexProject proj)
     {
 	NullCheck.notNull(proj, "proj");
 	this.proj = proj;
@@ -47,7 +51,7 @@ public final class TexFolder implements Part
 			if (sourceFiles == null)
 			    sourceFiles = new ArrayList<>();
 	    for(TexFolder f: subfolders)
-		f.setProject(proj);
+		f.init(proj);
 	    for(TexSourceFile f: sourceFiles)
 		f.setProject(proj);
     }
@@ -55,10 +59,12 @@ public final class TexFolder implements Part
     @Override public Part [] getChildParts()
     {
 	final List<Part> res = new ArrayList<>();
-	for(Part p: subfolders)
-	    res.add(p);
-	for(Part p: sourceFiles)
-	    res.add(p);
+	if (subfolders != null)
+	    for(Part p: subfolders)
+		res.add(p);
+	if (sourceFiles != null)
+	    for(Part p: sourceFiles)
+		res.add(p);
 	return res.toArray(new Part[res.size()]);
     }
 
@@ -112,9 +118,24 @@ public void setSubfolders(List<TexFolder> subfolders)
 
                 @Override public org.luwrain.studio.Part.Action[] getActions()
     {
-	return Part.actions(
-		       Part.action("Создать новый раздел", (ide)->{ return false; })
+	return actions(
+		       action("Создать новый раздел", new InputEvent(InputEvent.Special.INSERT), (ide)->newSubfolder(ide))
 		       );
+    }
+
+    private boolean newSubfolder(IDE ide)
+    {
+	NullCheck.notNull(ide, "ide");
+	Log.debug("proba", "creating");
+	final String name = Popups.textNotEmpty(ide.getLuwrainObj(), proj.getStrings().newFolderPopupName(), proj.getStrings().newFolderPopupPrefix(), "");
+	if (name == null || name.trim().isEmpty())
+	    return true;
+	final TexFolder newFolder = new TexFolder();
+	newFolder.setName(name.trim());
+	newFolder.init(proj);
+	this.subfolders.add(newFolder);
+	ide.onFoldersUpdate();
+	return true;
     }
 
 }

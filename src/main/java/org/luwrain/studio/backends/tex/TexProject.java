@@ -41,9 +41,16 @@ public final class TexProject implements  org.luwrain.studio.Project
     private transient File projFile = null;
     private transient File projDir = null;
     private transient IDE ide = null;
+    private transient Strings strings = null;
+    private transient final Gson gson = new Gson();
+
+                @Override public org.luwrain.studio.Part getPartsRoot() { return rootFolder; }
+    @Override public org.luwrain.studio.Part getMainSourceFile() { return null; }
+    Strings getStrings() { return strings; }
 
     @Override public void close()
     {
+	save();
     }
 
     void setProjectFile(File projFile)
@@ -62,21 +69,19 @@ public final class TexProject implements  org.luwrain.studio.Project
 	return projDir;
     }
 
-    void finalizeLoading()
+    private void finalizeLoading(IDE ide)
     {
-	if (rootFolder != null)
-	rootFolder.setProject(this);
+	NullCheck.notNull(ide, "ide");
+	if (rootFolder == null)
+	{
+	    rootFolder = new TexFolder();
+	    rootFolder.setName("Tex root");
+    }
+	rootFolder.init(this);
+	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);
+	NullCheck.notNull(strings, "strings");
     }
 
-            @Override public org.luwrain.studio.Part getPartsRoot()
-    {
-	return rootFolder;
-    }
-
-    @Override public org.luwrain.studio.Part getMainSourceFile()
-    {
-	return null;
-    }
 
     public String getProjName()
     {
@@ -102,13 +107,30 @@ public final class TexProject implements  org.luwrain.studio.Project
 	this.rootFolder = rootFolder;
     }
 
-        @Override public Project load(File projFile) throws IOException
+    void save()
     {
+	if (projFile == null)
+	    throw new IllegalStateException("projFile is not set");
+	try {
+	    try (final BufferedWriter w = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(projFile), "UTF-8"))) {
+		gson.toJson(this, w);
+	    }
+	}
+	catch(IOException e)
+	{
+	    throw new RuntimeException(e);
+	}
+    }
+
+    @Override public Project load(File projFile, IDE ide) throws IOException
+    {
+	NullCheck.notNull(projFile, "projFile");
+	NullCheck.notNull(ide, "ide");
 	final Gson gson = new Gson();
 	try (final BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(projFile), "UTF-8"))) {
 final TexProject proj = gson.fromJson(reader, TexProject.class);
 proj.setProjectFile(projFile);
-proj.finalizeLoading();
+proj.finalizeLoading(ide);
 return proj;
 	}
     }

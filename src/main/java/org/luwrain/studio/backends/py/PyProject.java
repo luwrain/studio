@@ -98,7 +98,7 @@ public final class PyProject implements  org.luwrain.studio.Project
 
     }
 
-        @Override public org.luwrain.studio.Project load(File file) throws IOException
+    @Override public org.luwrain.studio.Project load(File file, org.luwrain.studio.IDE ide) throws IOException
     {
 	return null;
     }

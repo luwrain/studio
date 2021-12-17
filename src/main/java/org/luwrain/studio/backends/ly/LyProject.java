@@ -89,7 +89,7 @@ public final class LyProject extends ProjectBase implements  org.luwrain.studio.
 
     }
 
-        @Override public org.luwrain.studio.Project load(File file) throws IOException
+    @Override public org.luwrain.studio.Project load(File file, org.luwrain.studio.IDE ide) throws IOException
     {
 	return null;
     }

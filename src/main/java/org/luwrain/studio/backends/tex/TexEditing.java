@@ -25,6 +25,7 @@ import org.luwrain.core.events.InputEvent.Modifiers;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.studio.util.*;
+import org.luwrain.script.controls.*;
 import org.luwrain.app.base.*;
 
 final class TexEditing extends TextEditingBase
@@ -100,9 +101,9 @@ final class TexEditing extends TextEditingBase
 	params.content = content;
 	params.appearance = new TexAppearance(context);
 	params.editFactory = (editParams)->{
-	    final MultilineEditCorrector bottomAugmentation = (MultilineEditCorrector)editParams.model;
-editParams.model = new TexNewLineIndent(bottomAugmentation);
-	    setEdit(new MultilineEdit(editParams), bottomAugmentation);
+	    final MultilineEditCorrector base = (MultilineEditCorrector)editParams.model;
+	    editParams.model = new EditCorrectorHooks(context, new TexNewLineIndent(base), "luwrain.studio.text");
+	    setEdit(new MultilineEdit(editParams), base);
 	    return getEdit();
 	};
 	params.name = file.getName();

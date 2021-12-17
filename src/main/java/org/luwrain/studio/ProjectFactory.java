@@ -53,7 +53,7 @@ public final class ProjectFactory
 	final Project loader = readProjectKey(projFile);
 	if (loader == null)
 	    throw new IOException("No known keys in the file");
-	final Project proj = loader.load(projFile);
+	final Project proj = loader.load(projFile, ide);
 	if (proj == null)
 	    throw new IOException(projFile.getPath() + " doesn't contain proper  project structure");
 	return proj;

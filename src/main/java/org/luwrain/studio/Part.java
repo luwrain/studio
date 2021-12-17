@@ -22,6 +22,7 @@ import java.io.*;
 
 import org.luwrain.core.*;
 import org.luwrain.core.events.*;
+import org.luwrain.util.*;
 
 public interface Part
 {
@@ -32,6 +33,7 @@ public interface ActionProc
 
     public interface Action extends ActionProc
     {
+	String getId();
 	String getTitle();
 	InputEvent getHotKey();
     }
@@ -45,7 +47,9 @@ public interface ActionProc
     {
 	NullCheck.notEmpty(title, "title");
 	NullCheck.notNull(proc, "proc");
+	final String id = Sha1.getSha1(title, "UTF-8");
 	return new Action(){
+	    @Override public String getId() { return id; }
 	    @Override public String getTitle() { return title; }
 	    @Override public InputEvent getHotKey() { return null; }
 	    @Override public boolean onAction(IDE ide) { return proc.onAction(ide); }
@@ -57,7 +61,9 @@ public interface ActionProc
 	NullCheck.notEmpty(title, "title");
 	NullCheck.notNull(hotKey, "hotKey");
 	NullCheck.notNull(proc, "proc");
+	final String id = Sha1.getSha1(title, "UTF-8");
 	return new Action(){
+	    @Override public String getId() { return id; }
 	    @Override public String getTitle() { return title; }
 	    @Override public InputEvent getHotKey() { return hotKey; }
 	    @Override public boolean onAction(IDE ide) { return proc.onAction(ide); }

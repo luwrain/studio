@@ -140,6 +140,8 @@ public final class App extends AppBase<Strings>
 	    @Override public Luwrain getLuwrainObj() { return getLuwrain(); }
 	    @Override public void onFoldersUpdate()
 	    {
+		if (projectBaseLayout != null)
+		    projectBaseLayout.treeArea.refresh();
 	    }
 	    @Override public void onEditingUpdate()
 	    {

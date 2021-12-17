@@ -40,14 +40,22 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	params.name = app.getStrings().treeAreaName();
 	params.clickHandler = this;
 	this.treeArea = new TreeArea(params){
-		private final Map<String, Part.Action> actionsCache = new HashMap<>();
 		@Override public boolean onSystemEvent(SystemEvent event)
 		{
 		    NullCheck.notNull(event, "event");
 		    if (event.getType() == SystemEvent.Type.REGULAR && event.getCode() == SystemEvent.Code.ACTION)
 		    {
 			final ActionEvent actionEvent = (ActionEvent)event;
-			actionEvent.getActionName();
+			final String actionName = actionEvent.getActionName();
+					    final Object obj = treeArea.selected();
+		    if (obj == null || !(obj instanceof Part))
+			return false;
+		    final Part part = (Part)obj;
+		    final Part.Action[] actions = part.getActions();
+		    for(Part.Action a: actions)
+			if (a.getId().equals(actionName))
+			    return a.onAction(app.ide);
+		    return false;
 		    }
 		    return super.onSystemEvent(event);
 		}
@@ -58,16 +66,13 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 			return new Action[0];
 		    final Part part = (Part)obj;
 		    final Part.Action[] actions = part.getActions();
-		    actionsCache.clear();
 		    final List<Action> res = new ArrayList<>();
-		    int k = 1;
 		    for(Part.Action a: actions)
 		    {
 			final Action action;
 						if (a.getHotKey() != null)
-			    action = new Action("action" + k++, a.getTitle(), a.getHotKey()); else
-			   action = new Action("action" + k++, a.getTitle());
-			this.actionsCache.put(action.name(), a);
+						    action = new Action(a.getId(), a.getTitle(), a.getHotKey()); else
+						    action = new Action(a.getId(), a.getTitle());
 			res.add(action);
 		    }
 		    return res.toArray(new Action[res.size()]);

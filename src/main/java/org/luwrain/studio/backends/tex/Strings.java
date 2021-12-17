@@ -14,18 +14,12 @@
    General Public License for more details.
 */
 
-//LWR_API 1.0
+package org.luwrain.studio.backends.tex;
 
-package org.luwrain.studio;
-
-import java.io.*;
-
-import org.luwrain.core.*;
-
-public interface Project
+public interface Strings
 {
-    Project load(File file, IDE ide) throws IOException;
-    void close();
-    Part getPartsRoot();
-        Part getMainSourceFile();
+    static public final String NAME = "luwrain.studio.tex";
+
+    String newFolderPopupName();
+    String newFolderPopupPrefix();
 }
