@@ -77,7 +77,7 @@ public final class TexProject implements  org.luwrain.studio.Project
 	    rootFolder = new TexFolder();
 	    rootFolder.setName("Tex root");
     }
-	rootFolder.init(this);
+	rootFolder.init(this, ide);
 	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);
 	NullCheck.notNull(strings, "strings");
     }

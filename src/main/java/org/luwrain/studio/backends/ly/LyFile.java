@@ -33,7 +33,8 @@ final class LyFile implements Part
     @SerializedName("path")
     private String path = null;
 
-    private LyProject proj = null;
+    private transient LyProject proj = null;
+    private transient IDE ide = null;
 
         void setProject(LyProject proj)
     {
@@ -53,7 +54,7 @@ final class LyFile implements Part
 
     @Override public Editing startEditing() throws IOException
     {
-	return new LyEditing(new File(proj.getProjectDir(), path));
+	return new LyEditing(ide, new File(proj.getProjectDir(), path));
     }
 
     @Override public String toString()

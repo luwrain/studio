@@ -30,9 +30,13 @@ import org.luwrain.app.base.*;
 
 final class TexEditing extends TextEditingBase
 {
-    TexEditing(File file) throws IOException
+    static private final String
+	HOOK_EDIT = "luwrain.studio.tex";
+
+    
+    TexEditing(IDE ide, File file) throws IOException
     {
-	super(file);
+	super(ide, file);
     }
 
     @Override public Part.Action[] getActions()
@@ -100,9 +104,11 @@ final class TexEditing extends TextEditingBase
 	params.context = context;
 	params.content = content;
 	params.appearance = new TexAppearance(context);
+
+	params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));
 	params.editFactory = (editParams)->{
 	    final MultilineEditCorrector base = (MultilineEditCorrector)editParams.model;
-	    editParams.model = new EditCorrectorHooks(context, new TexNewLineIndent(base), "luwrain.studio.text");
+	    editParams.model = new EditCorrectorHooks(ide.getScriptCore(), new TexNewLineIndent(base), HOOK_EDIT);
 	    setEdit(new MultilineEdit(editParams), base);
 	    return getEdit();
 	};

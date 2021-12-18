@@ -18,27 +18,35 @@ package org.luwrain.studio.util;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.controls.MultilineEdit.ModificationResult;
 import org.luwrain.studio.*;
 import org.luwrain.util.*;
+import org.luwrain.script.core.*;
+import org.luwrain.script.controls.*;
 import org.luwrain.app.base.*;
+
+import static org.luwrain.script.Hooks.*;
 
 public abstract class TextEditingBase implements TextEditing
 {
     static public final String CHARSET = "UTF-8";
 
+    protected final IDE ide;
     protected final File file;
     protected final MutableLinesImpl content;
     private MultilineEdit edit = null;
     private MultilineEditCorrector bottomCorrector = null;
     private int hotPointX = 0, hotPointY = 0;
 
-    public TextEditingBase(File file) throws IOException
+    public TextEditingBase(IDE ide, File file) throws IOException
     {
+	NullCheck.notNull(ide, "ide");
 	NullCheck.notNull(file, "files");
+	this.ide = ide;
 	this.file = file;
 	final String text = FileUtils.readTextFileSingleString(file, CHARSET);
 	final String[] lines = FileUtils.universalLineSplitting(text);
@@ -121,4 +129,20 @@ return res.isPerformed();
 	    return true;
 	return insertText(new String[]{text});
     }
+
+        protected EditArea.InputEventListener createEditAreaInputEventHook()
+    {
+	return (edit, event)->{
+	    final MultilineEditCorrector corrector = (MultilineEditCorrector)edit.getEdit().getMultilineEditModel();
+	    final AtomicBoolean res = new AtomicBoolean(false);
+	    corrector.doEditAction((lines, hotPoint)->{
+		    res.set(chainOfResponsibility(ide.getLuwrainObj(), EDIT_INPUT, new Object[]{
+				new EditAreaObj(edit, lines),
+				new InputEventObj(event)
+			    }));
+		});
+	    return res.get();
+	};
+    }
+
 }

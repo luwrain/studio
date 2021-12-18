@@ -32,7 +32,8 @@ final class PySourceFile implements Part
     @SerializedName("path")
     private String path = null;
 
-    private PyProject proj = null;
+    private transient PyProject proj = null;
+    private transient IDE ide = null;
 
         void setProject(PyProject proj)
     {
@@ -52,7 +53,7 @@ final class PySourceFile implements Part
 
     @Override public Editing startEditing() throws IOException
     {
-	return new PyEditing(new File(proj.getProjectDir(), path));
+	return new PyEditing(ide, new File(proj.getProjectDir(), path));
     }
 
     @Override public String toString()

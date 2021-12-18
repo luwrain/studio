@@ -32,7 +32,8 @@ final class TexSourceFile implements Part
     @SerializedName("path")
     private String path = null;
 
-    private TexProject proj = null;
+    private transient TexProject proj = null;
+    private transient IDE ide = null;
 
     TexSourceFile()
     {
@@ -45,10 +46,12 @@ final class TexSourceFile implements Part
 	this.path = path;
     }
 
-        void init(TexProject proj)
+    void init(TexProject proj, IDE ide)
     {
 	NullCheck.notNull(proj, "proj");
+	NullCheck.notNull(ide, "ide");
 	this.proj = proj;
+	this.ide = ide;
     }
 
     @Override public String getTitle()
@@ -63,7 +66,7 @@ final class TexSourceFile implements Part
 
     @Override public Editing startEditing() throws IOException
     {
-	return new TexEditing(new File(proj.getProjectDir(), path));
+	return new TexEditing(ide, new File(proj.getProjectDir(), path));
     }
 
     @Override public String toString()

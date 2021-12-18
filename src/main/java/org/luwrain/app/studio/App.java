@@ -119,12 +119,12 @@ public final class App extends AppBase<Strings>
     private void loadScriptCore() throws IOException
     {
 	this.scriptCore = new ScriptCore(getLuwrain());
-	final File scriptsDir = new File(new File(getLuwrain().getFileProperty("luwrain.dir.data"), "studio"), "js");
+	final File scriptsDir = getLuwrain().getFileProperty(Luwrain.PROP_DIR_JS);
 	final File[] scripts = scriptsDir.listFiles();
 	if (scripts == null)
 	    return;
 	for(File f: scripts)
-	    if (f != null)
+	    if (f != null && f.getName().startsWith("studio-"))
 	    {
 		Log.debug(LOG_COMPONENT, "loading " + f.getAbsolutePath());
 		scriptCore.load(f);

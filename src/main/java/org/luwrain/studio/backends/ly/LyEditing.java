@@ -27,9 +27,9 @@ import org.luwrain.app.base.*;
 
 final class LyEditing extends TextEditingBase
 {
-    LyEditing(File file) throws IOException
+    LyEditing(IDE ide, File file) throws IOException
     {
-	super(file);
+	super(ide, file);
     }
 
     @Override public EditArea.Params getEditParams(ControlContext context)

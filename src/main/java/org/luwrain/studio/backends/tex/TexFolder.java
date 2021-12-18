@@ -40,11 +40,14 @@ public final class TexFolder implements Part
     private List<TexSourceFile> sourceFiles = null;
 
     private transient TexProject proj = null;
+    private transient IDE ide = null;
 
-    void init(TexProject proj)
+    void init(TexProject proj, IDE ide)
     {
 	NullCheck.notNull(proj, "proj");
+	NullCheck.notNull(ide, "ide");
 	this.proj = proj;
+	this.ide = ide;
 	if (name == null)
 	    name = "-";
 	if (subfolders == null)
@@ -52,9 +55,9 @@ public final class TexFolder implements Part
 			if (sourceFiles == null)
 			    sourceFiles = new ArrayList<>();
 	    for(TexFolder f: subfolders)
-		f.init(proj);
+		f.init(proj, ide);
 	    for(TexSourceFile f: sourceFiles)
-		f.init(proj);
+		f.init(proj, ide);
     }
 
     @Override public Part [] getChildParts()
@@ -133,7 +136,7 @@ public void setSubfolders(List<TexFolder> subfolders)
 	    return true;
 	final TexFolder newFolder = new TexFolder();
 	newFolder.setName(name.trim());
-	newFolder.init(proj);
+	newFolder.init(proj, ide);
 	this.subfolders.add(newFolder);
 	ide.onFoldersUpdate();
 	return true;
@@ -146,17 +149,20 @@ public void setSubfolders(List<TexFolder> subfolders)
 	final String name = Popups.textNotEmpty(ide.getLuwrainObj(), proj.getStrings().newSourceFilePopupName(), proj.getStrings().newSourceFilePopupPrefix(), "");
 	if (name == null || name.trim().isEmpty())
 	    return true;
-	*/
 	final File file = Popups.existingFile(ide.getLuwrainObj(), "Новый файл");
 	if (file == null)
 	    return true;
-	/*
-	final TexSourceFile newFile = new TexSourceFile();
-	newFile.setName(name.trim());
-	newFile.init(proj);
-	this.sourceFiles.add(newFolder);
-	ide.onFoldersUpdate();
 	*/
+	final String name = Popups.textNotEmpty(ide.getLuwrainObj(), "Новый файл", "Имя:", "");
+	if (name == null)
+	    return true;
+	final String path = Popups.textNotEmpty(ide.getLuwrainObj(), "Новый файл", "Путь :", "");
+	if (path == null)
+	    return true;
+	final TexSourceFile newFile = new TexSourceFile(name, path);
+	newFile.init(proj, ide);
+	this.sourceFiles.add(newFile);
+	ide.onFoldersUpdate();
 	return true;
     }
 }

@@ -28,9 +28,9 @@ import org.luwrain.app.base.*;
 
 final class PyEditing extends TextEditingBase
 {
-    PyEditing(File file) throws IOException
+    PyEditing(IDE ide, File file) throws IOException
     {
-	super(file);
+	super(ide, file);
     }
 
     @Override public EditArea.Params getEditParams(ControlContext context)
