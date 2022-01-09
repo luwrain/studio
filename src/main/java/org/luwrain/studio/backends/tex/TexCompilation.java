@@ -43,7 +43,7 @@ final class TexCompilation
 
     private void runCompilationScript()
     {
-	final ScriptCore scriptCore = new ScriptCore(ide.getLuwrainObj(), (bindings)->{
+	final ScriptCore scriptCore = new ScriptCore(ide.getLuwrainObj(), (bindings, syncObj)->{
 		final CompilationCommandFactory factory = new CompilationCommandFactory();
 		bindings.putMember("latex", factory.newCompilationCommand(TexCompilation.this, "latex"));
 	    });
