@@ -7,6 +7,7 @@ import org.luwrain.core.*;
 
 public class ParserTest extends Assert
 {
+    /*
     @Test public void emptyClass()
     {
 	final String text = "class Proba {}";
@@ -18,7 +19,9 @@ public class ParserTest extends Assert
 	assertNotNull(classes[0]);
 	assertTrue(classes[0].getName().equals("Proba"));
     }
+    */
 
+    /*
     @Test public void emptyClassWithPackage()
     {
 	final String text = "package org.luwrain; class Proba {}";
@@ -30,6 +33,7 @@ public class ParserTest extends Assert
 	assertNotNull(classes[0]);
 	assertTrue(classes[0].getName().equals("org.luwrain.Proba"));
     }
+    */
 
     /*
     @Test public void file()
