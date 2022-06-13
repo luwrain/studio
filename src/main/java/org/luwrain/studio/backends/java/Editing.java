@@ -28,7 +28,7 @@ import org.luwrain.app.base.*;
 final class Editing implements TextEditing
 {
     private final File file;
-    private final MutableLinesImpl content;
+    private final MutableMarkedLinesImpl content;
 
     Editing(File file) throws IOException
     {
@@ -36,12 +36,11 @@ final class Editing implements TextEditing
 	this.file = file;
 	final String text = FileUtils.readTextFileSingleString(file, "UTF-8");
 	final String[] lines = FileUtils.universalLineSplitting(text);
-	this.content = new MutableLinesImpl(lines);
+	this.content = new MutableMarkedLinesImpl(lines);
     }
 
     @Override public EditArea.Params getEditParams(ControlContext context)
     {
-	NullCheck.notNull(context, "context");
 	final EditArea.Params params = new EditArea.Params();
 	params.context = context;
 	params.content = content;

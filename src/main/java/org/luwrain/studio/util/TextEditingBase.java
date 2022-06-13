@@ -37,7 +37,7 @@ public abstract class TextEditingBase implements TextEditing
 
     protected final IDE ide;
     protected final File file;
-    protected final MutableLinesImpl content;
+    protected final MutableMarkedLinesImpl content;
     private MultilineEdit edit = null;
     private MultilineEditCorrector bottomCorrector = null;
     private int hotPointX = 0, hotPointY = 0;
@@ -50,7 +50,7 @@ public abstract class TextEditingBase implements TextEditing
 	this.file = file;
 	final String text = FileUtils.readTextFileSingleString(file, CHARSET);
 	final String[] lines = FileUtils.universalLineSplitting(text);
-	this.content = new MutableLinesImpl(lines);
+	this.content = new MutableMarkedLinesImpl(lines);
     }
 
     @Override public boolean save() throws IOException

@@ -99,7 +99,6 @@ final class TexEditing extends TextEditingBase
 
     @Override public EditArea.Params getEditParams(ControlContext context)
     {
-	NullCheck.notNull(context, "context");
 	final EditArea.Params params = new EditArea.Params();
 	params.context = context;
 	params.content = content;
