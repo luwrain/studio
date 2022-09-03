@@ -22,6 +22,11 @@
       <artifactId>luwrain</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>org.luwrain</groupId>
+      <artifactId>luwrain-grammar</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
