@@ -23,12 +23,52 @@ import org.luwrain.core.*;
 
 public class Source
 {
-    String content = "";
+    static private final char NL = '\n';
+
+    private String content = "";
+    private String[] lines = new String[0];
 
     public Source(String content)
     {
 	NullCheck.notNull(content, "content");
-	this.content = content;
+	if (!content.isEmpty())
+	{
+	    this.content = content.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
+	    this.lines = this.content.split("\n", -1);
+	}
+    }
+
+    public int getLineStart(int lineIndex)
+    {
+	if (lineIndex < 0)
+	    throw new IllegalArgumentException("lineIndex can't be negative");
+	if (lineIndex > lines.length)
+	    throw new IllegalArgumentException("lineIndex can't be greater than number of lines");
+	int res = 0;
+	for(int i = 0;i < lineIndex;i++)
+	    res += (lines[i].length() + 1);
+	return res;
+    }
+
+    public int getLineWithPos(int pos)
+    {
+	if (pos < 0)
+	    throw new IllegalArgumentException("pos can't be negative");
+	int res = 0;
+	for(int i = 0;i < lines.length;i++)
+	    if (pos <= res + lines[i].length() + 1)
+		return i;
+	return -1;
+	    }
+
+    public int getLineCount()
+    {
+	return lines.length;
+    }
+
+    public String getLine(int index)
+    {
+	return lines[index];
     }
 
     public String getText()
