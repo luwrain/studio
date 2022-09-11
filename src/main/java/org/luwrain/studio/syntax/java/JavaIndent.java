@@ -48,7 +48,7 @@ public final class JavaIndent
 	final Span span = (spans.length > 0)?spans[spans.length - 1]:null;
 	final int spanStart = (span != null)?span.getFromPos():0;
 	final int spanStartLine = source.getLineWithPos(spanStart);
-	if (isEmptyFragment(spanStart, lineStart))
+	if (span != null && isEmptyFragment(spanStart, lineStart))
 	{
 	    //Analyzing the line with the span start
 	    final String line = source.getLine(spanStartLine);
@@ -58,7 +58,7 @@ public final class JavaIndent
 	    //Looking for the first previous non-empty line
 	    int baseIndex = lineIndex - 1;
 	    while(baseIndex >= 0 && source.getLine(baseIndex).trim().isEmpty())
-		continue;
+		baseIndex--;
 	    if (baseIndex < 0)
 		return 0;
 	    return utils.getIndent(source.getLine(baseIndex));
