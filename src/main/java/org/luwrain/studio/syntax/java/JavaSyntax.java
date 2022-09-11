@@ -24,11 +24,14 @@ import org.antlr.v4.runtime.atn.*;
 
 import org.luwrain.core.*;
 import org.luwrain.antlr.java.*;
+import org.luwrain.antlr.java.JavaParser.*;
 import org.luwrain.studio.syntax.*;
+import org.luwrain.studio.syntax.SpanTree.*;
 
 public final class JavaSyntax
 {
-    private final Source source;
+    public final Source source;
+    public final SpanTree spanTree = new SpanTree();
     public JavaSyntax(Source source)
     {
 	NullCheck.notNull(source, "source");
@@ -44,6 +47,26 @@ public final class JavaSyntax
 	final ParseTree tree = parser.compilationUnit();
 	final ParseTreeWalker walker = new ParseTreeWalker();
 	final JavaListener listener = new JavaBaseListener(){
+		//enterMethodBody
+		//enterConstructorBody
+		//enterEnumBody
+		//enterInterfaceBody
+		//enterLambdaBody
+		//enterClassBody
+		@Override public void enterClassBody(ClassBodyContext c)
+		{
+		    final Span span = spanTree.addSpan();
+		    span.setFromPos(c.getStart().getStartIndex());
+		    span.setToPos(c.getStop().getStartIndex());
+		}
+		@Override public void exitClassBody(ClassBodyContext c) { spanTree.pop(); }
+		@Override public void enterBlock(BlockContext c)
+		{
+		    final Span span = spanTree.addSpan();
+		    		    span.setFromPos(c.getStart().getStartIndex());
+		    span.setToPos(c.getStop().getStartIndex());
+		}
+		@Override public void exitBlock(BlockContext c) { spanTree.pop(); }
 		@Override public void enterClassDeclaration(JavaParser.ClassDeclarationContext ctx) 
 		{
 		    if (ctx.normalClassDeclaration() != null)

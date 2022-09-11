@@ -35,4 +35,9 @@ public class Source
     {
 	return content;
     }
+
+    public int length()
+    {
+	return content.length();
+    }
 }
