@@ -56,8 +56,11 @@ public class Source
 	    throw new IllegalArgumentException("pos can't be negative");
 	int res = 0;
 	for(int i = 0;i < lines.length;i++)
-	    if (pos <= res + lines[i].length() + 1)
+	{
+	    if (pos <= res + lines[i].length())//equals to cover trailing \n
 		return i;
+	    res += (lines[i].length() + 1);
+	}
 	return -1;
 	    }
 

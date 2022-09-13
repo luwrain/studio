@@ -38,10 +38,14 @@ public class JavaSyntaxTest extends Assert
 	assertEquals("{\n\tSystem.out.println(\"Hello, world!\");\n    ", s.source.getText().substring(spans[1].getFromPos(), spans[1].getToPos()));
 	final JavaIndent indent = new JavaIndent(s.source, s.spanTree, new SyntaxParams());
 	assertEquals(0, indent.getIndentForLine(0));
-		assertEquals(0, indent.getIndentForLine(1));
-		//		assertEquals(0, indent.getIndentForLine(2));
+	assertEquals(0, indent.getIndentForLine(1));
+	assertEquals(0, indent.getIndentForLine(2));
+	assertEquals(4, indent.getIndentForLine(3));
+	assertEquals(4, indent.getIndentForLine(4));
+		assertEquals(8, indent.getIndentForLine(5));
+		//		assertEquals(4, indent.getIndentForLine(6));
     }
-
+    
     private Source getHelloWorld()
     {
 	try {

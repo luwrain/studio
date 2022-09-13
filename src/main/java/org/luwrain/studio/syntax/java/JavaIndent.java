@@ -43,15 +43,31 @@ public final class JavaIndent
     {
 	if (lineIndex > source.getLineCount())
 	    throw new IllegalArgumentException("lineIndex can't be greater than number of lines");
+	System.out.println("proba " + source.getLine(lineIndex));
 	final int lineStart = source.getLineStart(lineIndex);
 	final Span[] spans = spanTree.findAtPoint(lineStart);
-	final Span span = (spans.length > 0)?spans[spans.length - 1]:null;
-	final int spanStart = (span != null)?span.getFromPos():0;
-	final int spanStartLine = source.getLineWithPos(spanStart);
-	if (span != null && isEmptyFragment(spanStart, lineStart))
+	final Span span;
+	if (spans.length > 0)
 	{
+	    //There is at least one block span
+	    final Span lastSpan = spans[spans.length - 1];
+	    	    //Checking if we have a block span at the beginning of the line
+	    if (lineStart == lastSpan.getFromPos())
+		span = (spans.length >= 2)?spans[spans.length - 2]:null; else
+		span = lastSpan;
+	} else
+	    span = null;
+	final int spanStart = (span != null)?span.getFromPos():0;
+	System.out.println(lineStart + " " + spanStart);
+	System.out.println(source.getText().charAt(spanStart));
+	final int spanStartLine = source.getLineWithPos(spanStart);
+	System.out.println("spanStartLine=" + spanStartLine);
+	if (span != null && isEmptyFragment(spanStart + 1, lineStart))//+ 1 to skip the left block brace itself
+	{
+	    System.out.println("nothing between");
 	    //Analyzing the line with the span start
 	    final String line = source.getLine(spanStartLine);
+	    System.out.println(line);
 	    return utils.getIndent(line) + params.getIndentStep();
 	} else
 	{
