@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -36,14 +36,11 @@ public final class TextEditingLayout extends LayoutBase
     TextEditingLayout(App app, ProjectBaseLayout projectBaseLayout, TextEditing textEditing)
     {
 	super(app);
-	NullCheck.notNull(projectBaseLayout, "projectBaseLayout");
-	NullCheck.notNull(textEditing, "textEditing");
 	this .app = app;
 	this.textEditing = textEditing;
 	final ControlContext editingControlContext = new WrappingControlContext(getControlContext()){
 		@Override public void onAreaNewHotPoint(Area area)
 		{
-		    NullCheck.notNull(area, "area");
 		    textEditing.onNewHotPoint(area.getHotPointX(), area.getHotPointY());
 		    super.onAreaNewHotPoint(area);
 		}};
@@ -52,7 +49,6 @@ public final class TextEditingLayout extends LayoutBase
 		private final Map<String, Part.Action> actionsCache = new HashMap<>();
 				@Override public boolean onSystemEvent(SystemEvent event)
 		{
-		    NullCheck.notNull(event, "event");
 		    if (event.getType() == SystemEvent.Type.REGULAR)
 			switch(event.getCode())
 			{
@@ -87,6 +83,8 @@ public final class TextEditingLayout extends LayoutBase
 		    return res.toArray(new Action[res.size()]);
 		}
 	    };
+	if (app.isSingleFileProject())
+	    setAreaLayout(editArea, null); else
 	setAreaLayout(AreaLayout.LEFT_RIGHT, treeArea, null, editArea, null);
     }
 

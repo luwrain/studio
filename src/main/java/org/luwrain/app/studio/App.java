@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -292,10 +292,8 @@ public final class App extends AppBase<Strings>
 	return new OutputModel();
     }
 
-    Conversations conv()
-    {
-	return this.conv;
-    }
+    Conversations conv() { return this.conv; }
+    boolean isSingleFileProject() { return this.proj instanceof SingleFileProject; }
 
     private final class OutputControl implements org.luwrain.studio.Output
     {
