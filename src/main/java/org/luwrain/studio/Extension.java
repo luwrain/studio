@@ -19,7 +19,6 @@ package org.luwrain.studio;
 import java.util.*;
 
 import org.luwrain.core.*;
-import org.luwrain.studio.backends.NewProjectCommands;
 
 public final class Extension extends EmptyExtension
 {
@@ -28,7 +27,6 @@ public final class Extension extends EmptyExtension
 	final List<Command> res = new ArrayList<>();
 
 	res.add(new SimpleShortcutCommand("studio"));
-	res.addAll(Arrays.asList(new NewProjectCommands().get()));
 	return res.toArray(new Command[res.size()]);
     }
 
