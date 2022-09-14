@@ -24,30 +24,28 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 
-final class TexSourceFile implements Part
+public final class TexSourceFile implements Part
 {
-    @SerializedName("name")
-    private String name = null;
-
-    @SerializedName("path")
-    private String path = null;
+    private String
+	name = null,
+	path = null;
 
     private transient Project proj = null;
     private transient File projDir = null;
     private transient IDE ide = null;
 
-    TexSourceFile()
+    public TexSourceFile()
     {
 	this(null, null);
     }
 
-    TexSourceFile(String name, String path)
+    public TexSourceFile(String name, String path)
     {
 	this.name = name;
 	this.path = path;
     }
 
-    void init(Project proj, IDE ide)
+    public void init(Project proj, IDE ide)
     {
 	NullCheck.notNull(proj, "proj");
 	NullCheck.notNull(ide, "ide");

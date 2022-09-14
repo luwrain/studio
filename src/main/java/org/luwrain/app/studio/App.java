@@ -28,9 +28,12 @@ import org.luwrain.app.base.*;
 import org.luwrain.script.core.*;
 import org.luwrain.script.*;
 
+import org.luwrain.studio.proj.single.*;
+
 public final class App extends AppBase<Strings>
 {
-    static public final String LOG_COMPONENT = "studio";
+    static public final String
+	LOG_COMPONENT = "studio";
 
     private final String arg;
     final IDE ide = getIde();
@@ -41,8 +44,8 @@ public final class App extends AppBase<Strings>
     private NewProjectLayout newProjectLayout = null;
 
     private ScriptCore scriptCore = null;
+        private Project proj = null;
     private Object treeRoot = null;
-    private Project proj = null;
     Editing editing = null;
     private final List<Editing> editings = new ArrayList<>();
     private Object[] compilationOutput = new Object[0];
@@ -77,12 +80,19 @@ public final class App extends AppBase<Strings>
     {
 	if (arg == null || arg.isEmpty())
 	    return false;
+	final Project singleFileProj = SingleFileProject.newProject(getIde(), new File(arg));
+	if (singleFileProj != null)
+	{
+	    this.proj = singleFileProj;
+	    this.treeRoot = proj.getPartsRoot();
+	    projectBaseLayout.treeArea.refresh();
+	    return true;
+	}
 	return loadProject(new File(arg));
     }
 
     private boolean loadProject(File file)
     {
-	NullCheck.notNull(file, "file");
 	if (!file.exists() || file.isDirectory())
 	    return false;
 	final TaskId taskId = newTaskId();

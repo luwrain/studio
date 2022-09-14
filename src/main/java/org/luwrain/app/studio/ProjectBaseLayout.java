@@ -83,7 +83,6 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 
     @Override public boolean onTreeClick(TreeArea treeArea, Object obj)
     {
-	NullCheck.notNull(treeArea, "treeArea");
 	if (obj == null || !(obj instanceof Part))
 	    return false;
 	final Part part = (Part)obj;
