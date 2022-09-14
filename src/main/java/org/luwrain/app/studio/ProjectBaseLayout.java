@@ -110,7 +110,6 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	}
 	@Override public Object[] getChildObjs(Object obj)
 	{
-	    NullCheck.notNull(obj, "obj");
 	    if (app.getProject() == null || !(obj instanceof Part))
 		return new Object[0];
 	    final Part part = (Part)obj;

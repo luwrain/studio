@@ -72,11 +72,11 @@ public final class App extends AppBase<Strings>
 	this.treeRoot = getStrings().treeRoot();
 	setAppName(getStrings().appName());
 	if (loadProjectByArg())
-	    return projectBaseLayout.getAreaLayout();
+	    return (textEditingLayout != null)?textEditingLayout.getAreaLayout():projectBaseLayout.getAreaLayout();
 	return newProjectLayout.getAreaLayout();
     }
 
-    private boolean loadProjectByArg()
+    private boolean loadProjectByArg() throws IOException
     {
 	if (arg == null || arg.isEmpty())
 	    return false;
@@ -86,6 +86,9 @@ public final class App extends AppBase<Strings>
 	    this.proj = singleFileProj;
 	    this.treeRoot = proj.getPartsRoot();
 	    projectBaseLayout.treeArea.refresh();
+	    final Editing editing = proj.getMainSourceFile().startEditing();
+	    	    editings.add(editing);
+	this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
 	    return true;
 	}
 	return loadProject(new File(arg));
@@ -112,6 +115,7 @@ public final class App extends AppBase<Strings>
 		    return;
 		}
 		finishedTask(taskId, ()->{
+			//FIXME:do everything right here
 			activateProject(proj);
 			/*
 			  final Part mainFile = proj.getMainSourceFile();
@@ -191,7 +195,6 @@ public final class App extends AppBase<Strings>
 
     void startEditing(Editing editing) throws IOException
     {
-	NullCheck.notNull(editing, "editing");
 	Editing e = null;
 	for(Editing ee: editings)
 	    if (editing.equals(ee))
