@@ -53,15 +53,21 @@ public final class TextEditingLayout extends LayoutBase
 		{
 		    //Switching the tree
 		    if (event.equals(ProjectBaseLayout.KEY_TREE_TOGGLE))
-					    {
+		    {
 			if (app.isSingleFileProject())
 			    return false;
 			showTree = true;
-						updateAreaLayout();
-						app.setAreaLayout(TextEditingLayout.this);
+			updateAreaLayout();
+			app.setAreaLayout(TextEditingLayout.this);
 			setActiveArea(treeArea);
 			return true;
 		    }
+		    if (event.isSpecial() && !event.isModified())
+			switch(event.getSpecial())
+			{
+			case TAB:
+			    return fixIndent();
+			}
 		    return super.onInputEvent(event);
 		}
 				@Override public boolean onSystemEvent(SystemEvent event)
@@ -116,6 +122,11 @@ public final class TextEditingLayout extends LayoutBase
 	    app.crash(e);
 	    return true;
 	}
+    }
+
+    private boolean fixIndent()
+    {
+	return false;
     }
 
     private void updateAreaLayout()

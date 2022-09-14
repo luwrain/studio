@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -14,7 +14,7 @@
    General Public License for more details.
 */
 
-package org.luwrain.studio.backends.py;
+package org.luwrain.studio.edit.py;
 
 import java.io.*;
 import java.util.*;
@@ -32,10 +32,10 @@ final class PySourceFile implements Part
     @SerializedName("path")
     private String path = null;
 
-    private transient PyProject proj = null;
+    private transient Project proj = null;
     private transient IDE ide = null;
 
-        void setProject(PyProject proj)
+        void setProject(Project proj)
     {
 	NullCheck.notNull(proj, "proj");
 	this.proj = proj;
@@ -53,7 +53,7 @@ final class PySourceFile implements Part
 
     @Override public Editing startEditing() throws IOException
     {
-	return new PyEditing(ide, new File(proj.getProjectDir(), path));
+	return new PyEditing(ide, new File(""));
     }
 
     @Override public String toString()
