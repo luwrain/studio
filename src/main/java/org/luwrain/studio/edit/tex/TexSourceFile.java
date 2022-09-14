@@ -18,7 +18,6 @@ package org.luwrain.studio.edit.tex;
 
 import java.io.*;
 import java.util.*;
-import com.google.gson. annotations.*;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
@@ -34,11 +33,7 @@ public final class TexSourceFile implements Part
     private transient File projDir = null;
     private transient IDE ide = null;
 
-    public TexSourceFile()
-    {
-	this(null, null);
-    }
-
+    public TexSourceFile() { this(null, null); }
     public TexSourceFile(String name, String path)
     {
 	this.name = name;
@@ -53,14 +48,14 @@ public final class TexSourceFile implements Part
 	this.ide = ide;
     }
 
-    @Override public String getTitle()
+    @Override public String getTitle() 
     {
 	return name != null?name:"NONAME";
     }
 
     @Override public Part[] getChildParts()
     {
-	return new Part[0];
+	return null;
     }
 
     @Override public Editing startEditing() throws IOException
@@ -81,9 +76,8 @@ public final class TexSourceFile implements Part
 	return path.equals(f.path);
     }
 
-                @Override public org.luwrain.studio.Part.Action[] getActions()
+    @Override public Part.Action[] getActions()
     {
 	return new Action[0];
     }
-
 }

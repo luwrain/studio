@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -14,7 +14,7 @@
    General Public License for more details.
 */
 
-package org.luwrain.studio.util;
+package org.luwrain.studio.edit;
 
 import java.io.*;
 import java.util.*;
@@ -33,14 +33,17 @@ import static org.luwrain.script.Hooks.*;
 
 public abstract class TextEditingBase implements TextEditing
 {
-    static public final String CHARSET = "UTF-8";
+    static public final String
+	CHARSET = "UTF-8";
 
     protected final IDE ide;
     protected final File file;
     protected final MutableMarkedLinesImpl content;
     private MultilineEdit edit = null;
     private MultilineEditCorrector bottomCorrector = null;
-    private int hotPointX = 0, hotPointY = 0;
+    private int
+	hotPointX = 0,
+	hotPointY = 0;
 
     public TextEditingBase(IDE ide, File file) throws IOException
     {
@@ -103,15 +106,8 @@ public abstract class TextEditingBase implements TextEditing
 	return edit.getRegionText();
     }
 
-    protected int getHotPointX()
-    {
-	return this.hotPointX;
-    }
-
-    protected int getHotPointY()
-    {
-	return this.hotPointY;
-    }
+    protected int getHotPointX() { return this.hotPointX; }
+    protected int getHotPointY() { return this.hotPointY; }
 
     protected boolean insertText(String[] text)
     {
@@ -130,7 +126,7 @@ return res.isPerformed();
 	return insertText(new String[]{text});
     }
 
-        protected EditArea.InputEventListener createEditAreaInputEventHook()
+    protected EditArea.InputEventListener createEditAreaInputEventHook()
     {
 	return (edit, event)->{
 	    final MultilineEditCorrector corrector = (MultilineEditCorrector)edit.getEdit().getMultilineEditModel();
@@ -144,5 +140,4 @@ return res.isPerformed();
 	    return res.get();
 	};
     }
-
 }

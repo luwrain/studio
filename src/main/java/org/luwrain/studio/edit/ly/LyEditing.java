@@ -24,6 +24,7 @@ import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.studio.util.*;
 import org.luwrain.app.base.*;
+import org.luwrain.studio.edit.*;
 
 final class LyEditing extends TextEditingBase
 {

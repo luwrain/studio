@@ -27,13 +27,13 @@ import org.luwrain.studio.*;
 import org.luwrain.studio.util.*;
 import org.luwrain.script.controls.*;
 import org.luwrain.app.base.*;
+import org.luwrain.studio.edit.*;
 
 final class TexEditing extends TextEditingBase
 {
     static private final String
 	HOOK_EDIT = "luwrain.studio.tex";
 
-    
     TexEditing(IDE ide, File file) throws IOException
     {
 	super(ide, file);
