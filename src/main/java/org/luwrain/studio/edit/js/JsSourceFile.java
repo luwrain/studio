@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -21,10 +21,10 @@ import java.io.*;
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 
-final class SourceFile implements org.luwrain.studio.Part
+final class JsSourceFile implements org.luwrain.studio.Part
 {    private final File file;
 
-    SourceFile(File file)
+    JsSourceFile(File file)
     {
 	NullCheck.notNull(file, "file");
 	this.file = file;
