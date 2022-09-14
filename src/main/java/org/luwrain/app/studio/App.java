@@ -51,14 +51,11 @@ public final class App extends AppBase<Strings>
     private Object[] compilationOutput = new Object[0];
     private final MutableLinesImpl outputText = new MutableLinesImpl();
 
-    public App()
-    {
-	this(null);
-    }
-
+    public App() { this(null); }
     public App(String arg)
     {
 	super(Strings.NAME, Strings.class, "luwrain.studio");
+	setTabProcessing(false);
 	this.projFactory = new ProjectFactory(ide);
 	this.arg = arg;
     }
@@ -294,6 +291,7 @@ public final class App extends AppBase<Strings>
 
     Conversations conv() { return this.conv; }
     boolean isSingleFileProject() { return this.proj instanceof SingleFileProject; }
+    TextEditingLayout getTextEditingLayout() { return textEditingLayout; }
 
     private final class OutputControl implements org.luwrain.studio.Output
     {

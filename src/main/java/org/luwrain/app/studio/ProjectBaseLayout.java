@@ -27,6 +27,9 @@ import org.luwrain.app.base.*;
 
 public final class ProjectBaseLayout extends LayoutBase implements TreeArea.ClickHandler
 {
+    static final InputEvent
+	KEY_TREE_TOGGLE = new InputEvent(InputEvent.Special.F5);
+
     private final App app;
     final TreeArea treeArea;
 
@@ -40,6 +43,18 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	params.name = app.getStrings().treeAreaName();
 	params.clickHandler = this;
 	this.treeArea = new TreeArea(params){
+		@Override public boolean onInputEvent(InputEvent event)
+		{
+		    //Switching to the edit area
+		    if (event.equals(KEY_TREE_TOGGLE))
+		    {
+			if (app.getTextEditingLayout() == null)
+			    return false;
+			    app.getTextEditingLayout().activateEditArea(true);
+			    return true;
+			}
+		    return super.onInputEvent(event);
+		}
 		@Override public boolean onSystemEvent(SystemEvent event)
 		{
 		    NullCheck.notNull(event, "event");
@@ -98,6 +113,11 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	    app.crash(e);
 	    return true;
 	}
+    }
+
+    protected boolean activateEditArea(boolean closeTree)
+    {
+	return false;
     }
 
     private final class TreeModel implements CachedTreeModelSource

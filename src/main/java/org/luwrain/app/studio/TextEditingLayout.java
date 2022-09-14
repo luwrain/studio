@@ -32,11 +32,13 @@ public final class TextEditingLayout extends LayoutBase
     final EditArea editArea;
     final NavigationArea outputArea = null;
     private final TextEditing textEditing;
+    private boolean showTree = true, showOutput = false;
 
     TextEditingLayout(App app, ProjectBaseLayout projectBaseLayout, TextEditing textEditing)
     {
 	super(app);
 	this .app = app;
+	this.showTree = !app.isSingleFileProject();
 	this.textEditing = textEditing;
 	final ControlContext editingControlContext = new WrappingControlContext(getControlContext()){
 		@Override public void onAreaNewHotPoint(Area area)
@@ -47,6 +49,21 @@ public final class TextEditingLayout extends LayoutBase
 	this.treeArea = projectBaseLayout.treeArea;
 	this.editArea = new EditArea(textEditing.getEditParams(editingControlContext)) {
 		private final Map<String, Part.Action> actionsCache = new HashMap<>();
+		@Override public boolean onInputEvent(InputEvent event)
+		{
+		    //Switching the tree
+		    if (event.equals(ProjectBaseLayout.KEY_TREE_TOGGLE))
+					    {
+			if (app.isSingleFileProject())
+			    return false;
+			showTree = true;
+						updateAreaLayout();
+						app.setAreaLayout(TextEditingLayout.this);
+			setActiveArea(treeArea);
+			return true;
+		    }
+		    return super.onInputEvent(event);
+		}
 				@Override public boolean onSystemEvent(SystemEvent event)
 		{
 		    if (event.getType() == SystemEvent.Type.REGULAR)
@@ -83,9 +100,7 @@ public final class TextEditingLayout extends LayoutBase
 		    return res.toArray(new Action[res.size()]);
 		}
 	    };
-	if (app.isSingleFileProject())
-	    setAreaLayout(editArea, null); else
-	setAreaLayout(AreaLayout.LEFT_RIGHT, treeArea, null, editArea, null);
+	updateAreaLayout();
     }
 
     private boolean onSave()
@@ -101,5 +116,21 @@ public final class TextEditingLayout extends LayoutBase
 	    app.crash(e);
 	    return true;
 	}
+    }
+
+    private void updateAreaLayout()
+    {
+	if (showTree)
+	    setAreaLayout(AreaLayout.LEFT_RIGHT, treeArea, null, editArea, null); else
+	    setAreaLayout(editArea, null);
+    }
+
+    boolean activateEditArea(boolean closeTree)
+    {
+	this.showTree = !closeTree;
+	updateAreaLayout();
+	app.setAreaLayout(this);
+	setActiveArea(editArea);
+	return true;
     }
 }
