@@ -25,11 +25,17 @@ import org.antlr.v4.runtime.atn.*;
 import org.luwrain.core.*;
 import org.luwrain.antlr.java.*;
 import org.luwrain.antlr.java.JavaParser.*;
-import org.luwrain.studio.syntax.*;
+import org.luwrain.studio.syntax.SpanTree;
 import org.luwrain.studio.syntax.SpanTree.*;
 
 public final class JavaSyntax
 {
+    public interface Source
+    {
+	String getText();
+    }
+
+    
     public final Source source;
     public final SpanTree spanTree = new SpanTree();
     public JavaSyntax(Source source)

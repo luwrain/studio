@@ -40,7 +40,7 @@ public abstract class TextEditingBase implements TextEditing
     protected final File file;
     protected final MutableMarkedLinesImpl content;
     private MultilineEdit edit = null;
-    private MultilineEditCorrector bottomCorrector = null;
+    private MultilineEditCorrector corrector = null;
     private int
 	hotPointX = 0,
 	hotPointY = 0;
@@ -77,12 +77,12 @@ public abstract class TextEditingBase implements TextEditing
 	this.hotPointY = hotPointY;
     }
 
-    protected void setEdit(MultilineEdit edit, MultilineEditCorrector bottomCorrector)
+    protected void setEdit(MultilineEdit edit, MultilineEditCorrector corrector)
     {
 	NullCheck.notNull(edit, "edit");
-	NullCheck.notNull(bottomCorrector, "bottomCorrector");
+	NullCheck.notNull(corrector, "corrector");
 	this.edit = edit;
-	this.bottomCorrector = bottomCorrector;
+	this.corrector = corrector;
     }
 
     protected MultilineEdit getEdit()
@@ -92,11 +92,11 @@ public abstract class TextEditingBase implements TextEditing
 	return this.edit;
     }
 
-    protected MultilineEditCorrector getBottomCorrector()
+    protected MultilineEditCorrector getCorrector()
     {
-	if (this.bottomCorrector == null)
-	    throw new IllegalStateException("The bottom corrector object isn't created");
-	return this.bottomCorrector;
+	if (this.corrector == null)
+	    throw new IllegalStateException("The corrector object isn't created");
+	return this.corrector;
     }
 
     protected String[] getRegion()
@@ -114,7 +114,7 @@ public abstract class TextEditingBase implements TextEditing
 	NullCheck.notNullItems(text, "text");
 	if (text.length == 0)
 	    return true;
-final ModificationResult res = getBottomCorrector().insertRegion(getHotPointX(), getHotPointY(), text);
+final ModificationResult res = getCorrector().insertRegion(getHotPointX(), getHotPointY(), text);
 return res.isPerformed();
     }
 
