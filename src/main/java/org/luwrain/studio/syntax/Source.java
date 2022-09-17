@@ -21,9 +21,10 @@ import java.util.*;
 
 import org.luwrain.core.*;
 
-public class Source
+public class Source implements Lines
 {
-    static private final char NL = '\n';
+    static private final char
+	NL = '\n';
 
     private String content = "";
     private String[] lines = new String[0];
@@ -36,6 +37,31 @@ public class Source
 	    this.content = content.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
 	    this.lines = this.content.split("\n", -1);
 	}
+    }
+
+    public Source(String[] lines)
+    {
+	NullCheck.notNullItems(lines, "lines");
+	this.lines = lines.clone();
+	final StringBuilder b = new StringBuilder();
+	for(String line: lines)
+	    b.append(line).append(NL);
+	this.content = new String(b);
+    }
+
+    public Source(Lines lines)
+    {
+	NullCheck.notNull(lines, "lines");
+	final ArrayList<String> l = new ArrayList<>();
+	final StringBuilder b = new StringBuilder();
+	for(int i = 0;i < lines.getLineCount();i++)
+	{
+	    final String line = lines.getLine(i);
+	    l.add(line);
+	    b.append(line).append(NL);
+	}
+	this.lines = l.toArray(new String[l.size()]);
+	this.content = new String(b);
     }
 
     public int getLineStart(int lineIndex)
@@ -62,14 +88,14 @@ public class Source
 	    res += (lines[i].length() + 1);
 	}
 	return -1;
-	    }
+    }
 
-    public int getLineCount()
+    @Override public int getLineCount()
     {
 	return lines.length;
     }
 
-    public String getLine(int index)
+    @Override public String getLine(int index)
     {
 	return lines[index];
     }

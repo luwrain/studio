@@ -23,6 +23,7 @@ import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 
 import static org.luwrain.script.Hooks.*;
+import static org.luwrain.core.DefaultEventResponse.*;
 
 final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
 {
@@ -33,10 +34,10 @@ final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
     {
 	if (line.trim().isEmpty())
 	{
-	    context.setEventResponse(DefaultEventResponse.hint(line.isEmpty()?Hint.EMPTY_LINE:Hint.SPACES));
+	    context.setEventResponse(hint(line.isEmpty()?Hint.EMPTY_LINE:Hint.SPACES));
 	    return;
 	}
-	    final StringBuilder b = new StringBuilder();
+	final StringBuilder b = new StringBuilder();
 	if (indent)
 	{
 	    final int indentLen = getIndentLen(line);
@@ -44,7 +45,7 @@ final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
 		b.append("Отступ ").append(String.valueOf(indentLen)).append(" ");
 	}
 	b.append(context.getSpeakableText(line, Luwrain.SpeakableTextType.PROGRAMMING));
-	context.setEventResponse(DefaultEventResponse.text(new String(b)));
+	context.setEventResponse(text(new String(b)));
     }
 
     private int getIndentLen(String line)
