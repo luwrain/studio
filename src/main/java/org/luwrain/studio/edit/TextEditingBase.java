@@ -155,4 +155,11 @@ return res.isPerformed();
 	    return res.get();
 	};
     }
+
+    protected MultilineEdit.Appearance getAppearance()
+    {
+	if (edit == null)
+	    throw new IllegalStateException("No edit to get appearance");
+	return edit.getMultilineEditAppearance();
+    }
 }

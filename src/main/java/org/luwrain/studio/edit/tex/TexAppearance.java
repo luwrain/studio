@@ -16,43 +16,45 @@
 
 package org.luwrain.studio.edit.tex;
 
-import java.io.*;
 import java.util.*;
-import com.google.gson. annotations.*;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 
+import static org.luwrain.script.Hooks.*;
+
 final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
 {
-    static private final String HOOK_NAME = "luwrain.studio.tex.appearance";
-
-    TexAppearance(ControlContext context)
-    {
-	super(context);
-    }
+    boolean indent = false;
+    TexAppearance(ControlContext context) { super(context); }
 
     @Override public void announceLine(int index, String line)
     {
-	NullCheck.notNull(line, "line");
-	/*
-	try {
-	    if (context.runHooks(HOOK_NAME + ".custom", new Object[]{new Integer(index), line}, Luwrain.HookStrategy.CHAIN_OF_RESPONSIBILITY))
-		return;
-	    if (context.runHooks(HOOK_NAME, new Object[]{new Integer(index), line}, Luwrain.HookStrategy.CHAIN_OF_RESPONSIBILITY))
-		return;
-	}
-	catch(RuntimeException e)
+	if (line.trim().isEmpty())
 	{
-	    //FIXME:
-	    context.say(context.getI18n().getExceptionDescr(e));
+	    context.setEventResponse(DefaultEventResponse.hint(line.isEmpty()?Hint.EMPTY_LINE:Hint.SPACES));
 	    return;
 	}
-	*/
-	if (line.trim().isEmpty())
-	    context.setEventResponse(DefaultEventResponse.hint(line.isEmpty()?Hint.EMPTY_LINE:Hint.SPACES)); else
-	    context.setEventResponse(DefaultEventResponse.text(context.getSpeakableText(line, Luwrain.SpeakableTextType.PROGRAMMING)));
+	    final StringBuilder b = new StringBuilder();
+	if (indent)
+	{
+	    final int indentLen = getIndentLen(line);
+	    if (indentLen > 0)
+		b.append("Отступ ").append(String.valueOf(indentLen)).append(" ");
+	}
+	b.append(context.getSpeakableText(line, Luwrain.SpeakableTextType.PROGRAMMING));
+	context.setEventResponse(DefaultEventResponse.text(new String(b)));
+    }
 
+    private int getIndentLen(String line)
+    {
+	//FIXME: Utilities
+	int res = 0;
+	for(int i = 0;i < line.length();i++)
+	    if (Character.isWhitespace(line.charAt(i)))
+		res++; else
+		break;
+	return res;
     }
 }

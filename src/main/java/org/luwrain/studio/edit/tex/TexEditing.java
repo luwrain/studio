@@ -29,11 +29,10 @@ import org.luwrain.script.controls.*;
 import org.luwrain.app.base.*;
 import org.luwrain.studio.edit.*;
 
+import static org.luwrain.studio.edit.tex.Hooks.*;
+
 final class TexEditing extends TextEditingBase
 {
-    static private final String
-	HOOK_EDIT = "luwrain.studio.tex";
-
     TexEditing(IDE ide, File file) throws IOException
     {
 	super(ide, file);
@@ -43,7 +42,8 @@ final class TexEditing extends TextEditingBase
     {
 	final EditArea.Params params = new EditArea.Params();
 	params.context = context;
-	params.content = content;
+		params.name = file.getName();
+		params.content = this.content;
 	params.appearance = new TexAppearance(context);
 	params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));
 	params.editFactory = (editParams)->{
@@ -52,18 +52,25 @@ final class TexEditing extends TextEditingBase
 	    setEdit(new MultilineEdit(editParams), base);
 	    return getEdit();
 	};
-	params.name = file.getName();
 	return params;
     }
 
     @Override public Part.Action[] getActions()
     {
+	//FIXME: Strings
 	return Part.actions(
 			    Part.action("Добавить слайд", new InputEvent('f', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addFrame),
 			    Part.action("Добавить ненумерованный список", new InputEvent('u', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItemize),
-			    Part.action("Добавить ненумерованный список", new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate),
-			    Part.action("Добавить элемент списка", new InputEvent('i', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItem)
+			    Part.action("Добавить нумерованный список", new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate),
+			    Part.action("Добавить элемент списка", new InputEvent('i', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItem),
+			    Part.action(getAppearance().indent?"Отключить чтение отступов":"Включить чтение отступов", new InputEvent(InputEvent.Special.F5, EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::toggleIndent)
 			    );
+    }
+
+    private boolean enableIndent()
+    {
+	getEdit().getMultilineEditAppearance();
+	return false;
     }
 
     private boolean addFrame(IDE ide)
@@ -107,10 +114,24 @@ final class TexEditing extends TextEditingBase
 
     private boolean addItem(IDE ide)
     {
-	NullCheck.notNull(ide, "ide");
 	if (!insertText("\\item{}"))
 	    return false;
 	ide.getLuwrainObj().message("item", Luwrain.MessageType.OK);
 	return true;
+    }
+
+    private boolean toggleIndent(IDE ide)
+    {
+	final boolean
+	oldState = getAppearance().indent,
+	newState = !oldState;
+	getAppearance().indent = newState;
+	ide.getLuwrainObj().message(newState?"Включено чтение отступов":"Отключено чтение отступов", Luwrain.MessageType.OK);
+	return true;
+    }
+
+    @Override protected TexAppearance getAppearance()
+    {
+	return (TexAppearance)super.getAppearance();
     }
 }
