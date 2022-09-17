@@ -24,10 +24,10 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.controls.MultilineEdit.ModificationResult;
 import org.luwrain.studio.*;
-import org.luwrain.util.*;
+import static org.luwrain.util.FileUtils.*;
 import org.luwrain.script.core.*;
 import org.luwrain.script.controls.*;
-import org.luwrain.app.base.*;
+import org.luwrain.studio.syntax.*;
 
 import static org.luwrain.script.Hooks.*;
 
@@ -38,9 +38,11 @@ public abstract class TextEditingBase implements TextEditing
 
     protected final IDE ide;
     protected final File file;
+    protected final Source source;
     protected final MutableMarkedLinesImpl content;
     private MultilineEdit edit = null;
     private MultilineEditCorrector corrector = null;
+    private boolean modified = false;
     private int
 	hotPointX = 0,
 	hotPointY = 0;
@@ -51,14 +53,17 @@ public abstract class TextEditingBase implements TextEditing
 	NullCheck.notNull(file, "files");
 	this.ide = ide;
 	this.file = file;
-	final String text = FileUtils.readTextFileSingleString(file, CHARSET);
-	final String[] lines = FileUtils.universalLineSplitting(text);
-	this.content = new MutableMarkedLinesImpl(lines);
+	final String text = readTextFileSingleString(file, CHARSET);
+	this.source = new Source(text);
+	this.content = new MutableMarkedLinesImpl(source.getLines());
     }
 
     @Override public boolean save() throws IOException
     {
-	FileUtils.writeTextFileMultipleStrings(file, content.getLines(), CHARSET, System.lineSeparator());
+	if (!this.modified)
+	    return false;
+	writeTextFileMultipleStrings(file, content.getLines(), CHARSET, System.lineSeparator());
+	this.modified = false;
 	return true;
     }
 
@@ -69,6 +74,16 @@ public abstract class TextEditingBase implements TextEditing
 
     @Override public void closeEditing()
     {
+    }
+
+        @Override public void onModification()
+    {
+	this.modified = true;
+    }
+
+    @Override public boolean hasUnsavedChanges()
+    {
+	return this.modified;
     }
 
     @Override public void onNewHotPoint(int hotPointX, int hotPointY)

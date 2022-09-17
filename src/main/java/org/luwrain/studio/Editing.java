@@ -26,5 +26,7 @@ public interface Editing
 {
     void closeEditing();
     Part.Action[] getActions();
+    void onModification();
+    boolean hasUnsavedChanges();
     boolean save() throws IOException;
 }

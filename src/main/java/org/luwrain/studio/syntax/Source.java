@@ -74,6 +74,11 @@ public class Source
 	return lines[index];
     }
 
+    public String[] getLines()
+    {
+	return lines.clone();
+    }
+
     public String getText()
     {
 	return content;

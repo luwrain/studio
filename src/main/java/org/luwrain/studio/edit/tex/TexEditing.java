@@ -39,6 +39,23 @@ final class TexEditing extends TextEditingBase
 	super(ide, file);
     }
 
+    @Override public EditArea.Params getEditParams(ControlContext context)
+    {
+	final EditArea.Params params = new EditArea.Params();
+	params.context = context;
+	params.content = content;
+	params.appearance = new TexAppearance(context);
+	params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));
+	params.editFactory = (editParams)->{
+	    final MultilineEditCorrector base = (MultilineEditCorrector)editParams.model;
+	    editParams.model = new EditCorrectorHooks(ide.getScriptCore(), new TexNewLineIndent(base), HOOK_EDIT);
+	    setEdit(new MultilineEdit(editParams), base);
+	    return getEdit();
+	};
+	params.name = file.getName();
+	return params;
+    }
+
     @Override public Part.Action[] getActions()
     {
 	return Part.actions(
@@ -95,23 +112,5 @@ final class TexEditing extends TextEditingBase
 	    return false;
 	ide.getLuwrainObj().message("item", Luwrain.MessageType.OK);
 	return true;
-    }
-
-    @Override public EditArea.Params getEditParams(ControlContext context)
-    {
-	final EditArea.Params params = new EditArea.Params();
-	params.context = context;
-	params.content = content;
-	params.appearance = new TexAppearance(context);
-
-	params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));
-	params.editFactory = (editParams)->{
-	    final MultilineEditCorrector base = (MultilineEditCorrector)editParams.model;
-	    editParams.model = new EditCorrectorHooks(ide.getScriptCore(), new TexNewLineIndent(base), HOOK_EDIT);
-	    setEdit(new MultilineEdit(editParams), base);
-	    return getEdit();
-	};
-	params.name = file.getName();
-	return params;
     }
 }

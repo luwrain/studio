@@ -69,4 +69,7 @@ final class Editing implements TextEditing
     @Override public void closeEditing()
     {
     }
+
+    public boolean hasUnsavedChanges() { return true; }
+    public void onModification() {}
 }
