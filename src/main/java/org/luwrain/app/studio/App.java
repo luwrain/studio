@@ -224,8 +224,6 @@ public final class App extends AppBase<Strings>
 
     @Override public boolean onAreaQuery(Area area, AreaQuery query)
     {
-	NullCheck.notNull(area, "area");
-	NullCheck.notNull(query, "query");
 	if (query.getQueryCode() == AreaQuery.CURRENT_DIR && query instanceof CurrentDirQuery)
 	    return onDirectoryQuery((CurrentDirQuery)query);
 	return super.onAreaQuery(area, query);
@@ -233,7 +231,6 @@ public final class App extends AppBase<Strings>
 
     private boolean onDirectoryQuery(CurrentDirQuery query)
     {
-	NullCheck.notNull(query, "query");
 	if (proj == null)
 	    return false;
 	final File f = new File("/tmp"); //app.file.getParentFile();
@@ -245,6 +242,32 @@ public final class App extends AppBase<Strings>
 
     @Override public void closeApp()
     {
+	boolean hasUnsavedChanges = false;
+	for(Editing e: editings)
+	    if (e.hasUnsavedChanges())
+	    {
+		hasUnsavedChanges = true;
+		break;
+	    }
+	switch(conv.unsavedChanges())
+	{
+	case CANCEL:
+	    return;
+	case SAVE:
+	    for(Editing e: editings)
+		if (e.hasUnsavedChanges())
+		    try {
+			e.save();
+		    }
+		    catch(IOException ex)
+		    {
+			crash(ex);
+			return;
+		    }
+	}
+	for(Editing e: editings)
+	    e.closeEditing();
+	editings.clear();
 	if (proj != null)
 	    proj.close();
 	proj = null;

@@ -23,6 +23,8 @@ import org.luwrain.popups.*;
 
 class Conversations
 {
+    enum SavingType {SAVE, NOT_SAVE, CANCEL};
+
     private final Luwrain luwrain;
     private final Strings strings;
 
@@ -41,5 +43,14 @@ class Conversations
     File openProject()
     {
 	return Popups.existingFile(luwrain, strings.openProjectPopupPrefix());
-	    }
+    }
+
+        SavingType unsavedChanges()
+    {
+	final YesNoPopup popup = new YesNoPopup(luwrain, "Несохранённые изменения", "Вы хотите сохранить изменения?", true, Popups.DEFAULT_POPUP_FLAGS);//FIXME:
+	luwrain.popup(popup);
+	if (popup.wasCancelled())
+	    return SavingType.CANCEL;
+	return popup.result()?SavingType.SAVE:SavingType.NOT_SAVE;
+    }
     }
