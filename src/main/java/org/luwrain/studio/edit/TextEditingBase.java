@@ -123,6 +123,7 @@ public abstract class TextEditingBase implements TextEditing
 
     protected int getHotPointX() { return this.hotPointX; }
     protected int getHotPointY() { return this.hotPointY; }
+    public Source getSourceCode() { return new Source(content); }
 
     protected boolean insertText(String[] text)
     {
