@@ -44,8 +44,10 @@ public class Source implements Lines
 	NullCheck.notNullItems(lines, "lines");
 	this.lines = lines.clone();
 	final StringBuilder b = new StringBuilder();
-	for(String line: lines)
-	    b.append(line).append(NL);
+	for(int i = 0;i < lines.length;i++)
+	    if (i == 0)
+		b.append(lines[0]); else
+	    b.append(NL).append(lines[i]);
 	this.content = new String(b);
     }
 
