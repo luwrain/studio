@@ -60,7 +60,9 @@ public class Source implements Lines
 	{
 	    final String line = lines.getLine(i);
 	    l.add(line);
-	    b.append(line).append(NL);
+	    if (i > 0)
+		b.append(NL);
+	    b.append(line);
 	}
 	this.lines = l.toArray(new String[l.size()]);
 	this.content = new String(b);

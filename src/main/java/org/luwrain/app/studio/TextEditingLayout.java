@@ -47,8 +47,11 @@ public final class TextEditingLayout extends LayoutBase
 		    super.onAreaNewHotPoint(area);
 		}};
 	this.treeArea = projectBaseLayout.treeArea;
+	final EditArea.ChangeListener modificationListener = (editArea, lines, hotPoint)->textEditing.onModification();
 	final EditArea.Params editParams = textEditing.getEditParams(editingControlContext);
-	editParams.changeListeners = Arrays.asList((EditArea.ChangeListener)(editArea, lines, hotPoint)->textEditing.onModification());
+	if (editParams.changeListeners == null)
+	    editParams.changeListeners = new ArrayList<>();
+	editParams.changeListeners.add(modificationListener);
 	this.editArea = new EditArea(editParams) {
 		private final Map<String, Part.Action> actionsCache = new HashMap<>();
 		@Override public boolean onInputEvent(InputEvent event)

@@ -54,6 +54,27 @@ public class SourceTest extends Assert
 			assertEquals("123", s.getLine(0));
     }
 
+            @Test public void twoEmpty()
+    {
+	final Source s = new Source("\n");
+	assertEquals(1, s.length());
+		assertEquals("\n", s.getText());
+		assertEquals(2, s.getLineCount());
+		assertTrue(s.getLine(0).isEmpty());
+				assertTrue(s.getLine(1).isEmpty());
+    }
 
+            @Test public void twoEmptyLines()
+    {
+	final Source s = new Source(new String[]{"", ""});
+	assertEquals(1, s.length());
+			assertEquals("\n", s.getText());
+			assertEquals(2, s.getLineCount());
+					assertTrue(s.getLine(0).isEmpty());
+				assertTrue(s.getLine(1).isEmpty());
+    }
 
+    //FIXME:oneAndEmpty
+    //FIXME:twoNonEmpty
+    //FIXME:\r\n
 }

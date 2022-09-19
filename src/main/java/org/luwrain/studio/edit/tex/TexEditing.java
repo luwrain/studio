@@ -28,14 +28,18 @@ import org.luwrain.studio.util.*;
 import org.luwrain.script.controls.*;
 import org.luwrain.app.base.*;
 import org.luwrain.studio.edit.*;
+import org.luwrain.nlp.*;
 
 import static org.luwrain.studio.edit.tex.Hooks.*;
 
 final class TexEditing extends TextEditingBase
 {
+        final EditSpellChecking spellChecking;
+
     TexEditing(IDE ide, File file) throws IOException
     {
 	super(ide, file);
+	this.spellChecking =new EditSpellChecking(ide.getLuwrainObj());
     }
 
     @Override public EditArea.Params getEditParams(ControlContext context)
@@ -46,6 +50,7 @@ final class TexEditing extends TextEditingBase
 		params.content = this.content;
 	params.appearance = new TexAppearance(context);
 	params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));
+	params.changeListeners = new ArrayList<>(Arrays.asList(spellChecking));
 	params.editFactory = (editParams)->{
 	    final MultilineEditCorrector base = (MultilineEditCorrector)editParams.model;
 	    editParams.model = new EditCorrectorHooks(ide.getScriptCore(), new TexNewLineIndent(base), HOOK_EDIT);
