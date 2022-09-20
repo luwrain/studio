@@ -48,7 +48,7 @@ final class TexEditing extends TextEditingBase
 	params.context = context;
 		params.name = file.getName();
 		params.content = this.content;
-	params.appearance = new TexAppearance(context);
+		params.appearance = new TexAppearance(context, this.content);
 	params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));
 	params.changeListeners = new ArrayList<>(Arrays.asList(spellChecking));
 	params.editFactory = (editParams)->{

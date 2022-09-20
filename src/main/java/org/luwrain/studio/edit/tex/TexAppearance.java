@@ -21,14 +21,21 @@ import java.util.*;
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
+import org.luwrain.nlp.*;
 
 import static org.luwrain.script.Hooks.*;
 import static org.luwrain.core.DefaultEventResponse.*;
 
 final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
 {
+    final MarkedLines content;
     boolean indent = false;
-    TexAppearance(ControlContext context) { super(context); }
+    TexAppearance(ControlContext context, MarkedLines content)
+    {
+	super(context);
+	NullCheck.notNull(content, "content");
+	this.content = content;
+    }
 
     @Override public void announceLine(int index, String line)
     {
@@ -36,6 +43,17 @@ final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
 	{
 	    context.setEventResponse(hint(line.isEmpty()?Hint.EMPTY_LINE:Hint.SPACES));
 	    return;
+	}
+	boolean hasSpellProblems = false;
+	if (content.getLineMarks(index) != null)
+	{
+	    final LineMarks.Mark[] marks = content.getLineMarks(index).getMarks();
+	    for(LineMarks.Mark m: marks)
+		if (m.getMarkObject() != null && m.getMarkObject() instanceof SpellProblem)
+		{
+		    hasSpellProblems = true;
+		    break;
+		}
 	}
 	final StringBuilder b = new StringBuilder();
 	if (indent)
@@ -45,7 +63,9 @@ final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
 		b.append("Отступ ").append(String.valueOf(indentLen)).append(" ");
 	}
 	b.append(context.getSpeakableText(line, Luwrain.SpeakableTextType.PROGRAMMING));
-	context.setEventResponse(text(new String(b)));
+	if (hasSpellProblems)
+	    context.setEventResponse(text(Sounds.SPELLING, new String(b))); else
+	    context.setEventResponse(text(new String(b)));
     }
 
     private int getIndentLen(String line)
