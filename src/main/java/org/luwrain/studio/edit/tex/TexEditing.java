@@ -29,6 +29,7 @@ import org.luwrain.script.controls.*;
 import org.luwrain.app.base.*;
 import org.luwrain.studio.edit.*;
 import org.luwrain.nlp.*;
+import static org.luwrain.popups.Popups.*;
 
 import static org.luwrain.studio.edit.tex.Hooks.*;
 
@@ -68,7 +69,8 @@ final class TexEditing extends TextEditingBase
 			    Part.action("Добавить ненумерованный список", new InputEvent('u', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItemize),
 			    Part.action("Добавить нумерованный список", new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate),
 			    Part.action("Добавить элемент списка", new InputEvent('i', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItem),
-			    Part.action(getAppearance().indent?"Отключить чтение отступов":"Включить чтение отступов", new InputEvent(InputEvent.Special.F5, EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::toggleIndent)
+			    Part.action(getAppearance().indent?"Отключить чтение отступов":"Включить чтение отступов", new InputEvent(InputEvent.Special.F5, EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::toggleIndent),
+			    Part.action("Заменить", new InputEvent('r', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::replace)
 			    );
     }
 
@@ -133,6 +135,24 @@ final class TexEditing extends TextEditingBase
 	getAppearance().indent = newState;
 	ide.getLuwrainObj().message(newState?"Включено чтение отступов":"Отключено чтение отступов", Luwrain.MessageType.OK);
 	return true;
+    }
+
+    private boolean replace(IDE ide)
+    {
+	final String replaceExp = textNotEmpty(ide.getLuwrainObj(), "Замена", "Заменить:", "");//FIXME:
+	if (replaceExp == null)
+	    return true;
+	final String replaceWith = text(ide.getLuwrainObj(), "Замена", "Заменить на:", "");//FIXME:
+		if (replaceWith == null)
+		    return true;
+		try {
+		super.replaceStr(replaceExp, replaceWith);
+		}
+		catch(java.util.regex.PatternSyntaxException e)
+		{
+		    ide.getLuwrainObj().message("Введённая строка для замены не является корректным регулярным выражением", Luwrain.MessageType.ERROR);
+		}
+		return true;
     }
 
     @Override protected TexAppearance getAppearance()

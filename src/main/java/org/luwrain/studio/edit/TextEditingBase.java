@@ -157,6 +157,15 @@ return res.isPerformed();
 	};
     }
 
+    protected void replaceStr(String replaceExp, String replaceWith)
+    {
+	this.content.update((lines)->{
+		for(int i = 0;i < lines.getLineCount();i++)
+		    lines.setLine(i, lines.getLine(i).replaceAll(replaceExp, replaceWith));
+	    });
+	this.modified = true;
+    }
+
     protected MultilineEdit.Appearance getAppearance()
     {
 	if (edit == null)
