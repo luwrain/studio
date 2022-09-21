@@ -32,15 +32,18 @@ import org.luwrain.nlp.*;
 import static org.luwrain.popups.Popups.*;
 
 import static org.luwrain.studio.edit.tex.Hooks.*;
+import static org.luwrain.studio.Part.*;
 
 final class TexEditing extends TextEditingBase
 {
         final EditSpellChecking spellChecking;
+    final Strings strings;
 
     TexEditing(IDE ide, File file) throws IOException
     {
 	super(ide, file);
 	this.spellChecking =new EditSpellChecking(ide.getLuwrainObj());
+	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);
     }
 
     @Override public EditArea.Params getEditParams(ControlContext context)
@@ -64,15 +67,15 @@ final class TexEditing extends TextEditingBase
     @Override public Part.Action[] getActions()
     {
 	//FIXME: Strings
-	return Part.actions(
-			    Part.action("Добавить слайд", new InputEvent('f', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addFrame),
-			    Part.action("Добавить ненумерованный список", new InputEvent('u', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItemize),
-			    Part.action("Добавить нумерованный список", new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate),
-			    Part.action("Добавить элемент списка", new InputEvent('i', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItem),
-			    Part.action(getAppearance().indent?"Отключить чтение отступов":"Включить чтение отступов", new InputEvent(InputEvent.Special.F5, EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::toggleIndent),
-			    Part.action("Заменить", new InputEvent('r', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::replace),
-			    Part.action("Перейти к строке", new InputEvent('g', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::gotoLine)
-			    );
+	return actions(
+		       action(strings.actAddFrame(), new InputEvent('f', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addFrame),
+		       action(strings.actAddUnordered(), new InputEvent('u', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItemize),
+		       action(strings.actAddOrdered(), new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate),
+		       action(strings.actAddListItem(), new InputEvent('i', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItem),
+		       action(getAppearance().indent?strings.actDisableIndentSpeaking():strings.actEnableIndentSpeaking(), new InputEvent(InputEvent.Special.F5, EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::toggleIndent),
+		       action(strings.actReplace(), new InputEvent('r', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::replace),
+		       action(strings.actGotoLine(), new InputEvent('g', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::gotoLine)
+		       );
     }
 
     private boolean enableIndent()

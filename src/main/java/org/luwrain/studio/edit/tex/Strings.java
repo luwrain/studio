@@ -18,8 +18,15 @@ package org.luwrain.studio.edit.tex;
 
 public interface Strings
 {
-    static public final String NAME = "luwrain.studio.tex";
+    static public final String NAME = "luwrain.studio.edit.tex";
 
-    String newFolderPopupName();
-    String newFolderPopupPrefix();
+    String actAddFrame();
+    String actAddOrdered();
+    String actAddUnordered();
+    String actAddListItem();
+    String actEnableIndentSpeaking();
+    String actDisableIndentSpeaking();
+    String actReplace();
+    String actGotoLine();
+
 }

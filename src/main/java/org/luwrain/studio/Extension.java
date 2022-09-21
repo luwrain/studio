@@ -19,9 +19,15 @@ package org.luwrain.studio;
 import java.util.*;
 
 import org.luwrain.core.*;
+import org.luwrain.i18n.*;
+
+import static org.luwrain.i18n.Lang.*;
 
 public final class Extension extends EmptyExtension
 {
+    static final String
+	LOG_COMPONENT = "studio";
+
     @Override public Command[] getCommands(Luwrain luwrain)
     {
 	final List<Command> res = new ArrayList<>();
@@ -41,7 +47,6 @@ public final class Extension extends EmptyExtension
 		}
 		@Override public Application[] prepareApp(String[] args)
 		{
-		    NullCheck.notNullItems(args, "args");
 		    if (args.length == 1)
 			return new Application[]{new org.luwrain.app.studio.App(args[0])};
 		    return new Application[]{new org.luwrain.app.studio.App()};
@@ -50,4 +55,18 @@ public final class Extension extends EmptyExtension
 
 	};
     }
+
+        @Override public void i18nExtension(Luwrain luwrain, org.luwrain.i18n.I18nExtension i18n)
+    {
+	try {
+	    i18n.addStrings(RU, org.luwrain.studio.edit.tex.Strings.NAME, new ResourceStringsObj(luwrain, getClass().getClassLoader(), getClass(), "edit-tex.properties").create(RU, org.luwrain.studio.edit.tex.Strings.class));
+	}
+	catch(java.io.IOException e)
+	{
+	    Log.error(LOG_COMPONENT, "unable to init i18n: " + e.getClass().getName() + ": " + e.getMessage());
+	}
+    }
+
+
+    
 }
