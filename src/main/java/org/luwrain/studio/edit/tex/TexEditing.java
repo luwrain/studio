@@ -70,7 +70,8 @@ final class TexEditing extends TextEditingBase
 			    Part.action("Добавить нумерованный список", new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate),
 			    Part.action("Добавить элемент списка", new InputEvent('i', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItem),
 			    Part.action(getAppearance().indent?"Отключить чтение отступов":"Включить чтение отступов", new InputEvent(InputEvent.Special.F5, EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::toggleIndent),
-			    Part.action("Заменить", new InputEvent('r', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::replace)
+			    Part.action("Заменить", new InputEvent('r', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::replace),
+			    Part.action("Перейти к строке", new InputEvent('g', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::gotoLine)
 			    );
     }
 
@@ -154,6 +155,29 @@ final class TexEditing extends TextEditingBase
 		}
 		return true;
     }
+
+        private boolean gotoLine(IDE ide)
+    {
+	final String lineNumStr = textNotEmpty(ide.getLuwrainObj(), "Перейти на строку", "Номер строки:", "");//FIXME:
+	if (lineNumStr == null)
+	    return true;
+	final int lineNum;
+	try {
+	    lineNum = Integer.parseInt(lineNumStr);
+	}
+	catch(NumberFormatException e)
+	{
+	    ide.getLuwrainObj().message("Введённое значение не является допустимым номером строки", Luwrain.MessageType.ERROR);
+	    return true;
+	}
+	if (lineNum <= 0 || lineNum> this.content.getLineCount())
+	{
+	    ide.getLuwrainObj().message("Введённое выражение выходит за границы допустимых номеров строки", Luwrain.MessageType.ERROR);
+	    return true;
+	}
+	return true;
+    }
+
 
     @Override protected TexAppearance getAppearance()
     {
