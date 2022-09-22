@@ -29,4 +29,7 @@ public interface Strings
     String actReplace();
     String actGotoLine();
 
+    String actSuggestCorrection();
+    String suggestCorrectionsPopupName();
+    
 }

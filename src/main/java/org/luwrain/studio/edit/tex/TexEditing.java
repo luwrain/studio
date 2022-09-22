@@ -29,8 +29,10 @@ import org.luwrain.script.controls.*;
 import org.luwrain.app.base.*;
 import org.luwrain.studio.edit.*;
 import org.luwrain.nlp.*;
-import static org.luwrain.popups.Popups.*;
+import org.luwrain.util.*;
 
+
+import static org.luwrain.popups.Popups.*;
 import static org.luwrain.studio.edit.tex.Hooks.*;
 import static org.luwrain.studio.Part.*;
 
@@ -73,6 +75,7 @@ final class TexEditing extends TextEditingBase
 		       action(strings.actAddOrdered(), new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate),
 		       action(strings.actAddListItem(), new InputEvent('i', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItem),
 		       action(getAppearance().indent?strings.actDisableIndentSpeaking():strings.actEnableIndentSpeaking(), new InputEvent(InputEvent.Special.F5, EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::toggleIndent),
+		       		       action(strings.actSuggestCorrection(), new InputEvent('s', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::suggestCorrection),
 		       action(strings.actReplace(), new InputEvent('r', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::replace),
 		       action(strings.actGotoLine(), new InputEvent('g', EnumSet.of(InputEvent.Modifiers.ALT, InputEvent.Modifiers.SHIFT)), this::gotoLine)
 		       );
@@ -181,6 +184,24 @@ final class TexEditing extends TextEditingBase
 	return true;
     }
 
+    private boolean suggestCorrection(IDE ide)
+    {
+	final String word = new TextFragmentUtils(this.content).getWord(getHotPointX(), getHotPointY());
+	if (word == null)
+	    return false;
+	final List<String> suggestions = spellChecking.getSpellChecker().suggestCorrections(word);
+	if (suggestions != null)
+	    if (suggestions == null || suggestions.isEmpty())
+		return false;
+	final String correction = (String)fixedList(ide.getLuwrainObj(), strings.suggestCorrectionsPopupName(), suggestions.toArray(new String[suggestions.size()]));
+	if (correction == null)
+	    return true;
+	this.content.update((lines)->{
+		final String newLine = new TextFragmentUtils(lines).replaceWord(getHotPointX(), getHotPointY(), correction);
+		lines.setLine(getHotPointY(), newLine);
+	    });
+	return true;
+    }
 
     @Override protected TexAppearance getAppearance()
     {
