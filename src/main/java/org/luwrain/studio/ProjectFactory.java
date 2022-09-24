@@ -22,7 +22,7 @@ import org.luwrain.core.*;
 import org.luwrain.util.*;
 
 import org.luwrain.studio.backends.tex.TexProject;
-import org.luwrain.studio.backends.tex.TexPresentationWizard;
+import org.luwrain.studio.proj.wizards.*;
 
 public final class ProjectFactory
 {
@@ -46,7 +46,6 @@ public final class ProjectFactory
 
     public Project load(File projFile) throws IOException
     {
-	NullCheck.notNull(projFile, "projFile");
 	final Project loader = readProjectKey(projFile);
 	if (loader == null)
 	    throw new IOException("No known keys in the file");
@@ -58,7 +57,6 @@ public final class ProjectFactory
 
     private Project readProjectKey(File projFile) throws IOException
     {
-	NullCheck.notNull(projFile, "projFile");
 	final String text = FileUtils.readTextFileSingleString(projFile, "UTF-8");
 	if (text.contains(TexProject.KEY))
 	    return new TexProject();
@@ -67,12 +65,10 @@ public final class ProjectFactory
 
     public void create(String projType, File destDir)
     {
-	NullCheck.notEmpty(projType, "projType");
-	NullCheck.notNull(destDir, "destDir");
 	switch(projType)
 	{
 	case "latex-presentation": {
-	    final TexPresentationWizard w = new TexPresentationWizard(ide, destDir);
+	    final TexPresentation w = new TexPresentation(ide, destDir);
 	    ide.showWizard(w);
 	    luwrain.announceActiveArea();
 	    return;
