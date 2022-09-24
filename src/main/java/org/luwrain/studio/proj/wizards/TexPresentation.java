@@ -30,6 +30,7 @@ import org.luwrain.controls.WizardArea.Frame;
 import org.luwrain.controls.WizardArea.WizardValues;
 
 import static org.luwrain.util.FileUtils.*;
+import static org.luwrain.util.ResourceUtils.*;
 import static org.luwrain.studio.syntax.tex.TexUtils.*;
 
 public final class TexPresentation extends LayoutBase
@@ -51,19 +52,24 @@ public final class TexPresentation extends LayoutBase
 	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);
 	this.destDir = destDir;
 	this.wizardArea = new WizardArea(getControlContext());
+	this.wizardArea.setAreaName(strings.texPresentationTitle());
 	final Frame greeting = wizardArea.newFrame()
-	.addText(ide.getAppBase().getStrings().texPresentationWizardGreeting())
-	.addInput("Название:", "")
-	.addInput("Автор:", "")
-	.addInput("Дата:", "")
-	.addClickable("Далее", (input)-> {return onGreetingClick(input);});
+	.addText(strings.texPresentationGreeting())
+	.addInput(strings.texPresentationInputTitle(), "")
+	.addInput(strings.texPresentationInputAuthor(), "")
+	.addInput(strings.texPresentationInputDate(), "")
+	.addClickable(strings.next(), (input)-> {return onGreetingClick(input);});
 	wizardArea.show(greeting);
 	setAreaLayout(wizardArea, null);
     }
 
     private boolean onGreetingClick(WizardValues input)
     {
-	NullCheck.notNull(input, "input");
+	if (input.getText(0).trim().isEmpty())
+	{
+	    ide.getLuwrainObj().message(strings.titleCannotBeEmpty(), Luwrain.MessageType.ERROR);
+	    return true;
+	}
 	this.title = input.getText(0).trim();
 	this.author = input.getText(1).trim();
 	this.date = input.getText(2).trim();
@@ -108,16 +114,7 @@ public final class TexPresentation extends LayoutBase
 	    body.append("\\\\begin{frame}").append(System.lineSeparator())
 	    .append("  \\\\frametitle{").append(escapeTex(f)).append("}").append(System.lineSeparator()).append(System.lineSeparator())
 	    .append("\\\\end{frame}").append(System.lineSeparator()).append(System.lineSeparator());
-	final StringBuilder b = new StringBuilder();
-	try (final BufferedReader r = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream("presentation-ru.tex"), "UTF-8"))) {
-	    String line = r.readLine();
-	    while (line != null)
-	    {
-		b.append(line).append(System.lineSeparator());
-		line = r.readLine();
-	    }
-	}
-	final String text = new String(b)
+	final String text = getStringResource(this.getClass(), "presentation-ru.tex")
 	.replaceAll("LWR_STUDIO_TITLE", quoteReplacement(escapeTex(this.title)))
 	.replaceAll("LWR_STUDIO_AUTHOR", quoteReplacement(escapeTex(this.author)))
 	.replaceAll("LWR_STUDIO_DATE", quoteReplacement(escapeTex(this.date)))

@@ -20,4 +20,13 @@ public interface Strings
 {
     static public final String
 	NAME = "luwrain.studio.wizards";
+
+    String next();
+    String titleCannotBeEmpty();
+
+    String texPresentationTitle();
+        String texPresentationGreeting();
+    String texPresentationInputTitle();
+    String texPresentationInputAuthor();
+    String texPresentationInputDate();
 }

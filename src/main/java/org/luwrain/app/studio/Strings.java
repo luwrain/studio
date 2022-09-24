@@ -31,5 +31,4 @@ public interface Strings
 
         String openProjectPopupPrefix();
 
-    String texPresentationWizardGreeting();
 }
