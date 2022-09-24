@@ -18,20 +18,16 @@ package org.luwrain.studio.proj.wizards;
 
 import java.io.*;
 import java.util.*;
-//import com.google.gson.*;
-
+import com.google.gson.*;
 import static java.util.regex.Matcher.*;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.app.base.*;
-import org.luwrain.util.*;
 
 import org.luwrain.controls.WizardArea.Frame;
 import org.luwrain.controls.WizardArea.WizardValues;
-
-import org.luwrain.app.studio.Strings;
 
 import static org.luwrain.util.FileUtils.*;
 import static org.luwrain.studio.syntax.tex.TexUtils.*;
@@ -39,9 +35,10 @@ import static org.luwrain.studio.syntax.tex.TexUtils.*;
 public final class TexPresentation extends LayoutBase
 {
     private final IDE ide;
-    final AppBase<Strings> app;
-    final File destDir;
-    final WizardArea wizardArea;
+    private final AppBase<org.luwrain.app.studio.Strings> app;
+    private final Strings strings;
+    private final File destDir;
+    private final WizardArea wizardArea;
 
     private String title = "", author = "", date = "";
     private List<String> frames = new ArrayList<>();
@@ -49,9 +46,9 @@ public final class TexPresentation extends LayoutBase
     public TexPresentation(IDE ide, File destDir)
     {
 	super(ide.getAppBase());
-	NullCheck.notNull(destDir, "destDir");
 	this.ide = ide;
 	this.app = ide.getAppBase();
+	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);
 	this.destDir = destDir;
 	this.wizardArea = new WizardArea(getControlContext());
 	final Frame greeting = wizardArea.newFrame()

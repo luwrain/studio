@@ -60,6 +60,7 @@ public final class Extension extends EmptyExtension
     {
 	try {
 	    i18n.addStrings(RU, org.luwrain.studio.edit.tex.Strings.NAME, new ResourceStringsObj(luwrain, getClass().getClassLoader(), getClass(), "edit-tex.properties").create(RU, org.luwrain.studio.edit.tex.Strings.class));
+	    	    i18n.addStrings(RU, org.luwrain.studio.proj.wizards.Strings.NAME, new ResourceStringsObj(luwrain, getClass().getClassLoader(), getClass(), "wizards.properties").create(RU, org.luwrain.studio.proj.wizards.Strings.class));
 	}
 	catch(java.io.IOException e)
 	{
