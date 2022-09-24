@@ -25,6 +25,7 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.app.base.*;
+import org.luwrain.studio.proj.main.*;
 
 import org.luwrain.controls.WizardArea.Frame;
 import org.luwrain.controls.WizardArea.WizardValues;
@@ -35,6 +36,11 @@ import static org.luwrain.studio.syntax.tex.TexUtils.*;
 
 public final class TexPresentation extends LayoutBase
 {
+    static private final String
+	MAIN_FILE_NAME = "main.tex",
+	PROJ_FILE_NAME = "presentation.lwrproj";
+
+    
     private final IDE ide;
     private final AppBase<org.luwrain.app.studio.Strings> app;
     private final Strings strings;
@@ -119,20 +125,18 @@ public final class TexPresentation extends LayoutBase
 	.replaceAll("LWR_STUDIO_AUTHOR", quoteReplacement(escapeTex(this.author)))
 	.replaceAll("LWR_STUDIO_DATE", quoteReplacement(escapeTex(this.date)))
 	.replaceAll("LWR_STUDIO_BODY", new String(body).trim());
-	/*
-		final TexProject proj = new TexProject();
+		final ProjectImpl proj = new ProjectImpl();
 	proj.setProjName(this.title);
-	final TexFolder folder = new TexFolder();
+	final Folder folder = new Folder();
 	folder.setName("Презентация Tex");
-	folder.setSubfolders(new ArrayList<TexFolder>());
-	folder.setSourceFiles(Arrays.asList(new TexSourceFile("main.tex", "main.tex")));
+	folder.setSubfolders(Arrays.asList());
+	folder.setTexFiles(Arrays.asList(new org.luwrain.studio.edit.tex.TexSourceFile(MAIN_FILE_NAME, MAIN_FILE_NAME)));
 	proj.setRootFolder(folder);
 	final Gson gson = new Gson();
-	final File projFile = new File(destDir, "presentation.lwrproj");
+	final File projFile = new File(destDir, PROJ_FILE_NAME);
 	final File mainFile = new File(destDir, "main.tex");
 	writeTextFileSingleString(mainFile, text, "UTF-8");
 	writeTextFileSingleString(projFile, gson.toJson(proj), "UTF-8");
 	ide.loadProject(projFile);
-	*/
     }
 }

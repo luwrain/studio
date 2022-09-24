@@ -84,13 +84,7 @@ public void setSubfolders(List<Folder> subfolders)
 }
 
     public List<TexSourceFile> getTexFiles() { return this.texFiles != null?this.texFiles:new ArrayList<>(); }
-    /*
-    public void setSourceFiles(List<TexSourceFile> sourceFiles)
-    {
-	NullCheck.notNull(sourceFiles, "sourceFiles");
-	this.sourceFiles = sourceFiles;
-    }
-    */
+    public void setTexFiles(List<TexSourceFile> texFiles) { this.texFiles = texFiles; }
 
                 @Override public org.luwrain.studio.Part.Action[] getActions()
     {

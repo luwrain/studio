@@ -249,22 +249,23 @@ public final class App extends AppBase<Strings>
 		hasUnsavedChanges = true;
 		break;
 	    }
-	switch(conv.unsavedChanges())
-	{
-	case CANCEL:
-	    return;
-	case SAVE:
-	    for(Editing e: editings)
-		if (e.hasUnsavedChanges())
-		    try {
-			e.save();
-		    }
-		    catch(IOException ex)
-		    {
-			crash(ex);
-			return;
-		    }
-	}
+	if (hasUnsavedChanges)
+	    switch(conv.unsavedChanges())
+	    {
+	    case CANCEL:
+		return;
+	    case SAVE:
+		for(Editing e: editings)
+		    if (e.hasUnsavedChanges())
+			try {
+			    e.save();
+			}
+			catch(IOException ex)
+			{
+			    crash(ex);
+			    return;
+			}
+	    }
 	for(Editing e: editings)
 	    e.closeEditing();
 	editings.clear();
