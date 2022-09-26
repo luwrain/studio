@@ -21,29 +21,24 @@ import java.io.*;
 import org.luwrain.core.*;
 import org.luwrain.popups.*;
 
-class Conversations
+import static org.luwrain.popups.Popups.*;
+
+class Conv
 {
     enum SavingType {SAVE, NOT_SAVE, CANCEL};
 
     private final Luwrain luwrain;
     private final Strings strings;
 
-    Conversations(App app)
+    Conv(App app)
     {
 	NullCheck.notNull(app, "app");
 	this.luwrain = app.getLuwrain();
 	this.strings = app.getStrings();
     }
 
-    File newProjectDir()
-    {
-	return Popups.existingDir(luwrain, "Каталог нового проекта:");
-    }
-
-    File openProject()
-    {
-	return Popups.existingFile(luwrain, strings.openProjectPopupPrefix());
-    }
+    File newProjectDir() { return existingDir(luwrain, "Каталог нового проекта:"); }
+    File openProject() { return existingFile(luwrain, strings.openProjectPopupPrefix()); }
 
         SavingType unsavedChanges()
     {

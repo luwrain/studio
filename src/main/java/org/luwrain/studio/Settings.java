@@ -14,17 +14,20 @@
    General Public License for more details.
 */
 
-package org.luwrain.app.studio;
+package org.luwrain.studio;
 
 import org.luwrain.core.*;
 
-interface Settings
+public interface Settings
 {
-    static public final String PATH = "/org/luwrain/studio";
-    
+    static public final String
+	PATH = "/org/luwrain/studio";
+
+    String getPersonalName(String defValue);
+    void setPersonalName(String value);
+
     static Settings create(Registry registry)
     {
-	NullCheck.notNull(registry, "registry");
 	return RegistryProxy.create(registry, PATH, Settings.class);
     }
 }

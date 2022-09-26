@@ -62,7 +62,7 @@ public final class TexPresentation extends LayoutBase
 	final Frame greeting = wizardArea.newFrame()
 	.addText(strings.texPresentationGreeting())
 	.addInput(strings.texPresentationInputTitle(), "")
-	.addInput(strings.texPresentationInputAuthor(), "")
+	.addInput(strings.texPresentationInputAuthor(), ide.getSett().getPersonalName(""))
 	.addInput(strings.texPresentationInputDate(), "")
 	.addClickable(strings.next(), (input)-> {return onGreetingClick(input);});
 	wizardArea.show(greeting);

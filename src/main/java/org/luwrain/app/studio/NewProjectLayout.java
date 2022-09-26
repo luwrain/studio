@@ -53,12 +53,11 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 
     @Override public boolean onListClick(ListArea listArea, int index, ProjectType projType)
     {
-	NullCheck.notNull(projType, "projType");
-	final File destDir = new File("/tmp/proba");//app.conv().newProjectDir();
+    	final File destDir = app.getConv().newProjectDir();
 	if (destDir == null)
 	    return true;
 	final ProjectFactory factory = new ProjectFactory(app.ide);
-factory.create(projType.getId(), destDir);
+	factory.create(projType.getId(), destDir);
 	return true;
     }
 }

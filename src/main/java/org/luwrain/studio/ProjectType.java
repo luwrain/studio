@@ -22,6 +22,9 @@ import org.luwrain.core.*;
 
 public final class ProjectType implements Comparable
 {
+    static public final String
+	TEX_PRESENTATION = "latex-presentation";
+
     private final String id;
     private final Integer orderIndex;
     private final String title;

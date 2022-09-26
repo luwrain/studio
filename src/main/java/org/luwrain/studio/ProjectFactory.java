@@ -24,6 +24,8 @@ import org.luwrain.util.*;
 import org.luwrain.studio.backends.tex.TexProject;
 import org.luwrain.studio.proj.wizards.*;
 
+import static org.luwrain.studio.ProjectType.*;
+
 public final class ProjectFactory
 {
     private final IDE ide;
@@ -67,7 +69,7 @@ public final class ProjectFactory
     {
 	switch(projType)
 	{
-	case "latex-presentation": {
+	case TEX_PRESENTATION: {
 	    final TexPresentation w = new TexPresentation(ide, destDir);
 	    ide.showWizard(w);
 	    luwrain.announceActiveArea();

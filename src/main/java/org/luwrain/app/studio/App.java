@@ -38,7 +38,8 @@ public final class App extends AppBase<Strings>
     private final String arg;
     final IDE ide = getIde();
     final ProjectFactory projFactory;
-    private Conversations conv = null;
+    private Conv conv = null;
+    private org.luwrain.studio.Settings sett = null;
     private ProjectBaseLayout projectBaseLayout = null;
     private TextEditingLayout textEditingLayout = null;
     private NewProjectLayout newProjectLayout = null;
@@ -62,7 +63,9 @@ public final class App extends AppBase<Strings>
 
     @Override protected AreaLayout onAppInit() throws IOException
     {
-	this.conv = new Conversations(this);
+	this.conv = new Conv(this);
+	getLuwrain().getRegistry().addDirectory(org.luwrain.studio.Settings.PATH);
+	this.sett = org.luwrain.studio.Settings.create(getLuwrain().getRegistry());
 	loadScriptCore();
 	this.projectBaseLayout = new ProjectBaseLayout(this);
 	this.newProjectLayout = new NewProjectLayout(this);
@@ -149,6 +152,7 @@ public final class App extends AppBase<Strings>
 	    @Override public App getAppBase() { return App.this; }
 	    @Override public boolean loadProject(File file) { return App.this.loadProject(file); }
 	    @Override public Luwrain getLuwrainObj() { return getLuwrain(); }
+	    @Override public org.luwrain.studio.Settings getSett(){ return App.this.sett; }
 	    @Override public void onFoldersUpdate()
 	    {
 		if (projectBaseLayout != null)
@@ -313,7 +317,7 @@ public final class App extends AppBase<Strings>
 	return new OutputModel();
     }
 
-    Conversations conv() { return this.conv; }
+    Conv getConv() { return this.conv; }
     boolean isSingleFileProject() { return this.proj instanceof SingleFileProject; }
     TextEditingLayout getTextEditingLayout() { return textEditingLayout; }
 
