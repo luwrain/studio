@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -17,7 +17,9 @@
 package org.luwrain.studio.syntax.java;
 
 import java.io.*;
-import org.junit.*;
+
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 import org.luwrain.core.*;
 import org.luwrain.studio.syntax.*;
@@ -25,7 +27,7 @@ import static org.luwrain.util.ResourceUtils.*;
 
 import org.luwrain.studio.syntax.SpanTree.*;
 
-public class JavaSyntaxTest extends Assert
+public class JavaSyntaxTest
 {
     @Test public void helloWorld()
     {
