@@ -14,24 +14,23 @@
    General Public License for more details.
 */
 
-package org.luwrain.app.studio;
+package org.luwrain.app.js;
 
-import javax.script.*;
+import java.io.*;
 
 import org.luwrain.core.*;
+import org.luwrain.popups.*;
 
-final class ScriptExceptionWrapper
+import static org.luwrain.popups.Popups.*;
+
+final class Conv
 {
-    final ScriptException ex;
+    private final Luwrain luwrain;
+    private final Strings strings;
 
-    ScriptExceptionWrapper(ScriptException ex)
+    Conv(App app)
     {
-	NullCheck.notNull(ex, "ex");
-	this.ex = ex;
-    }
-
-    @Override public String toString()
-    {
-	return "Строка " + ex.getLineNumber() + ":" + ex.getMessage();//FIXME:
+	this.luwrain = app.getLuwrain();
+	this.strings = app.getStrings();
     }
 }

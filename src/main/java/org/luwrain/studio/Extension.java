@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -30,21 +30,17 @@ public final class Extension extends EmptyExtension
 
     @Override public Command[] getCommands(Luwrain luwrain)
     {
-	final List<Command> res = new ArrayList<>();
-
-	res.add(new SimpleShortcutCommand("studio"));
-	return res.toArray(new Command[res.size()]);
+	return new Command[]{
+	    new SimpleShortcutCommand("studio"),
+			    new SimpleShortcutCommand("js"),
+		};
     }
 
     @Override public ExtensionObject[] getExtObjects(Luwrain luwrain)
     {
 	return new ExtensionObject[]{
-
 	    new Shortcut() {
-		@Override public String getExtObjName()
-		{
-		    return "studio";
-		}
+		@Override public String getExtObjName() { return "studio"; }
 		@Override public Application[] prepareApp(String[] args)
 		{
 		    if (args.length == 1)
@@ -52,7 +48,7 @@ public final class Extension extends EmptyExtension
 		    return new Application[]{new org.luwrain.app.studio.App()};
 		}
 	    },
-
+	    new SimpleShortcut("js", org.luwrain.app.js.App.class)
 	};
     }
 
@@ -61,13 +57,11 @@ public final class Extension extends EmptyExtension
 	try {
 	    i18n.addStrings(RU, org.luwrain.studio.edit.tex.Strings.NAME, new ResourceStringsObj(luwrain, getClass().getClassLoader(), getClass(), "edit-tex.properties").create(RU, org.luwrain.studio.edit.tex.Strings.class));
 	    	    i18n.addStrings(RU, org.luwrain.studio.proj.wizards.Strings.NAME, new ResourceStringsObj(luwrain, getClass().getClassLoader(), getClass(), "wizards.properties").create(RU, org.luwrain.studio.proj.wizards.Strings.class));
+		    	    i18n.addStrings(RU, org.luwrain.app.js.Strings.NAME, new ResourceStringsObj(luwrain, getClass().getClassLoader(), getClass(), "js.properties").create(RU, org.luwrain.app.js.Strings.class));
 	}
 	catch(java.io.IOException e)
 	{
 	    Log.error(LOG_COMPONENT, "unable to init i18n: " + e.getClass().getName() + ": " + e.getMessage());
 	}
     }
-
-
-    
 }

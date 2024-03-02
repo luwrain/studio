@@ -14,24 +14,11 @@
    General Public License for more details.
 */
 
-package org.luwrain.app.studio;
+package org.luwrain.app.js;
 
-import javax.script.*;
-
-import org.luwrain.core.*;
-
-final class ScriptExceptionWrapper
+public interface Strings
 {
-    final ScriptException ex;
+    static final String NAME = "luwrain.js";
 
-    ScriptExceptionWrapper(ScriptException ex)
-    {
-	NullCheck.notNull(ex, "ex");
-	this.ex = ex;
-    }
-
-    @Override public String toString()
-    {
-	return "Строка " + ex.getLineNumber() + ":" + ex.getMessage();//FIXME:
-    }
+    String appName();
 }
