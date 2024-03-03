@@ -20,22 +20,13 @@ import java.util.*;
 import java.io.*;
 
 import org.luwrain.core.*;
-import org.luwrain.core.events.*;
-import org.luwrain.core.queries.*;
-import org.luwrain.controls.*;
-import org.luwrain.studio.*;
 import org.luwrain.app.base.*;
-import org.luwrain.script.core.*;
-import org.luwrain.script.*;
-
-import org.luwrain.studio.proj.single.*;
 
 public final class App extends AppBase<Strings>
 {
-    static public final String
-	LOG_COMPONENT = "js";
-
     private Conv conv = null;
+    private File scriptsFile = null;
+    private Scripts scripts = null;
     private MainLayout mainLayout = null;
     public App()
     {
@@ -44,6 +35,16 @@ public final class App extends AppBase<Strings>
 
     @Override protected AreaLayout onAppInit() throws IOException
     {
+	final var dataDir = getLuwrain().getAppDataDir("luwrain.studio.js").toFile();
+	this.scriptsFile = new File(dataDir, "scripts.json");
+	if (!scriptsFile.exists())
+	{
+	    this.scripts = new Scripts();
+	    this.scripts.scripts = new ArrayList<>();
+	} else
+	    this.scripts = Scripts.load(scriptsFile);
+	if (scripts.scripts.isEmpty())
+	    this.scripts.scripts.add(new Script("default"));
 	this.conv = new Conv(this);
 	this.mainLayout = new MainLayout(this);
 	setAppName(getStrings().appName());
@@ -67,12 +68,23 @@ public final class App extends AppBase<Strings>
 	return true;
     }
 
+    void save()
+    {
+	try {
+	    Scripts.save(this.scriptsFile, this.scripts);
+	}
+	catch(IOException e)
+	{
+	    crash(e);
+	}
+    }
+
 
     Conv getConv() { return this.conv; }
+    Scripts getScripts() { return this.scripts; }
 
         interface Layouts
     {
 	void main();
     }
-
 }

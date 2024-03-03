@@ -23,21 +23,41 @@ import org.luwrain.core.events.*;
 import org.luwrain.app.base.*;
 import org.luwrain.controls.*;
 
+import static org.luwrain.controls.EditUtils.*; 
+
 final class MainLayout extends LayoutBase
 {
     private final App app;
     final EditArea editArea;
 
+    private Script script = null;
+
     MainLayout(App app)
     {
 	super(app);
 	this.app = app;
+	this.script = app.getScripts().scripts.get(0);
+	if (this.script.text == null)
+	    this.script.text = Arrays.asList();
 	this.editArea = new EditArea(editParams((params)->{
-		}));
+		    params.appearance = new DefaultEditAreaAppearance(getControlContext(), Luwrain.SpeakableTextType.PROGRAMMING);
+		})){
+		@Override public boolean onSystemEvent(org.luwrain.core.events.SystemEvent event)
+		{
+		    if (event.getType() == SystemEvent.Type.REGULAR)
+			switch(event.getCode())
+			{
+			case SAVE:
+			    return save();
+			}
+		    return super.onSystemEvent(event);
+		}
+	    };
+	this.editArea.setText(this.script.text.toArray(new String[this.script.text.size()]));
 	setAreaLayout(editArea, actions(
 					action("run", "Исполнить", new InputEvent(InputEvent.Special.F9), this::run)
-));
-	    }
+					));
+    }
 
     private boolean run()
     {
@@ -54,6 +74,14 @@ final class MainLayout extends LayoutBase
 	    return true;
 	}
 	Log.debug("proba", id);
+	return true;
+    }
+
+    private boolean save()
+    {
+	this.script .text = Arrays.asList(editArea.getText());
+	app.save();
+	app.message("Сохранено", Luwrain.MessageType.OK);
 	return true;
     }
 }
