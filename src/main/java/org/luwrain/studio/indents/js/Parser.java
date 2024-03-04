@@ -27,17 +27,33 @@ import org.luwrain.antlr.js.*;
 
 public final class Parser
 {
-    void parse(String[] lines)
+    final Handler handler;
+    final String text;
+
+    public Parser(Handler handler, List<String> lines)
     {
-	final String lineSep = System.lineSeparator();
-	final StringBuilder text = new StringBuilder();
-	final JavaScriptLexer lexer = new JavaScriptLexer(CharStreams.fromString(new String(text)));
+		final String lineSep = System.lineSeparator();
+	this.handler = handler;
+	this.text = lines.stream().reduce("", (a, b)->{ return a + (a.isEmpty()?"":lineSep) + b;});
+    }
+
+    void parse()
+    {
+	final JavaScriptLexer lexer = new JavaScriptLexer(CharStreams.fromString(text));
 	final CommonTokenStream tokens = new CommonTokenStream(lexer);
 	final JavaScriptParser parser = new JavaScriptParser(tokens);
 	parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 	final ParseTree tree = parser.program();
 	final ParseTreeWalker walker = new ParseTreeWalker();
-	final Listener listener = new Listener(){
+	final var listener = new JavaScriptParserBaseListener(){
+			@Override public void enterEveryRule(ParserRuleContext c)  
+		{
+		    handler.beginBlock(c.getClass().getSimpleName(), c.getStart().getLine(), c.getStart().getCharPositionInLine());
+		}
+					@Override public void exitEveryRule(ParserRuleContext c)  
+		{
+		    handler.endBlock(c.getClass().getSimpleName(), c.getStart().getLine(), c.getStart().getCharPositionInLine());
+		}
 	    };
 	walker.walk(listener, tree);
     }

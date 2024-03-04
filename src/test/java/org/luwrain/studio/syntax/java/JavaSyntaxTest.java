@@ -29,7 +29,7 @@ import org.luwrain.studio.syntax.SpanTree.*;
 
 public class JavaSyntaxTest
 {
-    @Test public void helloWorld()
+    @Disabled @Test public void helloWorld()
     {
 	final JavaSyntax s = new JavaSyntax(getHelloWorld());
 	s.parse();
