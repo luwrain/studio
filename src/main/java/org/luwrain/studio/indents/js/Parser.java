@@ -52,7 +52,8 @@ public final class Parser
 		}
 		@Override public void exitEveryRule(ParserRuleContext c)  
 		{
-		    handler.endBlock(c.getClass().getSimpleName(), c.getStop().getLine(), c.getStop().getCharPositionInLine());
+		    handler.endBlock(c.getClass().getSimpleName(), c.getStop().getLine(), c.getStop().getCharPositionInLine(),
+				     c.getStart().getLine(), c.getStart().getCharPositionInLine());
 		}
 	    };
 	walker.walk(listener, tree);
