@@ -32,29 +32,29 @@ public final class Parser
 
     public Parser(Handler handler, List<String> lines)
     {
-		final String lineSep = System.lineSeparator();
+	final String lineSep = System.lineSeparator();
 	this.handler = handler;
 	this.text = lines.stream().reduce("", (a, b)->{ return a + (a.isEmpty()?"":lineSep) + b;});
     }
 
     void parse()
     {
-	final JavaScriptLexer lexer = new JavaScriptLexer(CharStreams.fromString(text));
-	final CommonTokenStream tokens = new CommonTokenStream(lexer);
-	final JavaScriptParser parser = new JavaScriptParser(tokens);
+	final var lexer = new JavaScriptLexer(CharStreams.fromString(text));
+	final var tokens = new CommonTokenStream(lexer);
+	final var parser = new JavaScriptParser(tokens);
 	parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
-	final ParseTree tree = parser.program();
-	final ParseTreeWalker walker = new ParseTreeWalker();
+	final var tree = parser.program();
+	final var walker = new ParseTreeWalker();
 	final var listener = new JavaScriptParserBaseListener(){
-			@Override public void enterEveryRule(ParserRuleContext c)  
+		@Override public void enterEveryRule(ParserRuleContext c)  
 		{
 		    handler.beginBlock(c.getClass().getSimpleName(), c.getStart().getLine(), c.getStart().getCharPositionInLine());
 		}
-					@Override public void exitEveryRule(ParserRuleContext c)  
+		@Override public void exitEveryRule(ParserRuleContext c)  
 		{
-		    handler.endBlock(c.getClass().getSimpleName(), c.getStart().getLine(), c.getStart().getCharPositionInLine());
+		    handler.endBlock(c.getClass().getSimpleName(), c.getStop().getLine(), c.getStop().getCharPositionInLine());
 		}
 	    };
 	walker.walk(listener, tree);
     }
-    }
+}

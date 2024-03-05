@@ -24,13 +24,15 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class ParserTest
 {
-    @Test public void simple()
+    @Test public void singleLineFunc()
     {
 	final var h = new Handler();
 new Parser(h, asList(
-		       "(function(){",
-		       "  for(let i of v);",
-		       "{  f2(); var a = 1 + 2; }",
-		       "})")).parse();
+		       "function foo(){",
+		       "  bar();",
+		       "}")).parse();
+assertEquals(0, h.getCalculatedIndent(1));
+assertEquals(4, h.getCalculatedIndent(2));
+assertEquals(0, h.getCalculatedIndent(3));
     }
 }
