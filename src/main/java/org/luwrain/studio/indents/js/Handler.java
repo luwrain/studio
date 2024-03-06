@@ -19,12 +19,12 @@ public class Handler
 
     void beginBlock(String type, int line, int pos)
     {
-	//	System.out.println("#" + type + " "  + line + ", " + pos);
+		System.out.println("#" + type + " "  + line + ", " + pos);
 	while (lines.size() < line + 1)
 	    lines.add(new LineInfo());
 
 	final LineInfo lineInfo = lines.get(line);
-	final StackItem newStackItem = new StackItem(type, line, pos);
+	final StackItem newStackItem = type.equals(STATEMENT)?new StackItem(type, line, pos):null;
 
 	//Registering the first element on the line
 	if (type.equals(STATEMENT) && lineInfo.firstType == null)
@@ -38,9 +38,20 @@ public class Handler
 	if (type.equals(STATEMENT))
 	{
 	    stack.add(newStackItem);
-	    System.out.println("Adding " + type + " " + line + " " + pos);
+	    //	    System.out.println("Adding " + type + " " + line + " " + pos);
+	    return;
 	}
 
+	//Opening bracket of a function
+	if (type.equals(FUNC_BODY) && lineInfo.firstType == null && !stack.isEmpty())
+	{
+	    lineInfo.firstType = FUNC_BODY;
+	    lineInfo.calcIndent = stack.getLast().pos;
+	    return;
+	}
+
+
+	//Opening bracket inside of a function
 	if (type.equals(BLOCK) && !stack.isEmpty())
 		{
 		    //If it starts on the same position as the top stack item, which is supposed to be a statement, popping it
@@ -48,7 +59,7 @@ public class Handler
 		    if (stackTop.line == line && stackTop.pos == pos)
 		    {
 			stack.pollLast();
-			System.out.println("Replacing with block " + line + " " + pos);
+			//			System.out.println("Replacing with block " + line + " " + pos);
 		    //If the removed item was the first on the line, updating the calcIndent
 			if (lineInfo.firstStackItem != null &&lineInfo.firstStackItem.equals(stackTop) && !stack.isEmpty())
 			{
@@ -66,20 +77,12 @@ public class Handler
 	final LineInfo lineInfo = lines.get(endLine);
 
 	//Processing the closing brackets
-	if ((type == FUNC_BODY ||
+	if ((type.equals( FUNC_BODY) ||
 	     type.equals(BLOCK)) &&
 	    lineInfo.firstType == null && !stack.isEmpty())
 	{
-	    System.out.println("Closing " + type + " " + stack.size());
-	    System.out.println("" + stack.getLast().line + " " + stack.getLast().pos);
 	    lineInfo.calcIndent = stack.getLast().pos;
 	}
-
-	/*
-	if (type.equals(STATEMENT))
-	    System.out.println("Removing statement " + line + " " + pos);
-	*/
-
 
 	    	    	    //Popping the closing entity from the stack
 	    if (stack.isEmpty())
@@ -97,12 +100,15 @@ public class Handler
 	return lines.get(line).calcIndent;
     }
 
+    //Better to rename to Statement
         static final class StackItem
     {
 	final String type;
 	final int line, pos;
 	StackItem(String type, int line, int pos)
 	{
+	    if (!type.equals(STATEMENT))
+		throw new IllegalArgumentException("type can be only the statement (" + type + ")");
 	    this.type = type;
 	    this.line = line;
 	    this.pos = pos;
@@ -120,7 +126,6 @@ public class Handler
 	String firstType = null; //The type of the first element on the line
 	StackItem firstStackItem = null; //The stack item for the first element on the line
 	int calcIndent = 0;
-
     }
 
 }
