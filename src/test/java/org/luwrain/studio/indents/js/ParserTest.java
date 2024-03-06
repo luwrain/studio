@@ -36,7 +36,7 @@ public class ParserTest
 	assertEquals(0, h.getCalculatedIndent(3));
     }
 
-        @Test public void singleLineFunc()
+    @Test public void singleLineFunc()
     {
 	final var h = new Handler();
 	new Parser(h, asList(
@@ -45,24 +45,24 @@ public class ParserTest
 			     "  bar();",
 			     "}")).parse();
 	assertEquals(0, h.getCalculatedIndent(1));
-		assertEquals(0, h.getCalculatedIndent(2));
+	assertEquals(0, h.getCalculatedIndent(2));
 	assertEquals(4, h.getCalculatedIndent(3));
 	assertEquals(0, h.getCalculatedIndent(4));
     }
 
-        @Test public void singleLineFuncIndentBrief()
+    @Test public void singleLineFuncIndentBrief()
     {
 	final var h = new Handler();
 	new Parser(h, asList(
 			     "  function foo(){",
 			     "    bar();",
 			     "  }")).parse();
-		assertEquals(0, h.getCalculatedIndent(1));
+	assertEquals(0, h.getCalculatedIndent(1));
 	assertEquals(6, h.getCalculatedIndent(2));
 	assertEquals(2, h.getCalculatedIndent(3));
     }
 
-            @Test public void singleLineFuncIndent()
+    @Test public void singleLineFuncIndent()
     {
 	final var h = new Handler();
 	new Parser(h, asList(
@@ -70,8 +70,8 @@ public class ParserTest
 			     "{",
 			     "    bar();",
 			     "  }")).parse();
-		assertEquals(0, h.getCalculatedIndent(1));
-				assertEquals(2, h.getCalculatedIndent(2));
+	assertEquals(0, h.getCalculatedIndent(1));
+	assertEquals(2, h.getCalculatedIndent(2));
 	assertEquals(6, h.getCalculatedIndent(3));
 	assertEquals(2, h.getCalculatedIndent(4));
     }
@@ -90,7 +90,7 @@ public class ParserTest
 	assertEquals(0, h.getCalculatedIndent(4));
     }
 
-@Test public void forBlock()
+    @Test public void forBlock()
     {
 	final var h = new Handler();
 	new Parser(h, asList(
@@ -101,14 +101,39 @@ public class ParserTest
 			     "  }",
 			     "}")).parse();
 	assertEquals(0, h.getCalculatedIndent(1));
-		assertEquals(4, h.getCalculatedIndent(2));
-		assertEquals(2, h.getCalculatedIndent(3));
-		assertEquals(6, h.getCalculatedIndent(4));
-				assertEquals(2, h.getCalculatedIndent(5));
-								assertEquals(0, h.getCalculatedIndent(6));
+	assertEquals(4, h.getCalculatedIndent(2));
+	assertEquals(2, h.getCalculatedIndent(3));
+	assertEquals(6, h.getCalculatedIndent(4));
+	assertEquals(2, h.getCalculatedIndent(5));
+	assertEquals(0, h.getCalculatedIndent(6));
     }
 
-@Test public void forBlockBrief()
+        @Test public void forBlockNested()
+    {
+	final var h = new Handler();
+	new Parser(h, asList(
+			     "function foo(){",
+			     "  for (let i of v)",
+			     "  {",
+			     "    for(let j of w)",
+			     "    {",
+			     "      bar();",
+			     "    }",
+			     "  }",
+			     "}")).parse();
+	assertEquals(0, h.getCalculatedIndent(1));
+	assertEquals(4, h.getCalculatedIndent(2));
+	assertEquals(2, h.getCalculatedIndent(3));
+		assertEquals(6, h.getCalculatedIndent(4));
+		assertEquals(4, h.getCalculatedIndent(5));
+		assertEquals(8, h.getCalculatedIndent(6));
+				assertEquals(4, h.getCalculatedIndent(7));
+								assertEquals(2, h.getCalculatedIndent(8));
+																assertEquals(0, h.getCalculatedIndent(9));
+    }
+
+
+    @Test public void forBlockBrief()
     {
 	final var h = new Handler();
 	new Parser(h, asList(
@@ -118,13 +143,34 @@ public class ParserTest
 			     "  }",
 			     "}")).parse();
 	assertEquals(0, h.getCalculatedIndent(1));
-		assertEquals(4, h.getCalculatedIndent(2));
-		assertEquals(6, h.getCalculatedIndent(3));
-				assertEquals(2, h.getCalculatedIndent(4));
-								assertEquals(0, h.getCalculatedIndent(5));
+	assertEquals(4, h.getCalculatedIndent(2));
+	assertEquals(6, h.getCalculatedIndent(3));
+	assertEquals(2, h.getCalculatedIndent(4));
+	assertEquals(0, h.getCalculatedIndent(5));
     }
 
-@Test public void ifBlock()
+        @Test public void forBlockBriefNested()
+    {
+	final var h = new Handler();
+	new Parser(h, asList(
+			     "function foo(){",
+			     "  for (let i of v) {",
+			     "    for(let j of w) {",
+			     "      bar();",
+			     "    }",
+			     "  }",
+			     "}")).parse();
+	assertEquals(0, h.getCalculatedIndent(1));
+	assertEquals(4, h.getCalculatedIndent(2));
+		assertEquals(6, h.getCalculatedIndent(3));
+	//	assertEquals(2, h.getCalculatedIndent(4));
+		assertEquals(4, h.getCalculatedIndent(5));
+				assertEquals(2, h.getCalculatedIndent(6));
+								assertEquals(0, h.getCalculatedIndent(7));
+    }
+
+
+    @Test public void ifBlock()
     {
 	final var h = new Handler();
 	new Parser(h, asList(
@@ -135,14 +181,14 @@ public class ParserTest
 			     "  }",
 			     "}")).parse();
 	assertEquals(0, h.getCalculatedIndent(1));
-		assertEquals(4, h.getCalculatedIndent(2));
-		assertEquals(2, h.getCalculatedIndent(3));
-		assertEquals(6, h.getCalculatedIndent(4));
-				assertEquals(2, h.getCalculatedIndent(5));
-								assertEquals(0, h.getCalculatedIndent(6));
+	assertEquals(4, h.getCalculatedIndent(2));
+	assertEquals(2, h.getCalculatedIndent(3));
+	assertEquals(6, h.getCalculatedIndent(4));
+	assertEquals(2, h.getCalculatedIndent(5));
+	assertEquals(0, h.getCalculatedIndent(6));
     }
 
-@Test public void ifBlockBrief()
+    @Test public void ifBlockBrief()
     {
 	final var h = new Handler();
 	new Parser(h, asList(
@@ -152,9 +198,11 @@ public class ParserTest
 			     "  }",
 			     "}")).parse();
 	assertEquals(0, h.getCalculatedIndent(1));
-		assertEquals(4, h.getCalculatedIndent(2));
-		assertEquals(6, h.getCalculatedIndent(3));
-				assertEquals(2, h.getCalculatedIndent(4));
-								assertEquals(0, h.getCalculatedIndent(5));
+	assertEquals(4, h.getCalculatedIndent(2));
+	assertEquals(6, h.getCalculatedIndent(3));
+	assertEquals(2, h.getCalculatedIndent(4));
+	assertEquals(0, h.getCalculatedIndent(5));
     }
+
+    //FIXME: ef ... else ...
 }

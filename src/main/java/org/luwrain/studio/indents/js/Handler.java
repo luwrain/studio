@@ -19,7 +19,7 @@ public class Handler
 
     void beginBlock(String type, int line, int pos)
     {
-		System.out.println("#" + type + " "  + line + ", " + pos);
+	//	System.out.println("#" + type + " "  + line + ", " + pos);
 	while (lines.size() < line + 1)
 	    lines.add(new LineInfo());
 
@@ -32,13 +32,17 @@ public class Handler
 	    lineInfo.firstType = type;
 	    lineInfo.firstStackItem = newStackItem;
 	    if (!stack.isEmpty())
-		lineInfo.calcIndent = stack.getLast().pos + step;
+	    {
+		final var tail = stack.getLast();
+		lineInfo.calcIndent = tail.prevStatementIndent >= 0?tail.prevStatementIndent:(tail.pos + step);
+		//Saving the current position for the next statement
+		tail.prevStatementIndent = pos;
+	    }
 	}
 
 	if (type.equals(STATEMENT))
 	{
 	    stack.add(newStackItem);
-	    //	    System.out.println("Adding " + type + " " + line + " " + pos);
 	    return;
 	}
 
@@ -50,24 +54,26 @@ public class Handler
 	    return;
 	}
 
-
 	//Opening bracket inside of a function
 	if (type.equals(BLOCK) && !stack.isEmpty())
+	{
+	    //If it starts on the same position as the top stack statement, popping it
+	    final var tail = stack.getLast();
+	    if (tail.line == line && tail.pos == pos)
+	    {
+		stack.pollLast();
+		//The popped statement set the prevStatementIndent of the function statement, cleaning it
+		if (stack.isEmpty())
+		    throw new IllegalStateException("No statement of the function in the stack");
+		stack.getLast().prevStatementIndent = -1;
+		//If the removed item was the first on the line, updating the calcIndent
+		if (lineInfo.firstStackItem != null &&lineInfo.firstStackItem.equals(tail))
 		{
-		    //If it starts on the same position as the top stack item, which is supposed to be a statement, popping it
-		    final var stackTop = stack.getLast();
-		    if (stackTop.line == line && stackTop.pos == pos)
-		    {
-			stack.pollLast();
-			//			System.out.println("Replacing with block " + line + " " + pos);
-		    //If the removed item was the first on the line, updating the calcIndent
-			if (lineInfo.firstStackItem != null &&lineInfo.firstStackItem.equals(stackTop) && !stack.isEmpty())
-			{
-			    lineInfo.calcIndent = stack.getLast().pos;
-			    lineInfo.firstStackItem = null;
-			}
-		    }
+		    lineInfo.calcIndent = stack.getLast().pos;
+		    lineInfo.firstStackItem = null;
 		}
+	    }
+	}
     }
 
     void endBlock(String type, int endLine, int endPos, int startLine, int startPos)
@@ -105,6 +111,7 @@ public class Handler
     {
 	final String type;
 	final int line, pos;
+	int prevStatementIndent = -1;
 	StackItem(String type, int line, int pos)
 	{
 	    if (!type.equals(STATEMENT))
