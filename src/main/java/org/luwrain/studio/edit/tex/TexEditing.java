@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -23,6 +23,7 @@ import org.luwrain.core.*;
 import org.luwrain.core.events.*;
 import org.luwrain.core.events.InputEvent.Modifiers;
 import org.luwrain.controls.*;
+import org.luwrain.controls.edit.*;
 import org.luwrain.studio.*;
 import org.luwrain.studio.util.*;
 import org.luwrain.script.controls.*;

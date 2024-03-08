@@ -18,7 +18,8 @@ package org.luwrain.studio.util;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
-import org.luwrain.controls.MultilineEdit.ModificationResult;
+import org.luwrain.controls.edit.*;
+import org.luwrain.controls.edit.MultilineEdit.ModificationResult;
 
 public class EditAugmentationUtils extends EditUtils.EmptyCorrector
 {

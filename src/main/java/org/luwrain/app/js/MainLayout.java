@@ -22,8 +22,9 @@ import org.luwrain.core.*;
 import org.luwrain.core.events.*;
 import org.luwrain.app.base.*;
 import org.luwrain.controls.*;
+import org.luwrain.controls.edit.*;
 
-import static org.luwrain.controls.EditUtils.*; 
+import static org.luwrain.controls.edit.EditUtils.*; 
 
 final class MainLayout extends LayoutBase
 {
