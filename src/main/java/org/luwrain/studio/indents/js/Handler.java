@@ -22,7 +22,7 @@ public class Handler
 
     void beginBlock(String type, int line, int pos)
     {
-	//	System.out.println("#" + type + " "  + line + ", " + pos);
+		System.out.println("#" + type + " "  + line + ", " + pos);
 	while (lines.size() < line + 1)
 	    lines.add(new LineInfo());
 

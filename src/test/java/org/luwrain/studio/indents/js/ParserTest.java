@@ -299,6 +299,33 @@ public class ParserTest
 		assertEquals(0, h.getCalculatedIndent(5));
     }
 
+    @Test public void classWithConstructorAndAsyncFunc()
+    {
+	final var h = new Handler();
+	new Parser(h, asList(
+			     "class foo ",
+			     "{",
+			     "  constructor()",
+			     "  {",
+			     "    var i = 0;",
+			     			     "  }",
+			     "  async bar()",
+			     "  {",
+			     "  }",
+			     "}")).parse();
+	assertEquals(0, h.getCalculatedIndent(1));
+	assertEquals(0, h.getCalculatedIndent(2));
+	assertEquals(4, h.getCalculatedIndent(3));
+	assertEquals(2, h.getCalculatedIndent(4));
+	assertEquals(6, h.getCalculatedIndent(5));
+	assertEquals(2, h.getCalculatedIndent(6));
+	assertEquals(2, h.getCalculatedIndent(7));
+	assertEquals(2, h.getCalculatedIndent(8));
+		assertEquals(2, h.getCalculatedIndent(9));
+				assertEquals(0, h.getCalculatedIndent(10));
+    }
+
+
 
 
 
