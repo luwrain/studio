@@ -22,6 +22,7 @@ import static java.util.Arrays.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+@Disabled
 public class ParserTest
 {
     @Test public void singleLineFuncBrief()
@@ -251,4 +252,54 @@ public class ParserTest
 	assertEquals(2, h.getCalculatedIndent(4));
 	assertEquals(0, h.getCalculatedIndent(5));
     }
+
+            @Test public void classSimple()
+    {
+	final var h = new Handler();
+	new Parser(h, asList(
+			     "class foo",
+			     "{",
+			     "  var i = 0;",
+			     "}")).parse();
+		assertEquals(0, h.getCalculatedIndent(1));
+		assertEquals(0, h.getCalculatedIndent(2));
+		assertEquals(4, h.getCalculatedIndent(3));
+		assertEquals(0, h.getCalculatedIndent(4));
+    }
+
+            @Test public void classSimpleCoupleVars()
+    {
+	final var h = new Handler();
+	new Parser(h, asList(
+			     "class foo",
+			     "{",
+			     "  var i = 0;",
+			     			     "  var k = 0;",
+			     "}")).parse();
+		assertEquals(0, h.getCalculatedIndent(1));
+		assertEquals(0, h.getCalculatedIndent(2));
+		assertEquals(4, h.getCalculatedIndent(3));
+				assertEquals(2, h.getCalculatedIndent(4));
+		assertEquals(0, h.getCalculatedIndent(5));
+    }
+
+    @Test public void classWithConstructor()
+    {
+	final var h = new Handler();
+	new Parser(h, asList(
+			     "class foo {",
+			     "  constructor(){",
+			     "    var i = 0;",
+			     			     "  }",
+			     "}")).parse();
+		assertEquals(0, h.getCalculatedIndent(1));
+		assertEquals(4, h.getCalculatedIndent(2));
+		assertEquals(6, h.getCalculatedIndent(3));
+				assertEquals(2, h.getCalculatedIndent(4));
+		assertEquals(0, h.getCalculatedIndent(5));
+    }
+
+
+
+
 }

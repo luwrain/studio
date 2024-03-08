@@ -7,6 +7,9 @@ public class Handler
 {
     static private final String
 	BLOCK = "BlockContext",
+	CLASS_BODY = "ClassTailContext",
+		CLASS_EL = "ClassElementContext",
+	FIELD = "FieldDefinitionContext",
 	FUNC_EXP = "FunctionExpressionContext",
 	FUNC_DECL = "FunctionDeclarationContext",
 	FUNC_BODY = "FunctionBodyContext",
@@ -24,10 +27,22 @@ public class Handler
 	    lines.add(new LineInfo());
 
 	final LineInfo lineInfo = lines.get(line);
-	final StackItem newStackItem = type.equals(STATEMENT)?new StackItem(type, line, pos):null;
+	final StackItem newStackItem;
+	switch(type)
+	{
+	case STATEMENT:
+	case CLASS_EL:
+	newStackItem = new StackItem(type, line, pos);
+	break;
+	default:
+	    newStackItem = null;
+	}
 
 	//Registering the first element on the line
-	if (type.equals(STATEMENT) && lineInfo.firstType == null)
+	if (lineInfo.firstType == null && (
+					   type.equals(STATEMENT) ||
+					   type.equals(CLASS_EL)
+					   ))
 	{
 	    lineInfo.firstType = type;
 	    lineInfo.firstStackItem = newStackItem;
@@ -40,7 +55,7 @@ public class Handler
 	    }
 	}
 
-	if (type.equals(STATEMENT))
+	if (newStackItem != null)
 	{
 	    stack.add(newStackItem);
 	    return;
@@ -82,11 +97,12 @@ public class Handler
 	    lines.add(new LineInfo());
 	final LineInfo lineInfo = lines.get(endLine);
 
+	//	System.out.println("Closing " + type + " " + endLine + " " + endPos + ", " + startLine + " " + startPos);
 	//Processing the closing brackets
-	if ((type.equals( FUNC_BODY) ||
-	     type.equals(BLOCK)) &&
-	    lineInfo.firstType == null && !stack.isEmpty())
-	{
+	if (lineInfo.firstType == null && !stack.isEmpty() &&  (
+								type.equals( FUNC_BODY) || type.equals(CLASS_BODY) ||
+type.equals(BLOCK)
+			 )) {
 	    lineInfo.calcIndent = stack.getLast().pos;
 	}
 
@@ -114,8 +130,10 @@ public class Handler
 	int prevStatementIndent = -1;
 	StackItem(String type, int line, int pos)
 	{
+	    /*
 	    if (!type.equals(STATEMENT))
 		throw new IllegalArgumentException("type can be only the statement (" + type + ")");
+	    */
 	    this.type = type;
 	    this.line = line;
 	    this.pos = pos;
