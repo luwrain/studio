@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -35,12 +35,10 @@ public final class JavaSyntax
 	String getText();
     }
 
-    
     public final Source source;
     public final SpanTree spanTree = new SpanTree();
     public JavaSyntax(Source source)
     {
-	NullCheck.notNull(source, "source");
 	this.source = source;
     }
 

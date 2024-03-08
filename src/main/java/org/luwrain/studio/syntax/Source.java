@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -21,6 +21,8 @@ import java.util.*;
 
 import org.luwrain.core.*;
 
+import static org.luwrain.core.NullCheck.*;
+
 public class Source implements Lines
 {
     static private final char
@@ -31,7 +33,7 @@ public class Source implements Lines
 
     public Source(String content)
     {
-	NullCheck.notNull(content, "content");
+	notNull(content, "content");
 	if (!content.isEmpty())
 	{
 	    this.content = content.replaceAll("\r\n", "\n").replaceAll("\r", "\n");
@@ -41,7 +43,7 @@ public class Source implements Lines
 
     public Source(String[] lines)
     {
-	NullCheck.notNullItems(lines, "lines");
+	notNullItems(lines, "lines");
 	this.lines = lines.clone();
 	final StringBuilder b = new StringBuilder();
 	for(int i = 0;i < lines.length;i++)
@@ -53,7 +55,7 @@ public class Source implements Lines
 
     public Source(Lines lines)
     {
-	NullCheck.notNull(lines, "lines");
+	notNull(lines, "lines");
 	final ArrayList<String> l = new ArrayList<>();
 	final StringBuilder b = new StringBuilder();
 	for(int i = 0;i < lines.getLineCount();i++)

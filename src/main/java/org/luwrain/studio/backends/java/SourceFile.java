@@ -53,6 +53,7 @@ final class SourceFile implements Part
 	    }
     	this.lines = FileUtils.readTextFileMultipleStrings(file, "UTF-8", null);
 	final long timeStart = System.currentTimeMillis();
+	/*
 	try {
 	final Parser p = new Parser();
 	p.parse(lines);
@@ -61,6 +62,7 @@ final class SourceFile implements Part
 		    {
 			Log.error(LOG_COMPONENT, "unable to parse " + file.getAbsolutePath() + ": no enough memory");
 		    }
+	*/
 	final long timeEnd = System.currentTimeMillis();
 	final long mem = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1048576;
 	Log.debug(LOG_COMPONENT, "time " + (timeEnd - timeStart) + "ms, mem " + mem + "M, file " + file.getAbsolutePath());

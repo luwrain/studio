@@ -22,7 +22,6 @@ import static java.util.Arrays.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
-@Disabled
 public class ParserTest
 {
     @Test public void singleLineFuncBrief()
@@ -325,8 +324,15 @@ public class ParserTest
 				assertEquals(0, h.getCalculatedIndent(10));
     }
 
-
-
-
-
+        @Test public void lambda()
+    {
+	final var h = new Handler();
+	new Parser(h, asList(
+			     "const a = ()=>{",
+			     "  var b = 0;",
+			     "};")).parse();
+	assertEquals(0, h.getCalculatedIndent(1));
+	assertEquals(4, h.getCalculatedIndent(2));
+	assertEquals(0, h.getCalculatedIndent(3));
+    }
 }

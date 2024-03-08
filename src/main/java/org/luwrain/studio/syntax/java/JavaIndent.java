@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -18,9 +18,11 @@ package org.luwrain.studio.syntax.java;
 
 import java.util.*;
 
-import org.luwrain.core.*;
+
 import org.luwrain.studio.syntax.*;
 import org.luwrain.studio.syntax.SpanTree.*;
+
+import static org.luwrain.core.NullCheck.*;
 
 public final class JavaIndent
 {
@@ -30,9 +32,9 @@ public final class JavaIndent
     final IndentUtils utils;
     public JavaIndent(Source source, SpanTree spanTree, SyntaxParams params)
     {
-	NullCheck.notNull(source, "source");
-	NullCheck.notNull(spanTree, "spanTree");
-	NullCheck.notNull(params, "params");
+	notNull(source, "source");
+	notNull(spanTree, "spanTree");
+	notNull(params, "params");
 	this.source = source;
 	this.spanTree = spanTree;
 	this.params = params;
