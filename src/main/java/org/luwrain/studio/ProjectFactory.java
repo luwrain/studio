@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -25,6 +25,7 @@ import org.luwrain.studio.backends.tex.TexProject;
 import org.luwrain.studio.proj.wizards.*;
 
 import static org.luwrain.studio.ProjectType.*;
+import static org.luwrain.core.NullCheck.*;
 
 public final class ProjectFactory
 {
@@ -33,7 +34,7 @@ public final class ProjectFactory
 
     public ProjectFactory(IDE ide)
     {
-	NullCheck.notNull(ide, "ide");
+	notNull(ide, "ide");
 	this.ide = ide;
 	this.luwrain = ide.getLuwrainObj();
     }
@@ -42,6 +43,7 @@ public final class ProjectFactory
     {
 	return new ProjectType[]{
 	    new ProjectType("latex-presentation", 0, "Презентация TeX"),
+	    	    new ProjectType(TEX_ARTICLE, 0, "Статья TeX"),
 	    new ProjectType("lilypond-piano", 0, "Фортепианная пьеса Lilypond"),
 	};
     }
@@ -67,6 +69,7 @@ public final class ProjectFactory
 
     public void create(String projType, File destDir)
     {
+	try {
 	switch(projType)
 	{
 	case TEX_PRESENTATION: {
@@ -75,8 +78,19 @@ public final class ProjectFactory
 	    luwrain.announceActiveArea();
 	    return;
 	}
+	    	case TEX_ARTICLE: {
+		    final var w = new ProjectWizard(ide, destDir, "newLatexArticle.groovy");
+	    ide.showWizard(w);
+	    luwrain.announceActiveArea();
+	    return;
+	}
 	default:
 	    throw new IllegalArgumentException("Unknown project type: " + projType);
 	}
+    }
+    catch(IOException e)
+    {
+	throw new RuntimeException(e);
+    }
     }
 }

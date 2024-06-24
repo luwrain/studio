@@ -16,12 +16,13 @@
 
 package org.luwrain.app.studio;
 
-import java.io.*;
-import java.nio.file.*;
+import org.luwrain.core.annotations.*;
 
+@ResourceStrings(name = "luwrain.studio", resource = "strings.properties", langs = { "en", "ru" })
 public interface Strings
 {
-    static final String NAME = "luwrain.studio";
+    static final String
+	NAME = "luwrain.studio";
 
     String appName();
         String outputAreaName();

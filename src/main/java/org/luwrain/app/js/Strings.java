@@ -16,9 +16,13 @@
 
 package org.luwrain.app.js;
 
+import org.luwrain.core.annotations.*;
+
+@ResourceStrings(name = "luwrain.js", resource = "strings.properties", langs = { "en", "ru" })
 public interface Strings
 {
-    static final String NAME = "luwrain.js";
+    static final String
+	NAME = "luwrain.js";
 
     String appName();
 }

@@ -16,18 +16,13 @@
 
 package org.luwrain.studio;
 
-import java.util.*;
+import com.google.auto.service.*;
 
 import org.luwrain.core.*;
-import org.luwrain.i18n.*;
 
-import static org.luwrain.i18n.Lang.*;
-
+@AutoService(org.luwrain.core.Extension.class)
 public final class Extension extends EmptyExtension
 {
-    static final String
-	LOG_COMPONENT = "studio";
-
     @Override public Command[] getCommands(Luwrain luwrain)
     {
 	return new Command[]{
@@ -50,18 +45,5 @@ public final class Extension extends EmptyExtension
 	    },
 	    new SimpleShortcut("js", org.luwrain.app.js.App.class)
 	};
-    }
-
-        @Override public void i18nExtension(Luwrain luwrain, org.luwrain.i18n.I18nExtension i18n)
-    {
-	try {
-	    i18n.addStrings(RU, org.luwrain.studio.edit.tex.Strings.NAME, new ResourceStringsObj(luwrain, getClass().getClassLoader(), getClass(), "edit-tex.properties").create(RU, org.luwrain.studio.edit.tex.Strings.class));
-	    	    i18n.addStrings(RU, org.luwrain.studio.proj.wizards.Strings.NAME, new ResourceStringsObj(luwrain, getClass().getClassLoader(), getClass(), "wizards.properties").create(RU, org.luwrain.studio.proj.wizards.Strings.class));
-		    	    i18n.addStrings(RU, org.luwrain.app.js.Strings.NAME, new ResourceStringsObj(luwrain, getClass().getClassLoader(), getClass(), "js.properties").create(RU, org.luwrain.app.js.Strings.class));
-	}
-	catch(java.io.IOException e)
-	{
-	    Log.error(LOG_COMPONENT, "unable to init i18n: " + e.getClass().getName() + ": " + e.getMessage());
-	}
     }
 }

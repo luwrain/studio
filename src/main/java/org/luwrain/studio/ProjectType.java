@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -14,43 +14,32 @@
    General Public License for more details.
 */
 
-//LWR_API 1.0
-
 package org.luwrain.studio;
+
+import lombok.*;
 
 import org.luwrain.core.*;
 
+import static org.luwrain.core.NullCheck.*;
+
+@Data
 public final class ProjectType implements Comparable
 {
     static public final String
-	TEX_PRESENTATION = "latex-presentation";
+	TEX_PRESENTATION = "latex-presentation",
+	TEX_ARTICLE = "latex-article";
 
-    private final String id;
-    private final Integer orderIndex;
-    private final String title;
+    final String id;
+    final Integer orderIndex;
+    final String title;
 
     public ProjectType(String id, int orderIndex, String title)
     {
-	NullCheck.notEmpty(id, "id");
-	NullCheck.notNull(title, "title");
+	notEmpty(id, "id");
+	notNull(title, "title");
 	this.id = id;
 	this.orderIndex = new Integer(orderIndex);
 	this.title = title;
-    }
-
-    public String getId()
-    {
-	return id;
-    }
-
-    public int getOrderIndex()
-    {
-	return orderIndex.intValue();
-    }
-
-    public String getTitle()
-    {
-	return title;
     }
 
     @Override public String toString()
@@ -60,15 +49,15 @@ public final class ProjectType implements Comparable
 
     @Override public boolean equals(Object o)
     {
-	if (o == null || !(o instanceof ProjectType))
-	    return false;
-	return id.equals(((ProjectType)o).id);
+	if (o != null && o instanceof ProjectType t)
+	    return id.equals(t.id);
+	return false;
     }
 
     @Override public int compareTo(Object o)
     {
-	if (o == null || !(o instanceof ProjectType))
+	if (o != null && o instanceof ProjectType t)
+	    return orderIndex.compareTo(t.orderIndex);
 	    return 0;
-	return orderIndex.compareTo(((ProjectType)o).orderIndex);
     }
 }

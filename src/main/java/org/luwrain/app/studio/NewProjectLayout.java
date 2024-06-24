@@ -40,8 +40,6 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	params.appearance = new ListUtils.DefaultAppearance<ProjectType>(params.context){
 		@Override public void announceItem(ProjectType item, Set<Flags> flags)
 		{
-		    NullCheck.notNull(item, "item");
-		    NullCheck.notNull(flags, "flags");
 		    app.setEventResponse(DefaultEventResponse.listItem(app.getLuwrain().getSpeakableText(item.toString(), Luwrain.SpeakableTextType.NATURAL)));
 		}
 	    };
@@ -53,7 +51,8 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 
     @Override public boolean onListClick(ListArea listArea, int index, ProjectType projType)
     {
-    	final File destDir = app.getConv().newProjectDir();
+	//    	final File destDir = app.getConv().newProjectDir();
+	final File destDir = new File("/x/proj");
 	if (destDir == null)
 	    return true;
 	final ProjectFactory factory = new ProjectFactory(app.ide);

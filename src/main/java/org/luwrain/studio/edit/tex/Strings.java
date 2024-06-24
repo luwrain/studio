@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -16,6 +16,9 @@
 
 package org.luwrain.studio.edit.tex;
 
+import org.luwrain.core.annotations.*;
+
+@ResourceStrings(name = "luwrain.studio.edit.tex", resource = "strings.properties", langs = { "en", "ru" })
 public interface Strings
 {
     static public final String NAME = "luwrain.studio.edit.tex";
