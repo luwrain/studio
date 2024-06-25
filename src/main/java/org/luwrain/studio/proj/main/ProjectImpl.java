@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -25,6 +25,8 @@ import com.google.gson.annotations.*;
 import org.luwrain.core.*;
 import org.luwrain.studio.*;
 
+import static org.luwrain.core.NullCheck.*;
+
 public final class ProjectImpl implements  org.luwrain.studio.Project
 {
 static final Gson gson = new Gson();
@@ -35,8 +37,6 @@ static final Gson gson = new Gson();
     private transient File projFile = null;
     private transient File projDir = null;
     private transient IDE ide = null;
-    //    private transient Strings strings = null;
-
 
     @Override public org.luwrain.studio.Part getPartsRoot() { return folders; }
     @Override public org.luwrain.studio.Part getMainSourceFile() { return null; }
@@ -46,11 +46,11 @@ static final Gson gson = new Gson();
 	save();
     }
 
-    void setProjectFile(File projFile)
+    public void setProjectFile(File projFile)
     {
 	final File parent = projFile.getParentFile();
 	if (parent == null)
-	    throw new IllegalArgumentException("projFile must have the not-null parent");
+	    throw new IllegalArgumentException("projFile must have the non-null parent");
 	this.projDir = parent;
 	this.projFile = projFile;
     }
@@ -58,22 +58,20 @@ static final Gson gson = new Gson();
     File getProjectDir()
     {
 	if (projDir == null)
-	    throw new RuntimeException("The project does not have any project directory information");
+	    throw new RuntimeException("The project doesn't have any information about its project directory");
 	return projDir;
     }
 
     private void finalizeLoading(IDE ide)
     {
-	NullCheck.notNull(ide, "ide");
+	notNull(ide, "ide");
 	if (folders == null)
 	{
 	    folders = new Folder();
 	    folders.setName("Tex root");
     }
 	folders.init(this, ide);
-	//	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);
     }
-
 
     public String getProjName()
     {
@@ -82,21 +80,23 @@ static final Gson gson = new Gson();
 
     public void setProjName(String projName)
     {
-	NullCheck.notNull(projName, "projName");
+	notNull(projName, "projName");
 	if (projName.trim().isEmpty())
 	    throw new IllegalArgumentException("projName can't be empty");
 	this.projName = projName.trim();
     }
 
-    public Folder getRootFolder() { return this.folders; }
+    public Folder getRootFolder() {
+	return this.folders;
+    }
 
     public void setRootFolder(Folder rootFolder)
     {
-	NullCheck.notNull(rootFolder, "rootFolder");
+	notNull(rootFolder, "rootFolder");
 	this.folders = rootFolder;
     }
 
-    void save()
+    public void save()
     {
 	if (projFile == null)
 	    throw new IllegalStateException("projFile is not set");
@@ -121,5 +121,4 @@ proj.finalizeLoading(ide);
 return proj;
 	}
     }
-
 }

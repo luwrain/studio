@@ -8,7 +8,7 @@
   </parent>
   <artifactId>luwrain-studio</artifactId>
   <name>LUWRAIN Studio</name>
-  <description>A text editor for the blind based on the LUWRAIN platform</description>
+  <description>A text editor for the blind</description>
   <url>https://github.com/luwrain/studio/</url>
   <packaging>jar</packaging>
   <dependencies>

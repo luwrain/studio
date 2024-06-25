@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2021 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -22,6 +22,7 @@ import java.io.*;
 
 import org.luwrain.core.*;
 
+/** Represents a common information about a LUWRAIN Studio project. */
 public interface Project
 {
     Project load(File file, IDE ide) throws IOException;

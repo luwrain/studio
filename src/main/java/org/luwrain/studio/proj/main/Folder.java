@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2022 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -29,6 +29,7 @@ import org.luwrain.popups.*;
 import org.luwrain.studio.edit.tex.*;
 
 import static org.luwrain.studio.Part.*;
+import static org.luwrain.core.NullCheck.*;
 
 public final class Folder implements Part
 {
@@ -41,8 +42,8 @@ public final class Folder implements Part
 
     void init(ProjectImpl proj, IDE ide)
     {
-	NullCheck.notNull(proj, "proj");
-	NullCheck.notNull(ide, "ide");
+	notNull(proj, "proj");
+	notNull(ide, "ide");
 	this.proj = proj;
 	this.ide = ide;
 	if (name == null)
@@ -69,17 +70,15 @@ public final class Folder implements Part
 	return res.toArray(new Part[res.size()]);
     }
 
-
     public void setName(String name)
     {
 	NullCheck.notEmpty(name, "name");
 	this.name = name;
     }
 
-
 public void setSubfolders(List<Folder> subfolders)
 {
-    NullCheck.notNull(subfolders, "subfolders");
+    notNull(subfolders, "subfolders");
     this.subfolders = subfolders;
 }
 
