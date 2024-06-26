@@ -26,6 +26,7 @@ import org.luwrain.core.*;
 public interface Project
 {
     Project load(File file, IDE ide) throws IOException;
+    File getProjectDir();
     void close();
     Part getPartsRoot();
         Part getMainSourceFile();

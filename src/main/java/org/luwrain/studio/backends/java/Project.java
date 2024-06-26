@@ -102,7 +102,7 @@ public final class Project implements  org.luwrain.studio.Project
 	return this.closed;
     }
 
-    File getProjectDir()
+    @Override public File getProjectDir()
     {
 	return projDir;
     }

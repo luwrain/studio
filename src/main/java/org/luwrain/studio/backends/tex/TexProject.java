@@ -62,7 +62,7 @@ public final class TexProject implements  org.luwrain.studio.Project
 	this.projFile = projFile;
     }
 
-    File getProjectDir()
+    @Override public File getProjectDir()
     {
 	if (projDir == null)
 	    throw new RuntimeException("The project does not have any project directory information");

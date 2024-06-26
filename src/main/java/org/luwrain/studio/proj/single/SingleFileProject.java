@@ -44,6 +44,11 @@ public final class SingleFileProject implements Project
 	    ((TexSourceFile)mainPart).init(this, ide);
     }
 
+    @Override public File getProjectDir()
+    {
+	return projDir;
+    }
+
     @Override public void close()
     {
     }

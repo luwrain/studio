@@ -19,12 +19,18 @@ package org.luwrain.studio.edit.tex;
 import java.io.*;
 import java.util.*;
 
+import org.apache.logging.log4j.*;
+
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 
+import static org.luwrain.core.NullCheck.*;
+
 public final class TexSourceFile implements Part
 {
+    static private final Logger log = LogManager.getLogger();
+
     private String
 	name = null,
 	path = null;
@@ -42,10 +48,11 @@ public final class TexSourceFile implements Part
 
     public void init(Project proj, IDE ide)
     {
-	NullCheck.notNull(proj, "proj");
-	NullCheck.notNull(ide, "ide");
+	notNull(proj, "proj");
+	notNull(ide, "ide");
 	this.proj = proj;
 	this.ide = ide;
+	this.projDir = proj.getProjectDir();
     }
 
     @Override public String getTitle() 
@@ -60,7 +67,9 @@ public final class TexSourceFile implements Part
 
     @Override public Editing startEditing() throws IOException
     {
-	return new TexEditing(ide, new File(projDir, path));
+	final var file = new File(projDir, path);
+	log.trace("Opening for editing the tex file " + file.getAbsolutePath());
+	return new TexEditing(ide, file);
     }
 
     @Override public String toString()

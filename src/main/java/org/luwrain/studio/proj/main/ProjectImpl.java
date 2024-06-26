@@ -55,7 +55,7 @@ static final Gson gson = new Gson();
 	this.projFile = projFile;
     }
 
-    File getProjectDir()
+    @Override public File getProjectDir()
     {
 	if (projDir == null)
 	    throw new RuntimeException("The project doesn't have any information about its project directory");
