@@ -81,10 +81,12 @@ public final class ProjectWizard extends LayoutBase
 			throw new RuntimeException(ex);
 		    }
 		}
-		public void saveProject(String fileName, ProjectImpl proj)
+		public void finish(String fileName, ProjectImpl proj)
 		{
-		    proj.setProjectFile(new File(destDir, fileName));
+		    final var file = new File(destDir, fileName);
+		    proj.setProjectFile(file);
 		    proj.save();
+		    ide.loadProject(file);
 		}
 	    };
 	Eval.me("wizard", controller, getStringResource(this.getClass(), scriptName));

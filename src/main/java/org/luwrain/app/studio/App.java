@@ -102,7 +102,8 @@ public final class App extends AppBase<Strings>
 	return runTask(taskId, ()->{
 		final Project proj;
 		try {
-		    proj = new ProjectFactory(ide).load(file);
+		    proj = new org.luwrain.studio.proj.main.ProjectImpl().load(file, getIde());
+		    //		    proj;
 		}
 		catch(Throwable e)
 		{

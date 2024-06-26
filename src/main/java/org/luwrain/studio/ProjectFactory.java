@@ -48,6 +48,7 @@ public final class ProjectFactory
 	};
     }
 
+    /*
     public Project load(File projFile) throws IOException
     {
 	final Project loader = readProjectKey(projFile);
@@ -58,6 +59,7 @@ public final class ProjectFactory
 	    throw new IOException(projFile.getPath() + " doesn't contain proper  project structure");
 	return proj;
     }
+    */
 
     private Project readProjectKey(File projFile) throws IOException
     {

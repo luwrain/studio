@@ -1,5 +1,6 @@
 
 import org.luwrain.studio.proj.main.*
+import org.luwrain.studio.edit.tex.TexSourceFile
 
 wizard 'Новая статья', 'greeting', {
 frame 'greeting', {
@@ -10,10 +11,7 @@ if (values.getText(0).trim().isEmpty()) {
 error 'Название статьи не может быть пустым'
 return;
 }
-wizard.setValue 'authors', values.getText(0).trim()
-def l = new ArrayList<String>()
-l << '123'
-wizard.writeFile 'sections.tex', l
+wizard.setValue 'title', values.getText(0).trim()
 show 'second'
 }
 }
@@ -21,13 +19,18 @@ show 'second'
 frame 'second', {
 input 'authors', 'Авторы: ', wizard.getValue('authors')
 input 'org', 'Организация: ', ''
-button 'Создать' {
+button 'Создать', { values ->
+
+def l = new ArrayList<String>()
+l << '123'
+wizard.writeFile 'sections.tex', l
+
 def root = new Folder();
-root.setName values.getText(0)
+root.setName wizard.getValue('title')
+root.getTexFiles().add(new TexSourceFile('Главное содержание', 'sections.tex'))
 def proj = new ProjectImpl();
 proj.setRootFolder root
-wizard.saveProject 'article.lwrproj', proj
-
+wizard.finish 'article.lwrproj', proj
 }
 }
 

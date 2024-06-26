@@ -82,7 +82,12 @@ public void setSubfolders(List<Folder> subfolders)
     this.subfolders = subfolders;
 }
 
-    public List<TexSourceFile> getTexFiles() { return this.texFiles != null?this.texFiles:new ArrayList<>(); }
+    public List<TexSourceFile> getTexFiles()
+    {
+	if (texFiles == null)
+	    texFiles = new ArrayList<>();
+	return texFiles;
+    }
     public void setTexFiles(List<TexSourceFile> texFiles) { this.texFiles = texFiles; }
 
                 @Override public org.luwrain.studio.Part.Action[] getActions()
