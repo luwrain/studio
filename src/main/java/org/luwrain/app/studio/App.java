@@ -19,6 +19,8 @@ package org.luwrain.app.studio;
 import java.util.*;
 import java.io.*;
 
+import org.apache.logging.log4j.*;
+
 import org.luwrain.core.*;
 import org.luwrain.core.events.*;
 import org.luwrain.core.queries.*;
@@ -30,10 +32,11 @@ import org.luwrain.script.*;
 
 import org.luwrain.studio.proj.single.*;
 
+import static org.luwrain.core.NullCheck.*;
+
 public final class App extends AppBase<Strings>
 {
-    static public final String
-	LOG_COMPONENT = "studio";
+    static private final Logger log = LogManager.getLogger();
 
     private final String arg;
     final IDE ide = getIde();
@@ -98,20 +101,23 @@ public final class App extends AppBase<Strings>
     {
 	if (!file.exists() || file.isDirectory())
 	    return false;
-	final TaskId taskId = newTaskId();
+	log.trace("Loading the project " + file.getAbsolutePath());
+	final var taskId = newTaskId();
 	return runTask(taskId, ()->{
 		final Project proj;
 		try {
 		    proj = new org.luwrain.studio.proj.main.ProjectImpl().load(file, getIde());
 		    //		    proj;
 		}
-		catch(Throwable e)
+		catch(Throwable ex)
 		{
-		    getLuwrain().crash(e);
+		    log.catching(ex);
+		    getLuwrain().crash(ex);
 		    return;
 		}
 		if (proj == null)
 		{
+		    log.error("No loaded project");
 		    //FIXME:message
 		    return;
 		}
@@ -141,7 +147,7 @@ public final class App extends AppBase<Strings>
 	for(File f: scripts)
 	    if (f != null && f.getName().startsWith("studio-"))
 	    {
-		Log.debug(LOG_COMPONENT, "loading " + f.getAbsolutePath());
+		log.trace("Loading " + f.getAbsolutePath());
 		scriptCore.load(f);
 	    }
     }
@@ -169,7 +175,7 @@ public final class App extends AppBase<Strings>
 	    }
 	    @Override public void showWizard(LayoutBase wizardLayout)
 	    {
-		NullCheck.notNull(wizardLayout, "wizardLayout");
+		notNull(wizardLayout, "wizardLayout");
 		setAreaLayout(wizardLayout);
 	    }
 	};
@@ -188,10 +194,12 @@ public final class App extends AppBase<Strings>
 
     void activateProject(Project proj)
     {
-	NullCheck.notNull(proj, "proj");
+	notNull(proj, "proj");
 	this.proj = proj;
 	this.treeRoot = proj.getPartsRoot();
-	projectBaseLayout.treeArea.refresh();
+	if (treeRoot == null)
+	    log.warn("No project tree root");
+	projectBaseLayout.treeArea.requery();
 	layouts().projectBase();
     }
 

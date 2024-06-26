@@ -26,17 +26,17 @@ import static org.luwrain.core.NullCheck.*;
 
 final class ProjectTreeModel implements TreeListArea.Model<Part>
 {
-    final Project proj;
+    final App app;
 
-    ProjectTreeModel(Project proj)
+    ProjectTreeModel(App app)
     {
-	notNull(proj, "proj");
-	this.proj = proj;
+	notNull(app, "app");
+	this.app = app;
     }
 
         @Override public Part getRoot()
     {
-	return proj.getPartsRoot();
+	return app.getProject().getPartsRoot();
     }
 
     @Override public boolean getItems(Part part, TreeListArea.Collector<Part> collector)

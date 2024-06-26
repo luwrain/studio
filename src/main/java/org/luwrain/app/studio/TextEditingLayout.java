@@ -29,7 +29,7 @@ import org.luwrain.app.base.*;
 public final class TextEditingLayout extends LayoutBase
 {
     private final App app;
-    final TreeArea treeArea;
+    final TreeListArea<Part> treeArea;
     final EditArea editArea;
     final NavigationArea outputArea = null;
     private final TextEditing textEditing;

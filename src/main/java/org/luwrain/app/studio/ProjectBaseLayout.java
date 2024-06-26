@@ -25,24 +25,24 @@ import org.luwrain.controls.*;
 import org.luwrain.studio.*;
 import org.luwrain.app.base.*;
 
-public final class ProjectBaseLayout extends LayoutBase implements TreeArea.ClickHandler
+public final class ProjectBaseLayout extends LayoutBase implements TreeListArea.LeafClickHandler<Part>
 {
     static final InputEvent
 	KEY_TREE_TOGGLE = new InputEvent(InputEvent.Special.F5);
 
     private final App app;
-    final TreeArea treeArea;
+    final TreeListArea treeArea;
 
     ProjectBaseLayout(App app)
     {
 	super(app);
 	this .app = app;
-	final TreeArea.Params params = new TreeArea.Params();
+	final var params = new TreeListArea.Params<Part>();
 	params.context = getControlContext();
-	params.model = new CachedTreeModel(new TreeModel());
+	params.model = new ProjectTreeModel(app);
 	params.name = app.getStrings().treeAreaName();
-	params.clickHandler = this;
-	this.treeArea = new TreeArea(params){
+	params.leafClickHandler = this;
+	this.treeArea = new TreeListArea<>(params){
 		@Override public boolean onInputEvent(InputEvent event)
 		{
 		    //Switching to the edit area
@@ -96,11 +96,8 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
 	setAreaLayout(treeArea, null);
     }
 
-    @Override public boolean onTreeClick(TreeArea treeArea, Object obj)
+    @Override public boolean onLeafClick(TreeListArea<Part> area, Part part)
     {
-	if (obj == null || !(obj instanceof Part))
-	    return false;
-	final Part part = (Part)obj;
 	try {
 	    final Editing editing = part.startEditing();
 	    if (editing == null)
@@ -118,28 +115,5 @@ public final class ProjectBaseLayout extends LayoutBase implements TreeArea.Clic
     protected boolean activateEditArea(boolean closeTree)
     {
 	return false;
-    }
-
-    private final class TreeModel implements CachedTreeModelSource
-    {
-	@Override public Object getRoot()
-	{
-	    if (app.getProject() == null)
-		return app.getStrings().treeRoot();
-	    return app.getProject().getPartsRoot();
-	}
-	@Override public Object[] getChildObjs(Object obj)
-	{
-	    if (app.getProject() == null || !(obj instanceof Part))
-		return new Object[0];
-	    final Part part = (Part)obj;
-	    final Part[] res = part.getChildParts();
-	    if (res == null)
-		return new Object[0];
-	    for(int i = 0;i < res.length;i++)
-		if (res[i] == null)
-		    return new Object[0];
-	    return res;
-	}
     }
 }

@@ -16,22 +16,26 @@ show 'second'
 }
 }
 
-frame 'second', {
-input 'authors', 'Авторы: ', wizard.getValue('authors')
-input 'org', 'Организация: ', ''
-button 'Создать', { values ->
+  frame 'second', {
+    input 'authors', 'Авторы: ', wizard.getValue('authors')
+    input 'org', 'Организация: ', wizard.getValue('org')
+    input 'city', 'Город: ', wizard.getValue('city ')
+    button 'Создать', { values ->
+      def l = new ArrayList<String>()
+      l << '\\section*{Введение}'
+      wizard.writeFile 'intro.tex', l
 
-def l = new ArrayList<String>()
-l << '123'
-wizard.writeFile 'sections.tex', l
+      def root = new Folder();
+      root.setName wizard.getValue('title')
+      root.getTexFiles().add(new TexSourceFile('Титульная часть', 'title.tex'))
+      root.getTexFiles().add(new TexSourceFile('Введение', 'intro.tex'))
+      root.getTexFiles().add(new TexSourceFile('Основной текст', 'main.tex'))
+      root.getTexFiles().add(new TexSourceFile('Заключение', 'conclusion.tex'))
+      root.getTexFiles().add(new TexSourceFile('Список литературы', 'biblio.tex'))
 
-def root = new Folder();
-root.setName wizard.getValue('title')
-root.getTexFiles().add(new TexSourceFile('Главное содержание', 'sections.tex'))
-def proj = new ProjectImpl();
-proj.setRootFolder root
-wizard.finish 'article.lwrproj', proj
-}
-}
-
+      def proj = new ProjectImpl()
+      proj.setRootFolder root
+      wizard.finish 'article.lwrproj', proj
+    }
+  }
 }
