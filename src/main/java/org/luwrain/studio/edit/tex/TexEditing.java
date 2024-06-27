@@ -45,9 +45,9 @@ final class TexEditing extends TextEditingBase
     final Strings strings;
     final TexSourceFile sourceFile;
 
-    TexEditing(IDE ide, File file, TexSourceFile sourceFile) throws IOException
+    TexEditing(IDE ide, TexSourceFile sourceFile) throws IOException
     {
-	super(ide, file);
+	super(ide, sourceFile.getFile());
 	this.spellChecking =new EditSpellChecking(ide.getLuwrainObj());
 	this.sourceFile = sourceFile;
 	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);
@@ -57,15 +57,17 @@ final class TexEditing extends TextEditingBase
 
     @Override public EditArea.Params getEditParams(ControlContext context)
     {
-	final EditArea.Params params = new EditArea.Params();
+	final var params = new EditArea.Params();
 	params.context = context;
 		params.name = file.getName();
 		params.content = getContent();
 		params.appearance = new TexAppearance(context, getContent());
-	params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));
-	params.changeListeners = new ArrayList<>(Arrays.asList(spellChecking));
+		params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));
+	params.changeListeners = new ArrayList<>(Arrays.asList(
+							       (EditArea.ChangeListener)(edit, lines, hotPoint) -> sourceFile.modified.set(true),
+							       spellChecking));
 	params.editFactory = (editParams)->{
-	    final MultilineEditCorrector base = (MultilineEditCorrector)editParams.model;
+	    final var base = (MultilineEditCorrector)editParams.model;
 	    editParams.model = new EditCorrectorHooks(ide.getScriptCore(), new TexNewLineIndent(base), HOOK_EDIT);
 	    setEdit(new MultilineEdit(editParams), base);
 	    return getEdit();

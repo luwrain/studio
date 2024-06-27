@@ -58,12 +58,7 @@ public final class TexSourceFile implements Part
 	this.projDir = proj.getProjectDir();
     }
 
-    @Override public String getTitle() 
-    {
-	return name != null?name:"NONAME";
-    }
-
-    @Override public Part[] getChildParts()
+        @Override public Part[] getChildParts()
     {
 	return null;
     }
@@ -72,8 +67,15 @@ public final class TexSourceFile implements Part
     {
 	final var file = getFile();
 	log.trace("Opening for editing the tex file " + file.getAbsolutePath());
-return new TexEditing(ide, file, this);
+return new TexEditing(ide, this);
     }
+
+
+    @Override public String getTitle() 
+    {
+	return name != null?name:"NONAME";
+    }
+
 
     @Override public String toString()
     {
