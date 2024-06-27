@@ -259,7 +259,7 @@ public final class App extends AppBase<Strings>
     {
 	boolean hasUnsavedChanges = false;
 	for(Editing e: editings)
-	    if (e.hasUnsavedChanges())
+	    if (e.getModifiedFlag().get())
 	    {
 		hasUnsavedChanges = true;
 		break;
@@ -271,7 +271,7 @@ public final class App extends AppBase<Strings>
 		return;
 	    case SAVE:
 		for(Editing e: editings)
-		    if (e.hasUnsavedChanges())
+		    if (e.getModifiedFlag().get())
 			try {
 			    e.save();
 			}

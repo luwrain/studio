@@ -18,6 +18,7 @@ package org.luwrain.studio.edit.java;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
@@ -74,5 +75,10 @@ final class Editing implements TextEditing
     
     public boolean hasUnsavedChanges() { return true; }
     public void onModification() {}
+
+    @Override public AtomicBoolean getModifiedFlag()
+    {
+	return null;
+    }
 
 }

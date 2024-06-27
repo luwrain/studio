@@ -48,7 +48,7 @@ public final class TextEditingLayout extends LayoutBase
 		    super.onAreaNewHotPoint(area);
 		}};
 	this.treeArea = projectBaseLayout.treeArea;
-	final EditArea.ChangeListener modificationListener = (editArea, lines, hotPoint)->textEditing.onModification();
+	final EditArea.ChangeListener modificationListener = (editArea, lines, hotPoint)->textEditing.getModifiedFlag().set(true);
 	final EditArea.Params editParams = textEditing.getEditParams(editingControlContext);
 	if (editParams.changeListeners == null)
 	    editParams.changeListeners = new ArrayList<>();

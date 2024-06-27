@@ -38,19 +38,16 @@ import static org.luwrain.core.NullCheck.*;
 public abstract class TextEditingBase implements TextEditing
 {
     static private final Logger log = LogManager.getLogger();
-
-    static public final String
-	CHARSET = "UTF-8";
+    static public final String CHARSET = "UTF-8";
 
     protected final IDE ide;
     protected final File file;
-        private int
+    private int
 	hotPointX = 0,
 	hotPointY = 0;
     protected Source source;
     private MultilineEdit edit = null;
     private MultilineEditCorrector corrector = null;
-    private boolean modified = false;
 
     public TextEditingBase(IDE ide, File file)
     {
@@ -79,10 +76,10 @@ public abstract class TextEditingBase implements TextEditing
 
     @Override public boolean save() throws IOException
     {
-	if (!this.modified)
+	if (!getModified().get())
 	    return false;
 	writeTextFileMultipleStrings(file, getContent().getLines(), CHARSET, System.lineSeparator());
-	this.modified = false;
+	getModified().set(false);
 	return true;
     }
 
@@ -95,20 +92,15 @@ public abstract class TextEditingBase implements TextEditing
     {
     }
 
-        @Override public void onModification()
-    {
-	this.modified = true;
-    }
-
-    @Override public boolean hasUnsavedChanges()
-    {
-	return this.modified;
-    }
-
     @Override public void onNewHotPoint(int hotPointX, int hotPointY)
     {
 	this.hotPointX = hotPointX;
 	this.hotPointY = hotPointY;
+    }
+
+    @Override public AtomicBoolean getModifiedFlag()
+    {
+	return getModified();
     }
 
     protected void setEdit(MultilineEdit edit, MultilineEditCorrector corrector)
@@ -182,7 +174,7 @@ return res.isPerformed();
 		for(int i = 0;i < lines.getLineCount();i++)
 		    lines.setLine(i, lines.getLine(i).replaceAll(replaceExp, replaceWith));
 	    });
-	this.modified = true;
+	getModified().set(true);
     }
 
     protected MultilineEdit.Appearance getAppearance()

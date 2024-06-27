@@ -19,6 +19,7 @@
 package org.luwrain.studio;
 
 import java.io.*;
+import java.util.concurrent.atomic.*;
 
 import org.luwrain.app.base.*;
 
@@ -27,7 +28,6 @@ public interface Editing
 {
     void closeEditing();
     Part.Action[] getActions();
-    void onModification();
-    boolean hasUnsavedChanges();
+    AtomicBoolean getModifiedFlag();
     boolean save() throws IOException;
 }
