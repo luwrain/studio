@@ -45,9 +45,9 @@ final class TexEditing extends TextEditingBase
     final Strings strings;
     final TexSourceFile sourceFile;
 
-    TexEditing(IDE ide, TexSourceFile sourceFile) throws IOException
+    TexEditing(IDE ide, TexSourceFile sourceFile, int x, int y) throws IOException
     {
-	super(ide, sourceFile.getFile());
+	super(ide, sourceFile.getFile(), x, y);
 	this.spellChecking =new EditSpellChecking(ide.getLuwrainObj());
 	this.sourceFile = sourceFile;
 	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);

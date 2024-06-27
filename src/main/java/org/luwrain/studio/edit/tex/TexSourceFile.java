@@ -36,11 +36,12 @@ public final class TexSourceFile implements Part
 	name = null,
 	path = null;
 
+        transient List<Place> places = new ArrayList<>();
+    transient MutableMarkedLines content = null;
+    transient final AtomicBoolean modified = new AtomicBoolean(false);
         private transient IDE ide = null;
     private transient Project proj = null;
     private transient File projDir = null;
-    transient MutableMarkedLines content = null;
-    transient final AtomicBoolean modified = new AtomicBoolean(false);
 
     public TexSourceFile() { this(null, null); }
     public TexSourceFile(String name, String path)
@@ -60,14 +61,14 @@ public final class TexSourceFile implements Part
 
         @Override public Part[] getChildParts()
     {
-	return null;
+	return places.toArray(new Part[places.size()]);
     }
 
     @Override public Editing startEditing() throws IOException
     {
 	final var file = getFile();
 	log.trace("Opening for editing the tex file " + file.getAbsolutePath());
-return new TexEditing(ide, this);
+	return new TexEditing(ide, this, 0, 0);
     }
 
 

@@ -59,7 +59,7 @@ public final class Place implements Part
     {
 	final var file = sourceFile.getFile();
 	log.trace("Opening for editing the tex file " + file.getAbsolutePath() + " at position " + x + "," + y);
-	return new TexEditing(ide, sourceFile);
+	return new TexEditing(ide, sourceFile, x, y);
     }
 
     @Override public String getTitle() 

@@ -35,7 +35,7 @@ import org.luwrain.studio.syntax.*;
 import static org.luwrain.script.Hooks.*;
 import static org.luwrain.core.NullCheck.*;
 
-public abstract class TextEditingBase implements TextEditing
+public abstract class TextEditingBase implements TextEditing, HotPoint
 {
     static private final Logger log = LogManager.getLogger();
     static public final String CHARSET = "UTF-8";
@@ -49,12 +49,19 @@ public abstract class TextEditingBase implements TextEditing
     private MultilineEdit edit = null;
     private MultilineEditCorrector corrector = null;
 
-    public TextEditingBase(IDE ide, File file)
+    protected TextEditingBase(IDE ide, File file, int hotPointX, int hotPointY)
     {
 	notNull(ide, "ide");
 	notNull(file, "files");
 	this.ide = ide;
 	this.file = file;
+	this.hotPointX = hotPointX;
+	this.hotPointY = hotPointY;
+    }
+
+    protected TextEditingBase(IDE ide, File file)
+    {
+	this(ide, file, 0, 0);
     }
 
         public abstract MutableMarkedLines getContent();
@@ -137,8 +144,8 @@ public abstract class TextEditingBase implements TextEditing
 	return edit.getRegionText();
     }
 
-    protected int getHotPointX() { return this.hotPointX; }
-    protected int getHotPointY() { return this.hotPointY; }
+    @Override public int getHotPointX() { return this.hotPointX; }
+    @Override public int getHotPointY() { return this.hotPointY; }
     public Source getSourceCode() { return new Source(getContent()); }
 
     protected boolean insertText(String[] text)

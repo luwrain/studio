@@ -108,6 +108,11 @@ public final class TextEditingLayout extends LayoutBase
 		    return res.toArray(new Action[res.size()]);
 		}
 	    };
+	if (textEditing instanceof org.luwrain.studio.edit.TextEditingBase base)
+	{
+	if (base.getHotPointX() > 0 || base.getHotPointY() > 0)
+	    editArea.setHotPoint(base.getHotPointX(), base.getHotPointY());
+	}
 	updateAreaLayout();
     }
 

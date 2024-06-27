@@ -210,9 +210,12 @@ public final class App extends AppBase<Strings>
 	notNull(editing, "editing");
 	editings.removeIf(e -> editing.hasSameSource(e));
 	editings.add(editing);
-	this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
+	if (editing instanceof TextEditing t)
+	{
+	this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, t);
 	setAreaLayout(this.textEditingLayout);
 	this.textEditingLayout.setActiveArea(this.textEditingLayout.editArea);
+	}
     }
 
     PositionInfo getCompilationOutputPositionInfo(int index)
