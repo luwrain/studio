@@ -18,6 +18,7 @@ package org.luwrain.studio.edit.py;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
@@ -40,13 +41,23 @@ final class PyEditing extends TextEditingBase
 	NullCheck.notNull(context, "context");
 	final EditArea.Params params = new EditArea.Params();
 	params.context = context;
-	params.content = content;
+	params.content = getContent();
 	params.appearance = new EditUtils.DefaultEditAreaAppearance(context);
 	params.editFactory = (editParams)->{
 	    return new MultilineEdit(editParams);
 	};
 	params.name = file.getName();
 	return params;
+    }
+
+    @Override public MutableMarkedLines getContent()
+    {
+	return null;
+    }
+
+    @Override public AtomicBoolean getModified()
+    {
+	return null;
     }
 
         @Override public boolean save() throws IOException

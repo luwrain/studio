@@ -21,6 +21,7 @@ import java.io.*;
 import org.luwrain.controls.*;
 import org.luwrain.controls.edit.*;
 
+/** Editing session of a source file for the case when it's a text file. */
 public interface TextEditing extends Editing
 {
     EditArea.Params getEditParams(ControlContext context);

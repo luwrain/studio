@@ -18,6 +18,7 @@ package org.luwrain.studio.edit.tex;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.luwrain.core.*;
 import org.luwrain.core.events.*;
@@ -36,17 +37,22 @@ import org.luwrain.util.*;
 import static org.luwrain.popups.Popups.*;
 import static org.luwrain.studio.edit.tex.Hooks.*;
 import static org.luwrain.studio.Part.*;
+import static org.luwrain.core.NullCheck.*;
 
 final class TexEditing extends TextEditingBase
 {
         final EditSpellChecking spellChecking;
     final Strings strings;
+    final TexSourceFile sourceFile;
 
-    TexEditing(IDE ide, File file) throws IOException
+    TexEditing(IDE ide, File file, TexSourceFile sourceFile) throws IOException
     {
 	super(ide, file);
 	this.spellChecking =new EditSpellChecking(ide.getLuwrainObj());
+	this.sourceFile = sourceFile;
 	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);
+	if (sourceFile.content == null)
+	load();
     }
 
     @Override public EditArea.Params getEditParams(ControlContext context)
@@ -54,8 +60,8 @@ final class TexEditing extends TextEditingBase
 	final EditArea.Params params = new EditArea.Params();
 	params.context = context;
 		params.name = file.getName();
-		params.content = this.content;
-		params.appearance = new TexAppearance(context, this.content);
+		params.content = getContent();
+		params.appearance = new TexAppearance(context, getContent());
 	params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));
 	params.changeListeners = new ArrayList<>(Arrays.asList(spellChecking));
 	params.editFactory = (editParams)->{
@@ -65,6 +71,18 @@ final class TexEditing extends TextEditingBase
 	    return getEdit();
 	};
 	return params;
+    }
+
+    @Override public MutableMarkedLines getContent()
+    {
+	if (sourceFile.content == null)
+	    sourceFile.content = new MutableMarkedLinesImpl();
+	return sourceFile.content;
+    }
+
+    @Override public AtomicBoolean getModified()
+    {
+	return sourceFile.modified;
     }
 
     @Override public Part.Action[] getActions()
@@ -177,7 +195,7 @@ final class TexEditing extends TextEditingBase
 	    ide.getLuwrainObj().message("Введённое значение не является допустимым номером строки", Luwrain.MessageType.ERROR);
 	    return true;
 	}
-	if (lineNum <= 0 || lineNum> this.content.getLineCount())
+	if (lineNum <= 0 || lineNum> getContent().getLineCount())
 	{
 	    ide.getLuwrainObj().message("Введённое выражение выходит за границы допустимых номеров строки", Luwrain.MessageType.ERROR);
 	    return true;
@@ -187,7 +205,7 @@ final class TexEditing extends TextEditingBase
 
     private boolean suggestCorrection(IDE ide)
     {
-	final String word = new TextFragmentUtils(this.content).getWord(getHotPointX(), getHotPointY());
+	final String word = new TextFragmentUtils(getContent()).getWord(getHotPointX(), getHotPointY());
 	if (word == null)
 	    return false;
 	final List<String> suggestions = spellChecking.getSpellChecker().suggestCorrections(word);
@@ -197,7 +215,7 @@ final class TexEditing extends TextEditingBase
 	final String correction = (String)fixedList(ide.getLuwrainObj(), strings.suggestCorrectionsPopupName(), suggestions.toArray(new String[suggestions.size()]));
 	if (correction == null)
 	    return true;
-	this.content.update((lines)->{
+	getContent().update((lines)->{
 		final String newLine = new TextFragmentUtils(lines).replaceWord(getHotPointX(), getHotPointY(), correction);
 		lines.setLine(getHotPointY(), newLine);
 	    });

@@ -83,7 +83,9 @@ public final class App extends AppBase<Strings>
     {
 	if (arg == null || arg.isEmpty())
 	    return false;
-	final Project singleFileProj = SingleFileProject.newProject(getIde(), new File(arg));
+	if (arg.toUpperCase().endsWith(".lwrproj"))
+	    return loadProject(new File(arg));
+		final Project singleFileProj = SingleFileProject.newProject(getIde(), new File(arg));
 	if (singleFileProj != null)
 	{
 	    this.proj = singleFileProj;

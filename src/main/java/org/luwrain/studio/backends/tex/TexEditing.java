@@ -18,6 +18,7 @@ package org.luwrain.studio.backends.tex;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.luwrain.core.*;
 import org.luwrain.core.events.*;
@@ -49,6 +50,16 @@ final class TexEditing extends TextEditingBase
 			    Part.action("Добавить ненумерованный список", new InputEvent('o', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addEnumerate),
 			    Part.action("Добавить элемент списка", new InputEvent('i', EnumSet.of(Modifiers.ALT, Modifiers.SHIFT)), this::addItem)
 			    );
+    }
+
+    @Override public MutableMarkedLines getContent()
+    {
+	return null;
+    }
+
+    @Override public AtomicBoolean getModified()
+    {
+	return null;
     }
 
     private boolean addFrame(IDE ide)
@@ -103,7 +114,7 @@ final class TexEditing extends TextEditingBase
     {
 	final EditArea.Params params = new EditArea.Params();
 	params.context = context;
-	params.content = content;
+	params.content = getContent();
 	params.appearance = new TexAppearance(context);
 
 	params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));

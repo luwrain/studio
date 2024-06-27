@@ -18,6 +18,7 @@ package org.luwrain.studio.edit.tex;
 
 import java.io.*;
 import java.util.*;
+import java.util.concurrent.atomic.*;
 
 import org.apache.logging.log4j.*;
 
@@ -35,9 +36,11 @@ public final class TexSourceFile implements Part
 	name = null,
 	path = null;
 
+        private transient IDE ide = null;
     private transient Project proj = null;
     private transient File projDir = null;
-    private transient IDE ide = null;
+    transient MutableMarkedLines content = null;
+    transient final AtomicBoolean modified = new AtomicBoolean(false);
 
     public TexSourceFile() { this(null, null); }
     public TexSourceFile(String name, String path)
@@ -67,9 +70,9 @@ public final class TexSourceFile implements Part
 
     @Override public Editing startEditing() throws IOException
     {
-	final var file = new File(projDir, path);
+	final var file = getFile();
 	log.trace("Opening for editing the tex file " + file.getAbsolutePath());
-	return new TexEditing(ide, file);
+return new TexEditing(ide, file, this);
     }
 
     @Override public String toString()
@@ -77,12 +80,16 @@ public final class TexSourceFile implements Part
 	return getTitle();
     }
 
+    File getFile()
+    {
+	return new File(projDir, path);
+    }
+
     @Override public boolean equals(Object o)
     {
-	if (o == null || !(o instanceof TexSourceFile))
-	    return false;
-	final TexSourceFile f = (TexSourceFile)o;
-	return path.equals(f.path);
+	if (o != null && o instanceof TexSourceFile f)
+		return path.equals(f.path);
+		return false;
     }
 
     @Override public Part.Action[] getActions()

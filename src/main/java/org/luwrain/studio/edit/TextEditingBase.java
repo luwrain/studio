@@ -20,6 +20,8 @@ import java.io.*;
 import java.util.*;
 import java.util.concurrent.atomic.*;
 
+import org.apache.logging.log4j.*;
+
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.controls.edit.*;
@@ -31,39 +33,55 @@ import org.luwrain.script.controls.*;
 import org.luwrain.studio.syntax.*;
 
 import static org.luwrain.script.Hooks.*;
+import static org.luwrain.core.NullCheck.*;
 
 public abstract class TextEditingBase implements TextEditing
 {
+    static private final Logger log = LogManager.getLogger();
+
     static public final String
 	CHARSET = "UTF-8";
 
     protected final IDE ide;
     protected final File file;
-    protected final Source source;
-    protected final MutableMarkedLinesImpl content;
+        private int
+	hotPointX = 0,
+	hotPointY = 0;
+    protected Source source;
     private MultilineEdit edit = null;
     private MultilineEditCorrector corrector = null;
     private boolean modified = false;
-    private int
-	hotPointX = 0,
-	hotPointY = 0;
 
-    public TextEditingBase(IDE ide, File file) throws IOException
+    public TextEditingBase(IDE ide, File file)
     {
-	NullCheck.notNull(ide, "ide");
-	NullCheck.notNull(file, "files");
+	notNull(ide, "ide");
+	notNull(file, "files");
 	this.ide = ide;
 	this.file = file;
+    }
+
+        public abstract MutableMarkedLines getContent();
+    public abstract AtomicBoolean getModified();
+
+    protected void load() throws IOException
+    {
+		if (!file.exists())
+	{
+	    log.info("The file doesn't exist, creating it on starting the edit: " + file.getAbsolutePath());
+	    writeTextFileSingleString(file, "", CHARSET);
+	}
 	final String text = readTextFileSingleString(file, CHARSET);
 	this.source = new Source(text);
-	this.content = new MutableMarkedLinesImpl(source.getLines());
+	getContent().setLines(source.getLines());
     }
+
+
 
     @Override public boolean save() throws IOException
     {
 	if (!this.modified)
 	    return false;
-	writeTextFileMultipleStrings(file, content.getLines(), CHARSET, System.lineSeparator());
+	writeTextFileMultipleStrings(file, getContent().getLines(), CHARSET, System.lineSeparator());
 	this.modified = false;
 	return true;
     }
@@ -95,8 +113,8 @@ public abstract class TextEditingBase implements TextEditing
 
     protected void setEdit(MultilineEdit edit, MultilineEditCorrector corrector)
     {
-	NullCheck.notNull(edit, "edit");
-	NullCheck.notNull(corrector, "corrector");
+	notNull(edit, "edit");
+	notNull(corrector, "corrector");
 	this.edit = edit;
 	this.corrector = corrector;
     }
@@ -124,11 +142,11 @@ public abstract class TextEditingBase implements TextEditing
 
     protected int getHotPointX() { return this.hotPointX; }
     protected int getHotPointY() { return this.hotPointY; }
-    public Source getSourceCode() { return new Source(content); }
+    public Source getSourceCode() { return new Source(getContent()); }
 
     protected boolean insertText(String[] text)
     {
-	NullCheck.notNullItems(text, "text");
+	notNullItems(text, "text");
 	if (text.length == 0)
 	    return true;
 final ModificationResult res = getCorrector().insertRegion(getHotPointX(), getHotPointY(), text);
@@ -137,7 +155,7 @@ return res.isPerformed();
 
     protected boolean insertText(String text)
     {
-	NullCheck.notNull(text, "text");
+	notNull(text, "text");
 	if (text.isEmpty())
 	    return true;
 	return insertText(new String[]{text});
@@ -160,7 +178,7 @@ return res.isPerformed();
 
     protected void replaceStr(String replaceExp, String replaceWith)
     {
-	this.content.update((lines)->{
+	getContent().update((lines)->{
 		for(int i = 0;i < lines.getLineCount();i++)
 		    lines.setLine(i, lines.getLine(i).replaceAll(replaceExp, replaceWith));
 	    });

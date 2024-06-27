@@ -22,6 +22,7 @@ import java.io.*;
 
 import org.luwrain.app.base.*;
 
+/** Editing session of a source files. */
 public interface Editing
 {
     void closeEditing();
