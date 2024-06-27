@@ -207,12 +207,9 @@ public final class App extends AppBase<Strings>
 
     void startEditing(Editing editing) throws IOException
     {
-	Editing e = null;
-	for(Editing ee: editings)
-	    if (editing.equals(ee))
-		e = ee;
-	if (e == null)
-	    editings.add(editing);
+	notNull(editing, "editing");
+	editings.removeIf(e -> editing.hasSameSource(e));
+	editings.add(editing);
 	this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
 	setAreaLayout(this.textEditingLayout);
 	this.textEditingLayout.setActiveArea(this.textEditingLayout.editArea);

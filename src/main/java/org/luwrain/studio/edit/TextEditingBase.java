@@ -103,6 +103,11 @@ public abstract class TextEditingBase implements TextEditing
 	return getModified();
     }
 
+    @Override public boolean hasSameSource(Editing editing)
+    {
+	return false;
+    }
+
     protected void setEdit(MultilineEdit edit, MultilineEditCorrector corrector)
     {
 	notNull(edit, "edit");

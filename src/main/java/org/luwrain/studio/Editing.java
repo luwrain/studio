@@ -30,4 +30,5 @@ public interface Editing
     Part.Action[] getActions();
     AtomicBoolean getModifiedFlag();
     boolean save() throws IOException;
+    boolean hasSameSource(Editing editing);
 }

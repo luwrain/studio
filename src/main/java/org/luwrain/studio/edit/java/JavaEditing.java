@@ -81,4 +81,9 @@ final class Editing implements TextEditing
 	return null;
     }
 
+    @Override public boolean hasSameSource(org.luwrain.studio.Editing editing)
+    {
+	return false;
+    }
+
 }
