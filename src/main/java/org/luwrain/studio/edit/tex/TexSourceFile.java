@@ -57,6 +57,7 @@ public final class TexSourceFile implements Part
 	this.proj = proj;
 	this.ide = ide;
 	this.projDir = proj.getProjectDir();
+	new PlaceCollector();
     }
 
         @Override public Part[] getChildParts()
@@ -71,12 +72,10 @@ public final class TexSourceFile implements Part
 	return new TexEditing(ide, this, 0, 0);
     }
 
-
     @Override public String getTitle() 
     {
 	return name != null?name:"NONAME";
     }
-
 
     @Override public String toString()
     {

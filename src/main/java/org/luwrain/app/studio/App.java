@@ -85,18 +85,14 @@ public final class App extends AppBase<Strings>
 	    return false;
 	if (arg.toUpperCase().endsWith(".lwrproj"))
 	    return loadProject(new File(arg));
-		final Project singleFileProj = SingleFileProject.newProject(getIde(), new File(arg));
-	if (singleFileProj != null)
-	{
+		final Project singleFileProj = new SingleFileProject(getIde(), new File(arg));
 	    this.proj = singleFileProj;
 	    this.treeRoot = proj.getPartsRoot();
-	    projectBaseLayout.treeArea.refresh();
+	    projectBaseLayout.treeArea.requery();
 	    final Editing editing = proj.getMainSourceFile().startEditing();
 	    	    editings.add(editing);
 	this.textEditingLayout = new TextEditingLayout(this, projectBaseLayout, (TextEditing)editing);
 	    return true;
-	}
-	return loadProject(new File(arg));
     }
 
     private boolean loadProject(File file)

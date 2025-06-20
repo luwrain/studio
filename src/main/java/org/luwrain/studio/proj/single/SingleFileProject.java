@@ -19,29 +19,39 @@ package org.luwrain.studio.proj.single;
 import java.io.*;
 import java.util.*;
 
+import org.apache.logging.log4j.*;
+
 import org.luwrain.core.*;
 import org.luwrain.studio.*;
 
 import org.luwrain.studio.edit.tex.*;
 
+import static org.luwrain.core.NullCheck.*;
+
 public final class SingleFileProject implements Project
 {
+    static private final Logger log = LogManager.getLogger();
+
     final IDE ide;
     final File projDir, sourceFile;
 
     private final Part mainPart;
 
-    public SingleFileProject(IDE ide, File sourceFile, Part mainPart)
+    public SingleFileProject(IDE ide, File sourceFile)
     {
-	NullCheck.notNull(ide, "ide");
-	NullCheck.notNull(sourceFile, "sourceFile");
-	NullCheck.notNull(mainPart, "mainPart");
+	notNull(ide, "ide");
+	notNull(sourceFile, "sourceFile");
 	this.ide = ide;
 	this.sourceFile = sourceFile;
 		this.projDir = this.sourceFile.getParentFile();
-	this.mainPart = mainPart;
-	if (mainPart instanceof TexSourceFile)
-	    ((TexSourceFile)mainPart).init(this, ide);
+		if (sourceFile.getName().toUpperCase().endsWith(".TEX"))
+		{
+		    log.trace("Creating a single file project: dir=" + sourceFile.getParentFile().getAbsolutePath() + ", file=" + sourceFile.getName());
+final var p = new TexSourceFile(sourceFile.getName(), sourceFile.getName());
+p.init(this, ide);
+this.mainPart = p;
+		} else
+		    throw new IllegalArgumentException("Unable to choose proper project type: " + sourceFile.getName());
     }
 
     @Override public File getProjectDir()
@@ -65,18 +75,6 @@ public final class SingleFileProject implements Project
 
     @Override public Project load(File file, org.luwrain.studio.IDE ide) throws IOException
     {
-	return null;
-    }
-
-    static public SingleFileProject newProject(IDE ide, File file)
-    {
-	Log.debug("studio", "trying the single file project for " + file.getName());
-	if (file.getName().trim().toUpperCase().endsWith(".TEX"))
-	{
-	    Log.debug("studio", "tex matches");
-	    final TexSourceFile sourceFile = new TexSourceFile(file.getName(), file.getAbsolutePath());
-	    return new SingleFileProject(ide, file, sourceFile);
-	}
 	return null;
     }
 }

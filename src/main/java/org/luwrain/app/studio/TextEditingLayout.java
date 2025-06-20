@@ -56,8 +56,10 @@ public final class TextEditingLayout extends LayoutBase
 		    //Switching the tree
 		    if (event.equals(ProjectBaseLayout.KEY_TREE_TOGGLE))
 		    {
+			/*
 			if (app.isSingleFileProject())
 			    return false;
+			*/
 			showTree = true;
 			updateAreaLayout();
 			app.setAreaLayout(TextEditingLayout.this);
