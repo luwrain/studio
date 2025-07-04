@@ -67,8 +67,8 @@ public final class App extends AppBase<Strings>
     @Override protected AreaLayout onAppInit() throws IOException
     {
 	this.conv = new Conv(this);
-	getLuwrain().getRegistry().addDirectory(org.luwrain.studio.Settings.PATH);
-	this.sett = org.luwrain.studio.Settings.create(getLuwrain().getRegistry());
+	//	getLuwrain().getRegistry().addDirectory(org.luwrain.studio.Settings.PATH);
+	this.sett = null;//FIXME:newreg org.luwrain.studio.Settings.create(getLuwrain().getRegistry());
 	loadScriptCore();
 	this.projectBaseLayout = new ProjectBaseLayout(this);
 	this.newProjectLayout = new NewProjectLayout(this);

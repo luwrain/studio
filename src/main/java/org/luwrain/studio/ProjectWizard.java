@@ -53,7 +53,7 @@ public final class ProjectWizard extends LayoutBase
 	this.destDir = destDir;
 	wizardArea = new WizardArea(getControlContext());
 	wizardArea.setAreaName("Новый проект");
-	final var persInfo = createPersonalInfo(getLuwrain().getRegistry());
+	final var persInfo = createPersonalInfo(null/*FIXME:newreg getLuwrain().getRegistry()*/);
 	final var values = new HashMap<String, String>();
 	values.put("authors", persInfo.getFullName(""));
 	controller = new WizardGroovyController(getLuwrain(), wizardArea){
