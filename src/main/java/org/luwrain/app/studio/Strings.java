@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2025 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -18,12 +18,9 @@ package org.luwrain.app.studio;
 
 import org.luwrain.core.annotations.*;
 
-@ResourceStrings(name = "luwrain.studio", resource = "strings.properties", langs = { "en", "ru" })
+@ResourceStrings(langs = { "en", "ru" })
 public interface Strings
 {
-    static final String
-	NAME = "luwrain.studio";
-
     String appName();
         String outputAreaName();
         String treeAreaName();

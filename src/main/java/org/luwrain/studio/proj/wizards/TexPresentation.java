@@ -55,7 +55,7 @@ public final class TexPresentation extends LayoutBase
 	super(ide.getAppBase());
 	this.ide = ide;
 	this.app = ide.getAppBase();
-	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);
+	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.class.getName());
 	this.destDir = destDir;
 	this.wizardArea = new WizardArea(getControlContext());
 	this.wizardArea.setAreaName(strings.texPresentationTitle());

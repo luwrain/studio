@@ -104,7 +104,7 @@ public final class TextEditingLayout extends LayoutBase
 			if (a.getHotKey() != null)
 			    action = new Action("action" + k++, a.getTitle(), a.getHotKey()); else
 			    action = new Action("action" + k++, a.getTitle());
-			this.actionsCache.put(action.name(), a);
+			this.actionsCache.put(action.name, a);
 			res.add(action);
 		    }
 		    return res.toArray(new Action[res.size()]);

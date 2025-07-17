@@ -50,7 +50,7 @@ final class TexEditing extends TextEditingBase
 	super(ide, sourceFile.getFile(), x, y);
 	this.spellChecking =new EditSpellChecking(ide.getLuwrainObj());
 	this.sourceFile = sourceFile;
-	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.NAME);
+	this.strings = (Strings)ide.getLuwrainObj().i18n().getStrings(Strings.class.getName());
 	if (sourceFile.content == null)
 	load();
     }

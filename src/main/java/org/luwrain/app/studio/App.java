@@ -58,7 +58,7 @@ public final class App extends AppBase<Strings>
     public App() { this(null); }
     public App(String arg)
     {
-	super(Strings.NAME, Strings.class, "luwrain.studio");
+	super(Strings.class, "luwrain.studio");
 	setTabProcessing(false);
 	this.projFactory = new ProjectFactory(ide);
 	this.arg = arg;

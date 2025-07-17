@@ -30,7 +30,7 @@ public final class App extends AppBase<Strings>
     private MainLayout mainLayout = null;
     public App()
     {
-	super(Strings.NAME, Strings.class, "luwrain.js");
+	super(Strings.class, "luwrain.js");
     }
 
     @Override protected AreaLayout onAppInit() throws IOException
