@@ -171,7 +171,7 @@ return res.isPerformed();
 	    final MultilineEditCorrector corrector = (MultilineEditCorrector)edit.getEdit().getMultilineEditModel();
 	    final AtomicBoolean res = new AtomicBoolean(false);
 	    corrector.doEditAction((lines, hotPoint)->{
-		    res.set(chainOfResponsibilityNoExc(ide.getLuwrainObj(), EDIT_INPUT, new Object[]{
+		    res.set(chainOfResponsibilityNoExc(ide.getLuwrainObj(), TEXT_INPUT_ML, new Object[]{
 				new EditAreaObj(edit, lines),
 				new InputEventObj(event)
 			    }));
