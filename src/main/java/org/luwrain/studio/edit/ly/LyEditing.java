@@ -41,9 +41,9 @@ final class LyEditing extends TextEditingBase
 	final EditArea.Params params = new EditArea.Params();
 	params.context = context;
 	params.content = getContent();
-	params.appearance = new EditUtils.DefaultEditAreaAppearance(context);
+	params.appearance = new DefaultEditAreaAppearance(context);
 	params.editFactory = (editParams)->{
-	    setEdit(new MultilineEdit(editParams), (MultilineEditCorrector)editParams.model);
+	    setEdit(new MultilineEdit(editParams), getContent());
 	    return getEdit();
 	};
 	params.name = file.getName();

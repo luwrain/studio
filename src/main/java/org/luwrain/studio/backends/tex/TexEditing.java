@@ -119,9 +119,9 @@ final class TexEditing extends TextEditingBase
 
 	params.inputEventListeners = new ArrayList<>(Arrays.asList(createEditAreaInputEventHook()));
 	params.editFactory = (editParams)->{
-	    final MultilineEditCorrector base = (MultilineEditCorrector)editParams.model;
-	    editParams.model = new EditCorrectorHooks(ide.getScriptCore(), new TexNewLineIndent(base), HOOK_EDIT);
-	    setEdit(new MultilineEdit(editParams), base);
+	    //	    final MultilineEditCorrector base = (MultilineEditCorrector)editParams.model;
+	    editParams.model = new EditCorrectorHooks(ide.getScriptCore(), new TexNewLineIndent(editParams.model), HOOK_EDIT);
+
 	    return getEdit();
 	};
 	params.name = file.getName();

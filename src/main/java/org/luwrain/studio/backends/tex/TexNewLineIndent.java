@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2025 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -26,7 +26,7 @@ import org.luwrain.studio.util.*;
 
 final class TexNewLineIndent extends NewLineIndent
 {
-    TexNewLineIndent(MultilineEditCorrector base)
+    TexNewLineIndent(MultilineEdit.Model base)
     {
 	super(base);
     }

@@ -69,7 +69,7 @@ final class TexEditing extends TextEditingBase
 	params.editFactory = (editParams)->{
 	    final var base = (MultilineEditCorrector)editParams.model;
 	    editParams.model = new EditCorrectorHooks(ide.getScriptCore(), new TexNewLineIndent(base), HOOK_EDIT);
-	    setEdit(new MultilineEdit(editParams), base);
+	    setEdit(new MultilineEdit(editParams), getContent());
 	    return getEdit();
 	};
 	return params;

@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2025 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -47,12 +47,10 @@ public abstract class TextEditingBase implements TextEditing, HotPoint
 	hotPointY = 0;
     protected Source source;
     private MultilineEdit edit = null;
-    private MultilineEditCorrector corrector = null;
+    private MultilineEdit.Model corrector = null;
 
     protected TextEditingBase(IDE ide, File file, int hotPointX, int hotPointY)
     {
-	notNull(ide, "ide");
-	notNull(file, "files");
 	this.ide = ide;
 	this.file = file;
 	this.hotPointX = hotPointX;
@@ -115,12 +113,10 @@ public abstract class TextEditingBase implements TextEditing, HotPoint
 	return false;
     }
 
-    protected void setEdit(MultilineEdit edit, MultilineEditCorrector corrector)
+    protected void setEdit(MultilineEdit edit, MutableLines lines)
     {
-	notNull(edit, "edit");
-	notNull(corrector, "corrector");
 	this.edit = edit;
-	this.corrector = corrector;
+	this.corrector = edit.getMultilineEditModel();
     }
 
     protected MultilineEdit getEdit()
@@ -130,7 +126,7 @@ public abstract class TextEditingBase implements TextEditing, HotPoint
 	return this.edit;
     }
 
-    protected MultilineEditCorrector getCorrector()
+    protected MultilineEdit.Model getCorrector()
     {
 	if (this.corrector == null)
 	    throw new IllegalStateException("The corrector object isn't created");

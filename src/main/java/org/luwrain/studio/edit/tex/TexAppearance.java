@@ -27,7 +27,7 @@ import org.luwrain.nlp.*;
 import static org.luwrain.script.Hooks.*;
 import static org.luwrain.core.DefaultEventResponse.*;
 
-final class TexAppearance extends EditUtils.DefaultEditAreaAppearance
+final class TexAppearance extends DefaultEditAreaAppearance
 {
     final MarkedLines content;
     boolean indent = false;

@@ -42,7 +42,7 @@ final class PyEditing extends TextEditingBase
 	final EditArea.Params params = new EditArea.Params();
 	params.context = context;
 	params.content = getContent();
-	params.appearance = new EditUtils.DefaultEditAreaAppearance(context);
+	params.appearance = new DefaultEditAreaAppearance(context);
 	params.editFactory = (editParams)->{
 	    return new MultilineEdit(editParams);
 	};

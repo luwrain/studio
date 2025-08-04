@@ -33,7 +33,7 @@ final class Corrector extends EditAugmentationUtils
 
             @Override public ModificationResult splitLine(int pos, int lineIndex)
     {
-	final ModificationResult res = basicCorrector.splitLine(pos, lineIndex);
+	final ModificationResult res = wrappedModel.splitLine(pos, lineIndex);
 	if (!res.isPerformed())
 	    return res;
 	final int indent = getIndent(lineIndex);
@@ -46,6 +46,6 @@ return res;
 
         @Override public ModificationResult putChars(int pos, int lineIndex, String str)
     {
-	return basicCorrector.putChars(pos, lineIndex, str);
+	return wrappedModel.putChars(pos, lineIndex, str);
     }
 }

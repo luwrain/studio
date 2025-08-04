@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2025 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -26,14 +26,14 @@ import org.luwrain.studio.util.*;
 
 public class NewLineIndent extends EditAugmentationUtils
 {
-    public NewLineIndent(MultilineEditCorrector base)
+    public NewLineIndent(MultilineEdit.Model base)
     {
 	super(base);
     }
 
             @Override public ModificationResult splitLine(int pos, int lineIndex)
     {
-	final ModificationResult res = basicCorrector.splitLine(pos, lineIndex);
+	final ModificationResult res = wrappedModel.splitLine(pos, lineIndex);
 	if (!res.isPerformed())
 	    return res;
 	final int indent = getProperIndent(lineIndex + 1);

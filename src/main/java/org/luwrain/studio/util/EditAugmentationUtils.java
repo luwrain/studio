@@ -21,9 +21,9 @@ import org.luwrain.controls.*;
 import org.luwrain.controls.edit.*;
 import org.luwrain.controls.edit.MultilineEdit.ModificationResult;
 
-public class EditAugmentationUtils extends EditUtils.EmptyCorrector
+public class EditAugmentationUtils extends MultilineEditModelWrap
 {
-    public EditAugmentationUtils(MultilineEditCorrector base)
+    public EditAugmentationUtils(MultilineEdit.Model base)
     {
 	super(base);
     }
@@ -48,7 +48,7 @@ public class EditAugmentationUtils extends EditUtils.EmptyCorrector
 	    pos++;
 	if (pos == 0)
 	    return true;
-	return basicCorrector.deleteRegion(0, lineIndex, pos, lineIndex).isPerformed();
+	return wrappedModel.deleteRegion(0, lineIndex, pos, lineIndex).isPerformed();
     }
 
     public boolean addIndent(int lineIndex, int len)
@@ -63,6 +63,6 @@ public class EditAugmentationUtils extends EditUtils.EmptyCorrector
 	final int spaceCount = len % tabLen;
 	for(int i = 0;i < spaceCount;i++)
 	    b.append(' ');
-	return basicCorrector.putChars(0, lineIndex, new String(b)).isPerformed();
+	return wrappedModel.putChars(0, lineIndex, new String(b)).isPerformed();
     }
 }
