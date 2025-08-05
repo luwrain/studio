@@ -6,13 +6,13 @@ plugins {
 
 dependencies {
   implementation libraries.base
-    implementation libraries.apacheBase
+  implementation libraries.apacheBase
   implementation libraries.graalvm
+  annotationProcessor libraries.autoService
   implementation project(':luwrain-base')
   implementation project(':luwrain')
   implementation project(':luwrain-io')
   implementation (project(':luwrain-grammar'))
-  implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
   implementation 'org.antlr:antlr4-runtime:4.13.1'
   testImplementation libraries.junit
 }

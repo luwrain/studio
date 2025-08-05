@@ -138,7 +138,7 @@ public final class App extends AppBase<Strings>
     private void loadScriptCore() throws IOException
     {
 	this.scriptCore = new ScriptCore(getLuwrain());
-	final File scriptsDir = getLuwrain().getFileProperty(Luwrain.PROP_DIR_JS);
+	final File scriptsDir = new File(getLuwrain().getPath(Luwrain.PATH_SYS_JS_DIR));
 	final File[] scripts = scriptsDir.listFiles();
 	if (scripts == null)
 	    return;

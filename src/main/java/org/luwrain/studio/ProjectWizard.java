@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2025 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -24,6 +24,7 @@ import groovy.util.*;
 
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
+import org.luwrain.io.json.*;
 import org.luwrain.studio.*;
 import org.luwrain.app.base.*;
 import org.luwrain.studio.proj.main.*;
@@ -31,10 +32,10 @@ import org.luwrain.studio.proj.main.*;
 import org.luwrain.controls.wizard.*;
 import org.luwrain.studio.proj.main.*;
 
+import static java.util.Objects.*;
 import static org.luwrain.util.FileUtils.*;
 import static org.luwrain.util.ResourceUtils.*;
 import static org.luwrain.studio.syntax.tex.TexUtils.*;
-import static org.luwrain.core.Settings.*;
 import static org.luwrain.core.NullCheck.*;
 
 public final class ProjectWizard extends LayoutBase
@@ -53,31 +54,29 @@ public final class ProjectWizard extends LayoutBase
 	this.destDir = destDir;
 	wizardArea = new WizardArea(getControlContext());
 	wizardArea.setAreaName("Новый проект");
-	final var persInfo = createPersonalInfo(null/*FIXME:newreg getLuwrain().getRegistry()*/);
+	var persInfo = getLuwrain().loadConf(PersonalInfo.class);
+	if (persInfo == null)
+	    persInfo = new PersonalInfo();
 	final var values = new HashMap<String, String>();
-	values.put("authors", persInfo.getFullName(""));
+	values.put("authors", requireNonNullElse(persInfo.getFullName(), ""));
 	controller = new WizardGroovyController(getLuwrain(), wizardArea){
 		public void setValue(String name, String value)
 		{
-		    		    notEmpty(name, "name");
 		    values.put(name, value);
 		}
 		public String getValue(String name)
 		{
-		    notEmpty(name, "name");
 		    final var res = values.get(name);
 		    return res != null?res:"";
 		}
 		public void writeFile(String fileName, List<String> lines)
 		{
-		    notEmpty(fileName, "fileName");
-		    notNull(lines, "lines");
 		    try {
 		    writeTextFileMultipleStrings(new File(destDir, fileName), lines.toArray(new String[lines.size()]), "UTF-8", null);
 		    }
 		    catch(IOException ex)
 		    {
-			log.catching(ex);
+			log.error(ex);
 			throw new RuntimeException(ex);
 		    }
 		}
