@@ -7,11 +7,11 @@ frame 'greeting', {
 text getStrings().javaConsoleGreeting()
 input 'title', getStrings().javaConsoleProjNameEdit(), 'my-console-app'
 button getStrings().buttonContinue(), { values ->
-/*
 if (values.getText(0).trim().isEmpty()) {
-error 'Название статьи не может быть пустым'
+error getStrings().javaConsoleEmptyProjName()
 return;
 }
+/*
 wizard.setValue 'title', values.getText(0).trim()
 show 'second'
 */

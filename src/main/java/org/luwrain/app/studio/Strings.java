@@ -34,6 +34,7 @@ public interface Strings
     String projTypeJavaConsole();
     String javaConsoleGreeting();
     String javaConsoleProjNameEdit();
+    String javaConsoleEmptyProjName();
     String projTypeTexPresentation();
     String projTypeTexArticle();
 

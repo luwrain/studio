@@ -22,7 +22,7 @@ import java.util.*;
 import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.controls.edit.*;
-import org.luwrain.studio.util.*;
+import org.luwrain.studio.edit.*;
 
 final class TexNewLineIndent extends NewLineIndent
 {

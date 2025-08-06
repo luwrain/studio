@@ -24,7 +24,7 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.controls.edit.*;
 import org.luwrain.studio.*;
-import org.luwrain.studio.util.*;
+//import org.luwrain.studio.util.*;
 import org.luwrain.util.*;
 import org.luwrain.app.base.*;
 import org.luwrain.studio.edit.*;

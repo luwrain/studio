@@ -10,6 +10,7 @@ dependencies {
   implementation libraries.graalvm
   annotationProcessor libraries.autoService
   implementation project(':luwrain-base')
+  annotationProcessor project(':luwrain-base')
   implementation project(':luwrain')
   implementation project(':luwrain-io')
   implementation (project(':luwrain-grammar'))

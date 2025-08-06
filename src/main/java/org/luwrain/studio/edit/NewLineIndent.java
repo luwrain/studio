@@ -14,7 +14,7 @@
    General Public License for more details.
 */
 
-package org.luwrain.studio.util;
+package org.luwrain.studio.edit;
 
 import java.util.*;
 
@@ -22,7 +22,7 @@ import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.controls.edit.*;
 import org.luwrain.controls.edit.MultilineEdit.ModificationResult;
-import org.luwrain.studio.util.*;
+//import org.luwrain.studio.util.*;
 
 public class NewLineIndent extends EditAugmentationUtils
 {

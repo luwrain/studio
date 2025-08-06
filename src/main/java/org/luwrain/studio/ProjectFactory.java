@@ -22,7 +22,7 @@ import org.luwrain.core.*;
 import org.luwrain.util.*;
 
 import org.luwrain.studio.backends.tex.TexProject;
-import org.luwrain.studio.proj.wizards.*;
+//import org.luwrain.studio.proj.wizards.*;
 import org.luwrain.app.studio.Strings;
 
 import static java.util.Objects.*;
