@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2025 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -36,7 +36,7 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	this.app = app;
 	final ListArea.Params<ProjectType> params = new ListArea.Params<>();
 	params.context = getControlContext();
-	params.model = new ListUtils.FixedModel<>(new ProjectFactory(app.ide).getNewProjectTypes());
+	params.model = new ListUtils.FixedModel<>(new ProjectFactory(app.ide, app.getStrings()).getNewProjectTypes());
 	params.appearance = new ListUtils.DefaultAppearance<ProjectType>(params.context){
 		@Override public void announceItem(ProjectType item, Set<Flags> flags)
 		{
@@ -55,7 +55,7 @@ final class NewProjectLayout extends LayoutBase implements ListArea.ClickHandler
 	final File destDir = new File("/x/proj");
 	if (destDir == null)
 	    return true;
-	final ProjectFactory factory = new ProjectFactory(app.ide);
+	final ProjectFactory factory = new ProjectFactory(app.ide, app.getStrings());
 	factory.create(projType.getId(), destDir);
 	return true;
     }

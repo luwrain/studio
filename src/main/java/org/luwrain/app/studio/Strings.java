@@ -29,4 +29,12 @@ public interface Strings
 
         String openProjectPopupPrefix();
 
+    String buttonContinue();
+
+    String projTypeJavaConsole();
+    String javaConsoleGreeting();
+    String javaConsoleProjNameEdit();
+    String projTypeTexPresentation();
+    String projTypeTexArticle();
+
 }

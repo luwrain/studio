@@ -19,24 +19,18 @@ package org.luwrain.studio;
 import java.io.*;
 import java.util.*;
 import org.apache.logging.log4j.*;
-
 import groovy.util.*;
 
-import org.luwrain.core.*;
 import org.luwrain.controls.*;
 import org.luwrain.io.json.*;
-import org.luwrain.studio.*;
 import org.luwrain.app.base.*;
-import org.luwrain.studio.proj.main.*;
-
 import org.luwrain.controls.wizard.*;
 import org.luwrain.studio.proj.main.*;
+import org.luwrain.app.studio.Strings;
 
 import static java.util.Objects.*;
 import static org.luwrain.util.FileUtils.*;
 import static org.luwrain.util.ResourceUtils.*;
-import static org.luwrain.studio.syntax.tex.TexUtils.*;
-import static org.luwrain.core.NullCheck.*;
 
 public final class ProjectWizard extends LayoutBase
 {
@@ -47,7 +41,7 @@ public final class ProjectWizard extends LayoutBase
     final WizardArea wizardArea;
     final WizardGroovyController controller;
 
-    ProjectWizard(IDE ide, File destDir, String scriptName) throws IOException
+    ProjectWizard(IDE ide, Strings strings, File destDir, String scriptName)
     {
 	super(ide.getAppBase());
 	this.ide = ide;
@@ -72,7 +66,7 @@ public final class ProjectWizard extends LayoutBase
 		public void writeFile(String fileName, List<String> lines)
 		{
 		    try {
-		    writeTextFileMultipleStrings(new File(destDir, fileName), lines.toArray(new String[lines.size()]), "UTF-8", null);
+			writeTextFileMultipleStrings(new File(destDir, fileName), lines.toArray(new String[lines.size()]), "UTF-8", null);
 		    }
 		    catch(IOException ex)
 		    {
@@ -87,8 +81,19 @@ public final class ProjectWizard extends LayoutBase
 		    proj.save();
 		    ide.loadProject(file);
 		}
+		public Strings getStrings()
+		{
+		    return strings;
+		}
 	    };
-	Eval.me("wizard", controller, getStringResource(this.getClass(), scriptName));
+	try {
+	    Eval.me("wizard", controller, getStringResource(this.getClass(), scriptName));
+	}
+	catch(IOException ex)
+	{
+	    log.error("Unable to run project wizard script", ex);
+	    throw new RuntimeException(ex);
+	}
 	setAreaLayout(wizardArea, null);
     }
-    }
+}

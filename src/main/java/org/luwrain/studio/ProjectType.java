@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2025 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -26,8 +26,9 @@ import static org.luwrain.core.NullCheck.*;
 public final class ProjectType implements Comparable
 {
     static public final String
-	TEX_PRESENTATION = "latex-presentation",
-	TEX_ARTICLE = "latex-article";
+	JAVA_CONSOLE = "java-console",
+	TEX_PRESENTATION = "tex-presentation",
+	TEX_ARTICLE = "tex-article";
 
     final String id;
     final Integer orderIndex;

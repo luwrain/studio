@@ -1,5 +1,5 @@
 /*
-   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
+   Copyright 2012-2025 Michael Pozhidaev <msp@luwrain.org>
 
    This file is part of LUWRAIN.
 
@@ -40,7 +40,7 @@ public final class App extends AppBase<Strings>
 
     private final String arg;
     final IDE ide = getIde();
-    final ProjectFactory projFactory;
+    //    final ProjectFactory projFactory;
     private Conv conv = null;
     private org.luwrain.studio.Settings sett = null;
     private ProjectBaseLayout projectBaseLayout = null;
@@ -60,15 +60,13 @@ public final class App extends AppBase<Strings>
     {
 	super(Strings.class, "luwrain.studio");
 	setTabProcessing(false);
-	this.projFactory = new ProjectFactory(ide);
+	//	this.projFactory = new ProjectFactory(ide);
 	this.arg = arg;
     }
 
     @Override protected AreaLayout onAppInit() throws IOException
     {
 	this.conv = new Conv(this);
-	//	getLuwrain().getRegistry().addDirectory(org.luwrain.studio.Settings.PATH);
-	this.sett = null;//FIXME:newreg org.luwrain.studio.Settings.create(getLuwrain().getRegistry());
 	loadScriptCore();
 	this.projectBaseLayout = new ProjectBaseLayout(this);
 	this.newProjectLayout = new NewProjectLayout(this);
@@ -344,7 +342,6 @@ public final class App extends AppBase<Strings>
 	}
         @Override public void addLine(String line)
 	{
-	    NullCheck.notNull(line, "line");
 	    listener.run();
 	    outputText.addLine(line);
 	}
