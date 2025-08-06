@@ -33,13 +33,13 @@ public final class ProjectFactory
 {
 
     private final IDE ide;
-    private final Luwrain luwrain;
+    //    private final Luwrain luwrain;
     private final Strings strings;
 
     public ProjectFactory(IDE ide, Strings strings)
     {
 	this.ide = requireNonNull(ide, "ide can't be null");
-	this.luwrain = ide.getLuwrainObj();
+	//	this.luwrain = ide.getLuwrainObj();
 	this.strings = strings;
     }
 
@@ -57,7 +57,7 @@ public final class ProjectFactory
     {
 	final var w = new ProjectWizard(ide, strings, destDir, projType + ".groovy");
 	    ide.showWizard(w);
-	    luwrain.announceActiveArea();
+	    ide.getLuwrainObj().announceActiveArea();
     }
 
 
