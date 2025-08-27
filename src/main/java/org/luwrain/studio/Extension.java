@@ -34,8 +34,7 @@ public final class Extension extends EmptyExtension
     @Override public ExtensionObject[] getExtObjects(Luwrain luwrain)
     {
 	return new ExtensionObject[]{
-	    new Shortcut() {
-		@Override public String getExtObjName() { return "studio"; }
+	    new DefaultShortcut("studio", org.luwrain.app.studio.App.class) {
 		@Override public Application[] prepareApp(String[] args)
 		{
 		    if (args.length == 1)
@@ -43,7 +42,7 @@ public final class Extension extends EmptyExtension
 		    return new Application[]{new org.luwrain.app.studio.App()};
 		}
 	    },
-	    new SimpleShortcut("js", org.luwrain.app.js.App.class)
+	    new DefaultShortcut("js", org.luwrain.app.js.App.class)
 	};
     }
 }
