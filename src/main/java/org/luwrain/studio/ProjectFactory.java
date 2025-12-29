@@ -1,18 +1,3 @@
-/*
-   Copyright 2012-2025 Michael Pozhidaev <msp@luwrain.org>
-
-   This file is part of LUWRAIN.
-
-   LUWRAIN is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 3 of the License, or (at your option) any later version.
-
-   LUWRAIN is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-*/
 
 package org.luwrain.studio;
 
@@ -28,6 +13,7 @@ import org.luwrain.app.studio.Strings;
 import static java.util.Objects.*;
 import static org.luwrain.studio.ProjectType.*;
 import static org.luwrain.core.NullCheck.*;
+import static org.luwrain.util.FileUtils.*;
 
 public final class ProjectFactory
 {
@@ -76,7 +62,7 @@ public final class ProjectFactory
 
     private Project readProjectKey(File projFile) throws IOException
     {
-	final String text = FileUtils.readTextFileSingleString(projFile, "UTF-8");
+	final String text = readTextFile(projFile);
 	if (text.contains(TexProject.KEY))
 	    return new TexProject();
 	return null;

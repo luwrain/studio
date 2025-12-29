@@ -343,7 +343,7 @@ public final class App extends AppBase<Strings>
         @Override public void addLine(String line)
 	{
 	    listener.run();
-	    outputText.addLine(line);
+	    outputText.add(line);
 	}
     }
 

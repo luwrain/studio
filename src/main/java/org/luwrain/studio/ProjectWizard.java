@@ -65,14 +65,16 @@ public final class ProjectWizard extends LayoutBase
 		}
 		public void writeFile(String fileName, List<String> lines)
 		{
+		    /*
 		    try {
-			writeTextFileMultipleStrings(new File(destDir, fileName), lines.toArray(new String[lines.size()]), "UTF-8", null);
+			//FIXME:			writeTextFileMultipleStrings(new File(destDir, fileName), lines.toArray(new String[lines.size()]), "UTF-8", null);
 		    }
 		    catch(IOException ex)
 		    {
 			log.error(ex);
 			throw new RuntimeException(ex);
 		    }
+		    */
 		}
 		public void finish(String fileName, ProjectImpl proj)
 		{

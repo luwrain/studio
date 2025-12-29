@@ -1,18 +1,3 @@
-/*
-   Copyright 2012-2024 Michael Pozhidaev <msp@luwrain.org>
-
-   This file is part of LUWRAIN.
-
-   LUWRAIN is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 3 of the License, or (at your option) any later version.
-
-   LUWRAIN is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-*/
 
 package org.luwrain.studio.backends.java;
 
@@ -27,6 +12,9 @@ import org.luwrain.studio.*;
 import org.luwrain.util.FileUtils;
 import org.luwrain.app.base.*;
 
+import static org.luwrain.util.TextUtils.*;
+import static org.luwrain.util.FileUtils.*;
+
 final class Editing implements TextEditing
 {
     private final File file;
@@ -36,8 +24,8 @@ final class Editing implements TextEditing
     {
 	NullCheck.notNull(file, "files");
 	this.file = file;
-	final String text = FileUtils.readTextFileSingleString(file, "UTF-8");
-	final String[] lines = FileUtils.universalLineSplitting(text);
+	final String text = readTextFile(file);
+	final String[] lines = splitLines(text);
 	this.content = new MutableMarkedLinesImpl(lines);
     }
 

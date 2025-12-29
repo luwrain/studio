@@ -1,18 +1,3 @@
-/*
-   Copyright 2012-2025 Michael Pozhidaev <msp@luwrain.org>
-
-   This file is part of LUWRAIN.
-
-   LUWRAIN is free software; you can redistribute it and/or
-   modify it under the terms of the GNU General Public
-   License as published by the Free Software Foundation; either
-   version 3 of the License, or (at your option) any later version.
-
-   LUWRAIN is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   General Public License for more details.
-*/
 
 package org.luwrain.studio.edit;
 
@@ -70,9 +55,9 @@ public abstract class TextEditingBase implements TextEditing, HotPoint
 		if (!file.exists())
 	{
 	    log.info("The file doesn't exist, creating it on starting the edit: " + file.getAbsolutePath());
-	    writeTextFileSingleString(file, "", CHARSET);
+	    //FIXME:	    writeTextFileSingleString(file, "", CHARSET);
 	}
-	final String text = readTextFileSingleString(file, CHARSET);
+	final String text = readTextFile(file, CHARSET);
 	this.source = new Source(text);
 	getContent().setLines(source.getLines());
     }
@@ -83,7 +68,7 @@ public abstract class TextEditingBase implements TextEditing, HotPoint
     {
 	if (!getModified().get())
 	    return false;
-	writeTextFileMultipleStrings(file, getContent().getLines(), CHARSET, System.lineSeparator());
+	//FIXME:	writeTextFileMultipleStrings(file, getContent().getLines(), CHARSET, System.lineSeparator());
 	getModified().set(false);
 	return true;
     }
