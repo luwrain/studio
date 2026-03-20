@@ -50,7 +50,7 @@ public final class JavaSyntax
 	parser.getInterpreter().setPredictionMode(PredictionMode.SLL);
 	final ParseTree tree = parser.compilationUnit();
 	final ParseTreeWalker walker = new ParseTreeWalker();
-	final JavaListener listener = new JavaBaseListener(){
+	final var listener = new JavaParserBaseListener(){
 		//enterMethodBody
 		//enterConstructorBody
 		//enterEnumBody
@@ -80,7 +80,8 @@ public final class JavaSyntax
 		}
 		@Override public void enterPackageDeclaration(JavaParser.PackageDeclarationContext ctx) 
 		{
-		    JavaParser.PackageNameContext c = ctx.packageName();
+		    /*
+		    		    JavaParser.PackageNameContext c = ctx.packageName();
 		    String s = "";
 		    while (c != null)
 		    {
@@ -88,6 +89,7 @@ public final class JavaSyntax
 			c = c.packageName();
 		    }
 		    //		    namingContext = s;
+		    */
 		}
 	    };
 	walker.walk(listener, tree);
