@@ -17,3 +17,7 @@ dependencies {
   implementation 'org.antlr:antlr4-runtime:4.13.1'
   testImplementation libraries.junit
 }
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
