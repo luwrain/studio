@@ -1,6 +1,7 @@
 
 plugins {
-    id 'java-library'
+  id 'java-library'
+  id 'maven-publish'
   id 'io.freefair.lombok' version '8.6'
 }
 
@@ -19,5 +20,21 @@ dependencies {
 }
 
 tasks.named('test') {
-    useJUnitPlatform()
+  useJUnitPlatform()
+}
+
+publishing {
+  publications {
+    mavenJava(MavenPublication) {
+      groupId = 'org.luwrain'
+      artifactId = 'luwrain-studio'
+      version = ver.lwr
+      from components.java
+    }
+  }
+  repositories {
+    maven {
+      url = uri(mavenDestRepo)
+    }
+  }
 }
