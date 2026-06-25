@@ -28,6 +28,6 @@ public interface Settings
 
     static Settings create(Registry registry)
     {
-	return RegistryProxy.create(registry, PATH, Settings.class);
+	return null;
     }
 }
